@@ -30,6 +30,19 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+
+        private string lastName;
+        public string LastName
+        {
+            get { return lastName; }
+            set
+            {
+                lastName = value;
+                RaisePropertyChange("LastName");
+            }
+        }
+
+
         public void RaisePropertyChange(string propertyName)
         {
             if(PropertyChanged!=null)
