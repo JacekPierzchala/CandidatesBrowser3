@@ -1,0 +1,71 @@
+﻿using CandidatesBrowser3.Model;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CandidatesBrowser3.DAL
+{
+    public class CandidateRepository:ICandidateRepository
+    {
+        private static ObservableCollection<Candidate> Candidates;
+        public CandidateRepository() { }
+
+        public Candidate CandidateByID(int id)
+        {
+           if(Candidates==null)
+           {
+                LoadCandidates();
+           }
+            return Candidates.Where(c => c.ID.Equals(id)).FirstOrDefault();
+        }
+
+        private void LoadCandidates()
+        {
+            DataTable dt = DBObjects.GetTableFromSQL("Select * FROM [CANDIDATES]");
+            Candidates.Clear();
+            if (dt!=null)
+            {
+                foreach (DataRow row in dt.Rows)
+                {
+                    new Candidate(row) { };
+                }
+            }
+        }
+
+        public void DeleteCandidate(Candidate candidate)
+        {
+            Candidates.Remove(candidate);
+        }
+
+        public Candidate GetCandidate()
+        {
+            if (Candidates == null)
+            {
+                LoadCandidates();
+            }
+
+            return Candidates.FirstOrDefault();
+        }
+
+        public ObservableCollection<Candidate> GetCandidates()
+        {
+            if (Candidates==null)
+            {
+                LoadCandidates();
+            }
+            return Candidates;
+        }
+
+        public void UpdateCandidate(Candidate candidate)
+        {
+            Candidate candidateToUpdate = Candidates.Where(c => c.ID.Equals(candidate.ID)).FirstOrDefault();
+            candidateToUpdate = candidate;
+        }
+
+
+    }
+}

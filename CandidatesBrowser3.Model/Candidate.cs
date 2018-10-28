@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +43,11 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+        public Candidate() { }
+        public Candidate(DataRow row)
+        {
+
+        }
 
         public void RaisePropertyChange(string propertyName)
         {
