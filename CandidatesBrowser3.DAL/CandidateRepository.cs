@@ -12,7 +12,8 @@ namespace CandidatesBrowser3.DAL
     public class CandidateRepository:ICandidateRepository
     {
         private static ObservableCollection<Candidate> Candidates;
-        public CandidateRepository() { }
+
+        public CandidateRepository() {   }
 
         public Candidate CandidateByID(int id)
         {
@@ -25,13 +26,13 @@ namespace CandidatesBrowser3.DAL
 
         private void LoadCandidates()
         {
-            DataTable dt = DBObjects.GetTableFromSQL("Select * FROM [CANDIDATES]");
-            Candidates.Clear();
+            DataTable dt = DBObjects.GetTableFromSQL("Select * FROM [Candidates_View]");
+            Candidates = new ObservableCollection<Candidate>();
             if (dt!=null)
             {
                 foreach (DataRow row in dt.Rows)
                 {
-                    new Candidate(row) { };
+                    Candidates.Add(new Candidate(row));
                 }
             }
         }

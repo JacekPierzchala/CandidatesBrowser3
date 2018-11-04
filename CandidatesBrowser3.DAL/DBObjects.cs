@@ -10,14 +10,20 @@ namespace CandidatesBrowser3.DAL
 {
     public class DBObjects
     {
-        public static string connectionStringZaneta = @"Server=ZANETA-PC\SQLEXPRESS;database=Candidates;integrated Security=SSPI";
-        public static string connectionStringMichal = @"Server=DESKTOP-3U4D69V\SQLEXPRESS;database=Candidates;integrated Security=SSPI";
-        public static string connectionString;
+        public static string DBName;
+        public static string ConnectionStringZaneta = @"Server=ZANETA-PC\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
+        public static string ConnectionStringMichal = @"Server=DESKTOP-3U4D69V\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
+        public static string ConnectionString;
 
+        public static void SetConnectionString()
+        {
+         ConnectionStringZaneta = @"Server=ZANETA-PC\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
+         ConnectionStringMichal = @"Server=DESKTOP-3U4D69V\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
+        }
         public static string ReadScalar(string SQL)
         {
             System.Data.DataTable results = new System.Data.DataTable();
-            SqlConnection connection = new SqlConnection(connectionString);
+            SqlConnection connection = new SqlConnection(ConnectionString);
 
             string result = null;
             SqlCommand command = new SqlCommand(SQL, connection);
@@ -61,7 +67,7 @@ namespace CandidatesBrowser3.DAL
 
         public static System.Data.DataTable GetTableFromSQL(string sql)
         {
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, connectionString);
+            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, ConnectionString);
 
             SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
 
@@ -75,7 +81,7 @@ namespace CandidatesBrowser3.DAL
 
         public static void ExecProcedureWithArgs(string procedureName, Dictionary<string,string>Args)
         {
-            SqlConnection sqlConnection = new SqlConnection(connectionString);
+            SqlConnection sqlConnection = new SqlConnection(ConnectionString);
             SqlCommand cmd = new SqlCommand();
 
             cmd.CommandText = procedureName;

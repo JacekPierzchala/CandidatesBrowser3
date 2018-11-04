@@ -50,10 +50,6 @@
       <Project>{70bb0e4a-ff84-4ce1-9df8-7ffc0f561b8e}</Project>
       <Name>CandidatesBrowser3.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CandidatesBrowser3\CandidatesBrowser3.App.csproj">
-      <Project>{195cbae5-a854-4ca3-924d-038d33e3524d}</Project>
-      <Name>CandidatesBrowser3.App</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

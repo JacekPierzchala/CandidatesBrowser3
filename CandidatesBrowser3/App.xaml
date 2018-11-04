@@ -5,6 +5,9 @@
              StartupUri="View/MainListView.xaml"
              Startup="AppStartUp">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <local:ViewModelLocator x:Key="viewModelLocator"></local:ViewModelLocator>
+        </ResourceDictionary>
+       
     </Application.Resources>
 </Application>

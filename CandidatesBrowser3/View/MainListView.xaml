@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CandidatesBrowser3.View"
         mc:Ignorable="d"
-        Title="MainListView" Height="450" Width="800">
+        Title="MainListView" Height="450" Width="800"
+        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}">
     <Grid>
         
     </Grid>
