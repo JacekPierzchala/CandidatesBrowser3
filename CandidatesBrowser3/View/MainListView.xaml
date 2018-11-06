@@ -5,9 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CandidatesBrowser3.View"
         mc:Ignorable="d"
-        Title="MainListView" Height="450" Width="800"
-        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}">
-    <Grid>
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+        xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        WindowStartupLocation="CenterScreen"
+        Title="Main View" Height="450" Width="800"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+         TextElement.FontWeight="Regular"
+     TextElement.FontSize="13"
+     TextOptions.TextFormattingMode="Ideal"
+     TextOptions.TextRenderingMode="Auto"
+     Background="{DynamicResource MaterialDesignPaper}"
+     FontFamily="{DynamicResource MaterialDesignFont}"
         
+        
+        
+        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}">
+    
+    <Grid>
+      
+        <Grid Margin="0,0,0,0">
+            <dragablz:TabablzControl>
+                <dragablz:TabablzControl.InterTabController>
+                    <dragablz:InterTabController></dragablz:InterTabController>
+                </dragablz:TabablzControl.InterTabController>
+                <TabItem Header="Home">
+                    <Grid Margin="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox >ff</TextBox>
+                
+                            <DataGrid Grid.Column="1" ItemsSource="{Binding Candidates}" AutoGenerateColumns="False" IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="First Email" Binding="{Binding FirstEmail}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Second Email" Binding="{Binding SecondEmail}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="First Phone" Binding="{Binding FirstPhone}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Second Phone" Binding="{Binding SecondPhone}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Area" Binding="{Binding Area}"></DataGridTextColumn>
+                                    <DataGridTextColumn Header="Projects" Binding="{Binding Projects}"></DataGridTextColumn>
+                                    <DataGridCheckBoxColumn Header="CvUploaded" Binding="{Binding CvUploaded}"></DataGridCheckBoxColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                       
+                       
+                    </Grid>
+                </TabItem>
+              
+                
+            </dragablz:TabablzControl>
+        </Grid>
     </Grid>
 </Window>
