@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using CandidatesBrowser3.DAL;
+using System.Windows.Data;
 
 namespace CandidatesBrowser3.ViewModel
 {
@@ -22,7 +23,7 @@ namespace CandidatesBrowser3.ViewModel
             get { return candidates; }
             set {
                 candidates = value;
-                RaisePropertyChange("Candidates");
+
             }
         }
 
@@ -36,14 +37,23 @@ namespace CandidatesBrowser3.ViewModel
             }
         }
 
+        public CollectionView CandidatesView { get; set; }
+
+
         public MainListViewModel(ICandidateRepository CandidateRepository)
         {
             this.candidateRepository = CandidateRepository;
+            
             try
             {
                 LoadData();
+
+                CandidatesView = (CollectionView)CollectionViewSource.GetDefaultView(Candidates);
+                CandidatesView.Filter = UserFilter;
+
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
@@ -53,7 +63,13 @@ namespace CandidatesBrowser3.ViewModel
         private void LoadData()
         {
             Candidates = candidateRepository.GetCandidates();
+      
+        }
 
+
+        private bool UserFilter(object item)
+        {
+            return true;
         }
 
         public void RaisePropertyChange(string propertyName)

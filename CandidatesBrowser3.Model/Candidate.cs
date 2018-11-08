@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CandidatesBrowser3.Model
 {
-    public class Candidate : INotifyPropertyChanged
+    public class Candidate : INotifyPropertyChanged, ICloneable
     {
         private int id;
         public int ID
@@ -131,19 +131,17 @@ namespace CandidatesBrowser3.Model
         public Candidate() { }
         public Candidate(DataRow row)
         {
-            ID = row.Field<int>("ID");
-            FirstName = row.Field<string>("FIRST_NAME");
-            LastName = row.Field<string>("LAST_NAME");
+            ID = row.Field<int>("ID");            
+            FirstName = row.Field<string>("FIRST_NAME");            
+            LastName = row.Field<string>("LAST_NAME");           
             FirstEmail = row.Field<string>("1ST_@");
-            SecondEmail = row.Field<string>("2ND_@");
-            FirstPhone = row.Field<string>("1ST_TEL");
-            SecondPhone = row.Field<string>("2ND_TEL");
-            Projects = row.Field<string>("PROJECTS");
-            Area= row.Field<string>("AREA");
-            Deleted = row.Field<bool>("DELETED");
-            CvUploaded = row.Field<bool>("CV_UPLOADED");
-
-
+            SecondEmail = row.Field<string>("2ND_@"); 
+            FirstPhone = row.Field<string>("1ST_TEL");          
+            SecondPhone = row.Field<string>("2ND_TEL"); 
+            Area = row.Field<string>("AREA"); 
+            Deleted = row.Field<bool>("DELETED");        
+            Projects = row.Field<string>("PROJECTS");             
+            CvUploaded = row.Field<bool>("CV_UPLOADED"); 
         }
 
         public void RaisePropertyChange(string propertyName)
@@ -154,6 +152,12 @@ namespace CandidatesBrowser3.Model
             }
             
         }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

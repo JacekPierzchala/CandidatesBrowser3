@@ -28,12 +28,22 @@ namespace CandidatesBrowser3.DAL
         {
             DataTable dt = DBObjects.GetTableFromSQL("Select * FROM [Candidates_View]");
             Candidates = new ObservableCollection<Candidate>();
-            if (dt!=null)
+
+            try
             {
-                foreach (DataRow row in dt.Rows)
+                if (dt != null)
                 {
-                    Candidates.Add(new Candidate(row));
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        Candidates.Add(new Candidate(row));
+                    }
                 }
+            }
+           
+
+            catch (Exception x)
+            {
+
             }
         }
 

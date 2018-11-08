@@ -35,8 +35,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBox >ff</TextBox>
-                
-                            <DataGrid Grid.Column="1" ItemsSource="{Binding Candidates}" AutoGenerateColumns="False" IsReadOnly="True">
+
+                        <DataGrid Grid.Column="1" ItemsSource="{Binding CandidatesView}" AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
                                     <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
