@@ -28,7 +28,6 @@ namespace CandidatesBrowser3.DAL
         {
             DataTable dt = DBObjects.GetTableFromSQL("Select * FROM [Candidates_View]");
             Candidates = new ObservableCollection<Candidate>();
-
             try
             {
                 if (dt != null)
@@ -40,11 +39,7 @@ namespace CandidatesBrowser3.DAL
                 }
             }
            
-
-            catch (Exception x)
-            {
-
-            }
+            catch (Exception x)            {}
         }
 
         public void DeleteCandidate(Candidate candidate)

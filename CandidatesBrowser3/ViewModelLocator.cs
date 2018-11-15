@@ -11,7 +11,8 @@ namespace CandidatesBrowser3
     public class ViewModelLocator
     {
         private static ICandidateRepository candidateRepository = new CandidateRepository();
-        private static MainListViewModel mainListViewModel = new MainListViewModel(candidateRepository);
+        private static IConfigProjectsLibRepository configProjectsLibRepository = new ConfigProjectsLibRepository();
+        private static MainListViewModel mainListViewModel = new MainListViewModel(candidateRepository, configProjectsLibRepository);
 
         public static MainListViewModel MainListViewModel
         {

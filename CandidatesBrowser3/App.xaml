@@ -11,32 +11,44 @@
                 <local:ViewModelLocator x:Key="viewModelLocator"></local:ViewModelLocator>
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}"/>
 
+            <Style x:Key="labeStyle" TargetType="{x:Type Label}">
 
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="Background" Value="#FF3F9EEE"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="FontFamily" Value="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"/>
+            </Style>
 
-     
-
+            <Style x:Key="checkBoxStyle" TargetType="{x:Type CheckBox}">
+                <Setter Property="FontFamily" Value="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"/>
+                
+            </Style>
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary>
+                   <ResourceDictionary>
                     <ResourceDictionary.MergedDictionaries>
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Purple.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Label.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/materialdesigntheme.Listbox.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ListView.xaml" />
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Datagrid.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Label.xaml"/>
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
-                <ResourceDictionary>
+                <!--<ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.purple.xaml"/>
-                            <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.purple.xaml"/>
+                        <ResourceDictionary x:Name="blueColor" Source="pack://application:,,,/MaterialDesignColors;component/Themes/MaterialDesignColor.blue.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml"/>
                         </ResourceDictionary.MergedDictionaries>
-                        <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource ResourceKey=Primary100}"/>
-                        <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource ResourceKey=Primary100Foreground}"/>
-                        <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource ResourceKey=Primary500}"/>
-                        <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource ResourceKey=Primary500Foreground}"/>
-                        <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource ResourceKey=Primary700}"/>
+                      
                         <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource ResourceKey=Primary700Foreground}"/>
-                    </ResourceDictionary>
+                  </ResourceDictionary>-->
 
                     <!--<ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>

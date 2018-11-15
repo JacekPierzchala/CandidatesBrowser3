@@ -6,24 +6,24 @@
         xmlns:local="clr-namespace:CandidatesBrowser3.View"
         mc:Ignorable="d"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
-        xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        WindowStartupLocation="CenterScreen"
-        Title="Main View" Height="450" Width="800"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-         TextElement.FontWeight="Regular"
-     TextElement.FontSize="13"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+     xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+     WindowStartupLocation="CenterScreen"
+     Title="Main View" Height="600" Width="1000"
+     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+     TextElement.FontWeight="Regular"
+     TextElement.FontSize="12"
+     TextBlock.FontSize="12"
+     TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
      TextOptions.TextFormattingMode="Ideal"
      TextOptions.TextRenderingMode="Auto"
      Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="{DynamicResource MaterialDesignFont}"
-        
-        
-        
-        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}">
-    
-    <Grid>
-      
-        <Grid Margin="0,0,0,0">
+     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"        
+     
+     DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}">
+
+   
+        <Grid Margin="2">
             <dragablz:TabablzControl>
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController></dragablz:InterTabController>
@@ -31,10 +31,57 @@
                 <TabItem Header="Home">
                     <Grid Margin="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="250"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox >ff</TextBox>
+                    <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1">
+                        <StackPanel  Orientation="Vertical" Margin="1" >
+                            <TextBlock  Margin="1">First Name:</TextBlock>
+                            <TextBox Text="{Binding FirstNameFilter, UpdateSourceTrigger=PropertyChanged,Delay=100}" Margin="1" x:Name="txtFirstName"></TextBox>
+                            <TextBlock  Margin="1">Last Name:</TextBlock>
+                            <TextBox Text="{Binding LastNameFilter, UpdateSourceTrigger=PropertyChanged,Delay=100}" Margin="1" x:Name="txtLastName"></TextBox>
+                            <Expander>
+                                <Expander.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Label  Style="{StaticResource labeStyle}" FontSize="12" Content="Projects"></Label>
+                                            <TextBox x:Name="txtProject" 
+                                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.ProjectNameFilter,  UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+                                            <CheckBox  FontSize="12" Content="SelectAll" x:Name="selectAllProjectCheck"  >
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:InvokeCommandAction
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
+                                                            Path=DataContext.SelectAllProjectsCommand,UpdateSourceTrigger=PropertyChanged, Delay=100}"
+                                                            CommandParameter="{Binding ElementName=selectAllProjectCheck}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                               
+                                            </CheckBox>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </Expander.HeaderTemplate>
+                                <ListBox ItemsSource="{Binding ConfigProjectsLibsView}" Height="300">
+                                    <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                       
+                                                <StackPanel Orientation="Horizontal">
+
+                                                    <CheckBox Margin="8,0"  IsChecked="{Binding Selected}"/>
+                                                    <TextBlock Margin="1,0" Text="{Binding ProjectName}"/>
+
+                                                </StackPanel>
+                                         
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+           
+                            </Expander>
+                            <Button></Button>
+                        </StackPanel>
+                    </Border>
+                       
 
                         <DataGrid Grid.Column="1" ItemsSource="{Binding CandidatesView}" AutoGenerateColumns="False" IsReadOnly="True">
                                 <DataGrid.Columns>
@@ -53,9 +100,9 @@
                        
                     </Grid>
                 </TabItem>
-              
-                
+
+                <TabItem Header="Reports"></TabItem>
             </dragablz:TabablzControl>
         </Grid>
-    </Grid>
+   
 </Window>
