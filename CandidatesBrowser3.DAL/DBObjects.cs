@@ -67,15 +67,24 @@ namespace CandidatesBrowser3.DAL
 
         public static System.Data.DataTable GetTableFromSQL(string sql)
         {
-            SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, ConnectionString);
+            DataTable table = new DataTable();
+            try
+            {
+                SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, ConnectionString);
 
-            SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
+                SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
 
-            dataAdapter.SelectCommand.CommandTimeout = 1000;
-            //dataAdapter.SelectCommand.Parameters.Add()
-            System.Data.DataTable table = new System.Data.DataTable();
-            table.Locale = System.Globalization.CultureInfo.InvariantCulture;
-            dataAdapter.Fill(table);
+                dataAdapter.SelectCommand.CommandTimeout = 1000;
+                //dataAdapter.SelectCommand.Parameters.Add()
+       
+                table.Locale = System.Globalization.CultureInfo.InvariantCulture;
+                dataAdapter.Fill(table);
+            }
+            catch(Exception ex)
+            {
+
+            }
+            
             return table;
         }
 

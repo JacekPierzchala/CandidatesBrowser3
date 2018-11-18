@@ -40,12 +40,15 @@ namespace CandidatesBrowser3.Model
             }
         }
 
-        public ConfigProjectsLib() { }
-        public ConfigProjectsLib(DataRow row)
+        public ConfigProjectsLib()
+        {
+            Selected = true;
+        }
+        public ConfigProjectsLib(DataRow row):this()
         {
             Id = row.Field<int>("ID");
             ProjectName = row.Field<string>("PROJECT_NAME");
-            Selected = true;
+        
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

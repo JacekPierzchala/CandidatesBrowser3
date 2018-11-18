@@ -12,7 +12,8 @@ namespace CandidatesBrowser3
     {
         private static ICandidateRepository candidateRepository = new CandidateRepository();
         private static IConfigProjectsLibRepository configProjectsLibRepository = new ConfigProjectsLibRepository();
-        private static MainListViewModel mainListViewModel = new MainListViewModel(candidateRepository, configProjectsLibRepository);
+        private static IConfigProjectsRepository configProjectsRepository = new ConfigProjectsRepository();
+        private static MainListViewModel mainListViewModel = new MainListViewModel(candidateRepository, configProjectsLibRepository, configProjectsRepository);
 
         public static MainListViewModel MainListViewModel
         {

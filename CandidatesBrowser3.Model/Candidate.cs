@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
@@ -66,7 +67,7 @@ namespace CandidatesBrowser3.Model
         private string firstPhone;
         public string FirstPhone
         {
-            get { return firstEmail; }
+            get { return firstPhone; }
             set
             {
                 firstPhone = value;
@@ -133,16 +134,28 @@ namespace CandidatesBrowser3.Model
         {
             ID = row.Field<int>("ID");            
             FirstName = row.Field<string>("FIRST_NAME");            
-            LastName = row.Field<string>("LAST_NAME");           
-            FirstEmail = row.Field<string>("1ST_@");
-            SecondEmail = row.Field<string>("2ND_@"); 
-            FirstPhone = row.Field<string>("1ST_TEL");          
+            LastName = row.Field<string>("LAST_NAME");                      
+            FirstEmail = row.Field<string>("1ST_@");      
+            SecondEmail = row.Field<string>("2ND_@");           
+            FirstPhone = row.Field<string>("1ST_TEL");              
             SecondPhone = row.Field<string>("2ND_TEL"); 
             Area = row.Field<string>("AREA"); 
             Deleted = row.Field<bool>("DELETED");        
             Projects = row.Field<string>("PROJECTS");             
             CvUploaded = row.Field<bool>("CV_UPLOADED"); 
         }
+
+        private ObservableCollection<ConfigProject> candidateProjects;
+        public ObservableCollection<ConfigProject> CandidateProjects
+        {
+            get { return candidateProjects; }
+            set
+            {
+                candidateProjects = value;
+                RaisePropertyChange("CandidateProjects");
+            }
+        }
+
 
         public void RaisePropertyChange(string propertyName)
         {

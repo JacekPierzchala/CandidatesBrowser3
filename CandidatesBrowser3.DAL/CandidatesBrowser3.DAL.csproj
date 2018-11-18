@@ -42,9 +42,11 @@
   <ItemGroup>
     <Compile Include="CandidateRepository.cs" />
     <Compile Include="ConfigProjectsLibRepository.cs" />
+    <Compile Include="ConfigProjectsRepository.cs" />
     <Compile Include="DBObjects.cs" />
     <Compile Include="ICandidateRepository.cs" />
     <Compile Include="IConfigProjectsLibRepository.cs" />
+    <Compile Include="IConfigProjectsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

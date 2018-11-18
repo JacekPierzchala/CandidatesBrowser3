@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using CandidatesBrowser3.Utilities;
 using System.Windows.Controls;
+using CandidatesBrowser3.Extensions;
 
 namespace CandidatesBrowser3.ViewModel
 {
@@ -20,24 +21,87 @@ namespace CandidatesBrowser3.ViewModel
         #region properties
         private ICandidateRepository candidateRepository;
         private IConfigProjectsLibRepository configProjectsLibRepository;
-        #endregion
-        #region Commands
-        public ICommand SelectAllProjectsCommand { get; set; }
+        private IConfigProjectsRepository configProjectsRepository;
 
-        #endregion
-        #region methodsForCommands
-        private bool CanSelectAllProjects(object obj)
+        private bool allProjectsSelected;
+        public bool AllProjectsSelected
         {
-            return true;
+            get { return allProjectsSelected; }
+            set {
+                allProjectsSelected = value;
+                RaisePropertyChange("AllProjectsSelected");
+                ViewRefresh();
+            }
+        }
+
+
+        private Candidate selectedCandidate;
+        public Candidate SelectedCandidate
+        {
+            get { return selectedCandidate; }
+            set
+            {
+                selectedCandidate = value;
+                RaisePropertyChange("SelectedCandidate");
+            }
         }
         
-        private void SelectAllProjects(object obj)
-        {
-            bool? isChecked = ((CheckBox)obj).IsChecked;
-            ConfigProjectsLibs.ToList().ForEach(e => e.Selected = (bool)isChecked);           
-        }
         #endregion
+        #region Commands
+            public ICommand SelectAllProjectsCommand { get; set; }
+            public ICommand ProjectSelectionChangeCommand { get; set; }
+            public ICommand ResetFiltersCommand { get; set; }
+        #endregion
+        #region methodsForCommands
+             #region SelectAllProjectsCommand
+                private bool CanSelectAllProjects(object obj)
+                {
+                    return true;
+                }      
+                private void SelectAllProjects(object obj)
+                {
+                bool isChecked = (bool)obj;
+                //((CheckBox)obj).IsChecked;
+                ConfigProjectsLibs.ToList().ForEach(e => e.Selected = (bool)isChecked);
+                AllProjectsSelected = (bool)isChecked;
+                }       
+             #endregion            
+             #region ProjectSelectionChangeCommand
+             private bool CanProjectSelectionChange(object obj)
+                {
+                return true;
+                }               
+             private void ProjectSelectionChange(object obj)
+             {
+          
+                   if (ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count())
+                    {
+                        AllProjectsSelected = true;
+                    }
+                    else
+                    {
+                        AllProjectsSelected = false;
+                    }
 
+             }
+        #endregion
+            #region ResetFiltersCommand
+                private void ResetFilters(object obj)
+                {
+                    FirstNameFilter = null;
+                    LastNameFilter = null;
+                    ProjectNameFilter = null;
+                    AllProjectsSelected = true;          
+                    SelectAllProjects(AllProjectsSelected);
+                    
+                }
+                private bool CanResetFilters(object obj)
+                {
+                    return true;
+                }
+            #endregion
+        #endregion
+        #region collections
         private ObservableCollection<Candidate> candidates;
         public ObservableCollection<Candidate> Candidates
         {
@@ -47,6 +111,8 @@ namespace CandidatesBrowser3.ViewModel
                 RaisePropertyChange("Candidates");
             }
         }
+
+
 
         private ObservableCollection<ConfigProjectsLib> configProjectsLibs;
         public ObservableCollection<ConfigProjectsLib> ConfigProjectsLibs
@@ -58,28 +124,53 @@ namespace CandidatesBrowser3.ViewModel
                 }
         }
 
-
-        private Candidate selectedCandidate;
-        public Candidate SelectedCandidate
+        private ObservableCollection<ConfigProject> configProjectCollection;
+        public ObservableCollection<ConfigProject> ConfigProjectCollection
         {
-            get { return selectedCandidate; }
-            set {
-                selectedCandidate = value;
-                RaisePropertyChange("SelectedCandidate");
+            get { return configProjectCollection; }
+            set
+            {
+                configProjectCollection = value;
+                RaisePropertyChange("ConfigProjectCollection");
             }
         }
 
-        public CollectionView CandidatesView { get; set; }
-        public CollectionView ConfigProjectsLibsView { get; set; }
 
-        public MainListViewModel(ICandidateRepository CandidateRepository, IConfigProjectsLibRepository configProjectsLibRepository)
+        public CollectionView CandidatesView { get; set; }
+
+        private CollectionView configProjectsLibsView;
+        public CollectionView ConfigProjectsLibsView
+        {
+            get { return configProjectsLibsView; }
+            set {
+                configProjectsLibsView = value;
+                RaisePropertyChange("ConfigProjectsLibsView");
+                if (CandidatesView!=null)
+                {
+                    CandidatesView.Refresh();
+                }
+               
+            }
+        }
+
+
+        #endregion
+
+
+
+
+        public MainListViewModel(ICandidateRepository CandidateRepository, IConfigProjectsLibRepository configProjectsLibRepository,
+            IConfigProjectsRepository configProjectsRepository)
         {
             this.candidateRepository = CandidateRepository;
             this.configProjectsLibRepository = configProjectsLibRepository;
+            this.configProjectsRepository = configProjectsRepository;
+            AllProjectsSelected = true;
             #region loadData           
             try
             {
                 LoadData();
+                AddProjectsTocandidate();
             }
             catch (Exception e)
             {
@@ -99,30 +190,57 @@ namespace CandidatesBrowser3.ViewModel
 
             #region commandsInitialisation
             SelectAllProjectsCommand = new CustomCommand(SelectAllProjects, CanSelectAllProjects);
+            ProjectSelectionChangeCommand = new CustomCommand(ProjectSelectionChange, CanProjectSelectionChange);
+            ResetFiltersCommand = new CustomCommand(ResetFilters, CanResetFilters);
             #endregion
         }
 
         private void LoadViews()
         {
-            CandidatesView = (CollectionView)CollectionViewSource.GetDefaultView(Candidates);
-            CandidatesView.Filter = CandidatesViewFilter;
             ConfigProjectsLibsView = (CollectionView)CollectionViewSource.GetDefaultView(ConfigProjectsLibs);
             ConfigProjectsLibsView.Filter = ConfigProjectsLibsFilter;
+            CandidatesView = (CollectionView)CollectionViewSource.GetDefaultView(Candidates);
+            CandidatesView.Filter = CandidatesViewFilter;
+
         }
         private void LoadData()
         {
             Candidates = candidateRepository.GetCandidates();
             ConfigProjectsLibs = configProjectsLibRepository.GetConfigProjectsLibs();
+            ConfigProjectCollection = configProjectsRepository.GetConfigProjects();
       
         }
 
+        private void AddProjectsTocandidate()
+        {        
+            Candidates.ToList().ForEach(e => e.CandidateProjects = ConfigProjectCollection.Where(cp => cp.ConfigCandidateID.Equals(e.ID)).ToList().ToObservableCollection());
+        }
 
         #region Filters
+
+        private void ViewRefresh()
+        {
+
+            if (ConfigProjectsLibsView!=null)
+            {
+                ConfigProjectsLibsView.Refresh();
+            }
+            if (CandidatesView != null)
+            {
+                CandidatesView.Refresh();
+            }
+                
+        }
+
         private bool CandidatesViewFilter(object item)
         {
             if (string.IsNullOrEmpty(FirstNameFilter)
                 &&
-                string.IsNullOrEmpty(LastNameFilter))
+                string.IsNullOrEmpty(LastNameFilter)
+               
+
+                && ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count()
+                )
             {
                 return true;
             }
@@ -131,6 +249,11 @@ namespace CandidatesBrowser3.ViewModel
                 if (
                     (string.IsNullOrEmpty(FirstNameFilter) || (((Candidate)item).FirstName.ToLower()).StartsWith(FirstNameFilter.ToLower()))
                  && (string.IsNullOrEmpty(LastNameFilter) || (((Candidate)item).LastName.ToLower()).StartsWith(LastNameFilter.ToLower()))
+                 && (
+                     ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count()
+                     || ((Candidate)item).CandidateProjects.Join((ConfigProjectsLibsView.Cast<ConfigProjectsLib>().Where(e => e.Selected.Equals(true))).ToList(), cp=>cp.ConfigProjectLibID,cpl=>cpl.Id,(cp,cpl)=>cp.ConfigCandidateID).ToList().Count>0
+                   
+                    )
                    )
                    {
                        return true;
@@ -188,7 +311,7 @@ namespace CandidatesBrowser3.ViewModel
             {
                 projectNameFilter = value;
                 RaisePropertyChange("ProjectNameFilter");
-                ConfigProjectsLibsView.Refresh();
+                ViewRefresh();
             }
         }
         #endregion
