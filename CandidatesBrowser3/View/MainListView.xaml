@@ -7,21 +7,19 @@
         mc:Ignorable="d"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-     xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-     WindowStartupLocation="CenterScreen"
-     Title="Main View" Height="600" Width="1000"
-     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-     TextElement.FontWeight="Regular"
-     TextElement.FontSize="12"
-     TextBlock.FontSize="12"
-     TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
-     TextOptions.TextFormattingMode="Ideal"
-     TextOptions.TextRenderingMode="Auto"
-     Background="{DynamicResource MaterialDesignPaper}"
-     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"        
-     
-     DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}">
-
+        xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        WindowStartupLocation="CenterScreen"
+        Title="Main View" Height="750" Width="1000"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="12"
+        TextBlock.FontSize="12"
+        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"            
+        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}">
    
         <Grid Margin="2">
             <dragablz:TabablzControl>
@@ -51,6 +49,61 @@
                             <TextBox Text="{Binding FirstNameFilter, UpdateSourceTrigger=PropertyChanged,Delay=100}" Margin="1" x:Name="txtFirstName"></TextBox>
                             <TextBlock  Margin="1">Last Name:</TextBlock>
                             <TextBox Text="{Binding LastNameFilter, UpdateSourceTrigger=PropertyChanged,Delay=100}" Margin="1" x:Name="txtLastName"></TextBox>
+                            <Expander x:Name="AreaExpander">
+                                <Expander.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Label  Style="{StaticResource labeStyle}" FontSize="12" Content="Area"></Label>
+                                            <TextBox x:Name="txtArea" 
+                                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AreaNameFilter,  UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+                                            <CheckBox VerticalAlignment="Center"  HorizontalAlignment="Center" BorderBrush="Gray" BorderThickness="5" FontSize="12" Content="SelectAll" x:Name="selectAllAreasCheck"
+                                                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AllAreasSelected}">
+                             
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:InvokeCommandAction
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
+                                                            Path=DataContext.SelectAllAreasCommand,UpdateSourceTrigger=PropertyChanged}"
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AllAreasSelected}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </CheckBox>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </Expander.HeaderTemplate>
+
+                                <ListBox ItemsSource="{Binding ConfigAreaView}" Height="300" >
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <CheckBox x:Name="SelectedAreaCheck"   Margin="8,0"  IsChecked="{Binding Selected}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Checked">
+                                                            <i:InvokeCommandAction
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
+                                                            Path=DataContext.AreaSelectionChangeCommand}"
+                                                                CommandParameter="{Binding ElementName=SelectedAreaCheck}"
+                                                           />
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="Unchecked">
+                                                            <i:InvokeCommandAction
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
+                                                            Path=DataContext.ProjectSelectionChangeCommand}"
+                                                                CommandParameter="{Binding ElementName=SelectedAreaCheck}"
+                                                           />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </CheckBox>
+                                                <TextBlock Margin="1,0" Text="{Binding AreaName}"/>
+
+                                            </StackPanel>
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Expander>
                             <Expander x:Name="ProjectsExpander">
                                 <Expander.HeaderTemplate>
                                     <DataTemplate>
@@ -77,7 +130,7 @@
                                 </Expander.HeaderTemplate>
                                 <ListBox ItemsSource="{Binding ConfigProjectsLibsView}" Height="300" >
                                     <ListBox.ItemTemplate>
-                                      <DataTemplate>
+                                        <DataTemplate>
 
                                             <StackPanel Orientation="Horizontal">
                                                 <CheckBox x:Name="SelectedCheck"   Margin="8,0"  IsChecked="{Binding Selected}">
@@ -98,16 +151,94 @@
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </CheckBox>
-                                                 <TextBlock Margin="1,0" Text="{Binding ProjectName}"/>
+                                                <TextBlock Margin="1,0" Text="{Binding ProjectName}"/>
 
-                                                </StackPanel>
-                                         
+                                            </StackPanel>
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Expander>
+                            <Label  x:Name="CompanyLabel" Style="{StaticResource labeStyle}" Margin="25,0,60,0" FontSize="12" Content="Company">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseEnter">
+                                        <i:InvokeCommandAction
+                                                        Command="{Binding CompaniesListOpenedChangeCommand}"
+                                                            CommandParameter="true"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Label>
+                       
+                            <Popup  materialdesign:ThemeAssist.Theme="Light"
+                                PlacementTarget="{Binding ElementName=CompanyLabel}" IsOpen="{Binding CompaniesListOpened}" Placement="Left">
+                                <Border>
+
+                                    <StackPanel >
+
+                                        <StackPanel Background="White">
+                                            <Button Content="Close" Margin="2">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:InvokeCommandAction
+                                                        Command="{Binding CompaniesListOpenedChangeCommand}"
+                                                            CommandParameter="false"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Button>
+                                            
+                                            <Label  Style="{StaticResource labeStyle}" FontSize="12" Content="Company"></Label>
+                                            <TextBox x:Name="txtCompany" Background="White" Foreground="Black"
+                                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.ProjectNameFilter,  UpdateSourceTrigger=PropertyChanged, Delay=100}"/>
+                                            <CheckBox  materialdesign:ThemeAssist.Theme="Light"  VerticalAlignment="Center"  HorizontalAlignment="Center" BorderBrush="Gray" BorderThickness="5" FontSize="12" Content="SelectAll" x:Name="selectAllCompanyCheck"
+                                                      IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AllProjectsSelected}">
+                                                <!--IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AllProjectsSelected}"-->
+
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:InvokeCommandAction
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
+                                                            Path=DataContext.SelectAllProjectsCommand,UpdateSourceTrigger=PropertyChanged}"
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AllProjectsSelected}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </CheckBox>
+                                        </StackPanel>
+
+                                        <ListBox ItemsSource="{Binding ConfigCompanyCollectionView}" Height="600" Width="250" Background="White" Foreground="Black">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <CheckBox x:Name="SelectedCheck"   Margin="8,0"  IsChecked="{Binding Selected}">
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="Checked">
+                                                                    <i:InvokeCommandAction
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
+                                                            Path=DataContext.ProjectSelectionChangeCommand}"
+                                                                CommandParameter="{Binding ElementName=SelectedCheck}"
+                                                           />
+                                                                </i:EventTrigger>
+                                                                <i:EventTrigger EventName="Unchecked">
+                                                                    <i:InvokeCommandAction
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
+                                                            Path=DataContext.ProjectSelectionChangeCommand}"
+                                                                CommandParameter="{Binding ElementName=SelectedCheck}"
+                                                           />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
+                                                        </CheckBox>
+                                                        <TextBlock Margin="1,0" Text="{Binding Company}"/>
+
+                                                    </StackPanel>
+
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
-           
-                            </Expander>
-                           
+                                    </StackPanel>
+                                </Border>
+                             
+                               
+                            </Popup>
                         </StackPanel>
                     </Border>
 

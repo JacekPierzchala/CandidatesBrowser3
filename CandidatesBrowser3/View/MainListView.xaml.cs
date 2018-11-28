@@ -23,5 +23,7 @@ namespace CandidatesBrowser3.View
         {
             InitializeComponent();
         }
+
+      
     }
 }

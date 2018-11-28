@@ -41,7 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Candidate.cs" />
+    <Compile Include="ConfigArea.cs" />
+    <Compile Include="ConfigCompany.cs" />
     <Compile Include="ConfigProject.cs" />
+    <Compile Include="ConfigProjectCandidate.cs" />
     <Compile Include="ConfigProjectsLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

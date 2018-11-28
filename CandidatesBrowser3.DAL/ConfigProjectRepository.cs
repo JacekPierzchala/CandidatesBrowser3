@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace CandidatesBrowser3.DAL
 {
-    public class ConfigProjectsRepository: IConfigProjectsRepository
+    public class ConfigProjectRepository:IConfigProjectRepository
     {
-
         private static ObservableCollection<ConfigProject> ConfigProjects;
         public void DeleteConfigProject(ConfigProject configProject)
         {
@@ -20,7 +19,7 @@ namespace CandidatesBrowser3.DAL
 
         public ConfigProject GetConfigProject()
         {
-            if (ConfigProjects == null)
+            if (ConfigProjects== null)
             {
                 LoadConfigProjects();
             }
@@ -33,7 +32,7 @@ namespace CandidatesBrowser3.DAL
             {
                 LoadConfigProjects();
             }
-            return ConfigProjects.Where(e => e.ConfigProjectID.Equals(id)).FirstOrDefault();
+            return ConfigProjects.Where(e => e.ID.Equals(id)).FirstOrDefault();
         }
         private void LoadConfigProjects()
         {
@@ -65,8 +64,8 @@ namespace CandidatesBrowser3.DAL
 
         public void UpdateConfigProject(ConfigProject configProject)
         {
-            ConfigProject configProjectsToUpdate = ConfigProjects.Where(e => e.ConfigProjectID.Equals(configProject.ConfigProjectID)).FirstOrDefault();
-            configProjectsToUpdate = configProject;
+            ConfigProject configProjectToUpdate = ConfigProjects.Where(e => e.ID.Equals(configProject.ID)).FirstOrDefault();
+            configProjectToUpdate = configProject;
         }
     }
 }

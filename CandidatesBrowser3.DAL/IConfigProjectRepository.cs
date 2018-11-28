@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace CandidatesBrowser3.DAL
 {
-    public interface IConfigProjectsRepository
+    public interface IConfigProjectRepository
     {
-        void DeleteConfigProject(ConfigProject candidate);
+        void DeleteConfigProject(ConfigProject configProject);
         ConfigProject GetConfigProject();
         ConfigProject ConfigProjectByID(int id);
         ObservableCollection<ConfigProject> GetConfigProjects();

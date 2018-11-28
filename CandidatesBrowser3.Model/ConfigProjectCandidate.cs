@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Data;
 
 namespace CandidatesBrowser3.Model
 {
-    public class ConfigProject : INotifyPropertyChanged, ICloneable
+    public class ConfigProjectCandidate : INotifyPropertyChanged, ICloneable
     {
-        private int id;
-        public int ID
+        private int configProjectID;
+        public int ConfigProjectID
         {
-            get { return id; }
-            set
-            {
-                id = value;
-                RaisePropertyChanged("ID");
-            }
+            get { return configProjectID; }
+            set {
+                configProjectID = value;
+                RaisePropertyChanged("ConfigProjectID");
+                }
         }
 
         private int configAreaID;
@@ -65,20 +64,22 @@ namespace CandidatesBrowser3.Model
             }
         }
 
-        public ConfigProject(DataRow row)
+        public ConfigProjectCandidate(DataRow row)
         {
-            ID = row.Field<int>("ID");
+            ConfigProjectID = row.Field<int>("CONFIG_PROJECT_ID");
             ConfigAreaID = row.Field<int>("CONFIG_AREA_ID");
             ConfigProjectLibID = row.Field<int>("CONFIG_PROJECT_LIB_ID");
             ConfigGroupID = row.Field<int>("CONFIG_GROUP_ID");
-    
+            ConfigCandidateID = row.Field<int>("CANDIDATES_ID");
+            
+                
+                
         }
 
-        public ConfigProject()
+        public ConfigProjectCandidate()
         {
 
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propertyName)

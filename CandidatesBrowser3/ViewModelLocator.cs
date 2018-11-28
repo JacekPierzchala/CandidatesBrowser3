@@ -12,9 +12,13 @@ namespace CandidatesBrowser3
     {
         private static ICandidateRepository candidateRepository = new CandidateRepository();
         private static IConfigProjectsLibRepository configProjectsLibRepository = new ConfigProjectsLibRepository();
-        private static IConfigProjectsRepository configProjectsRepository = new ConfigProjectsRepository();
-        private static MainListViewModel mainListViewModel = new MainListViewModel(candidateRepository, configProjectsLibRepository, configProjectsRepository);
+        private static IConfigProjectsCandidateRepository configProjectsCandidateRepository = new ConfigProjectsCandidateRepository();
+        private static IConfigAreaRepository configAreaRepository = new ConfigAreaRepository();
+        private static IConfigProjectRepository configProjectRepository = new ConfigProjectRepository();
+        private static IConfigCompanyRepository configCompanyRepository = new ConfigCompanyRepository();
 
+        private static MainListViewModel mainListViewModel = new MainListViewModel(candidateRepository, configProjectsLibRepository, 
+            configProjectsCandidateRepository,configAreaRepository,configProjectRepository, configCompanyRepository);
         public static MainListViewModel MainListViewModel
         {
             get

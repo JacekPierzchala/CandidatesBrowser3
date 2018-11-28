@@ -145,8 +145,8 @@ namespace CandidatesBrowser3.Model
             CvUploaded = row.Field<bool>("CV_UPLOADED"); 
         }
 
-        private ObservableCollection<ConfigProject> candidateProjects;
-        public ObservableCollection<ConfigProject> CandidateProjects
+        private ObservableCollection<ConfigProjectCandidate> candidateProjects;
+        public ObservableCollection<ConfigProjectCandidate> CandidateProjects
         {
             get { return candidateProjects; }
             set

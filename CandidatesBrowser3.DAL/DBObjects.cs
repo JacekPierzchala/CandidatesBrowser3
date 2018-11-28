@@ -5,20 +5,21 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CandidatesBrowser3.DAL
 {
     public class DBObjects
     {
         public static string DBName;
-        public static string ConnectionStringZaneta = @"Server=ZANETA-PC\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
-        public static string ConnectionStringMichal = @"Server=DESKTOP-3U4D69V\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
+        public static string ConnectionStringZaneta;//= @"Server=ZANETA-PC\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
+        public static string ConnectionStringMichal; //= @"Server=DESKTOP-3U4D69V\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
         public static string ConnectionString;
 
         public static void SetConnectionString()
         {
-         ConnectionStringZaneta = @"Server=ZANETA-PC\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
-         ConnectionStringMichal = @"Server=DESKTOP-3U4D69V\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI";
+         ConnectionStringZaneta = @"Server=ZANETA-PC\SQLEXPRESS;database=" + DBName +";integrated Security=SSPI; timeout=5000";
+         ConnectionStringMichal = @"Server=DESKTOP-3U4D69V\SQLEXPRESS;database=" + DBName + ";integrated Security=SSPI; timeout=5000";
         }
         public static string ReadScalar(string SQL)
         {
@@ -68,22 +69,17 @@ namespace CandidatesBrowser3.DAL
         public static System.Data.DataTable GetTableFromSQL(string sql)
         {
             DataTable table = new DataTable();
-            try
-            {
-                SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, ConnectionString);
+              SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, ConnectionString);
 
                 SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
 
-                dataAdapter.SelectCommand.CommandTimeout = 1000;
+                dataAdapter.SelectCommand.CommandTimeout = 5000;
                 //dataAdapter.SelectCommand.Parameters.Add()
        
                 table.Locale = System.Globalization.CultureInfo.InvariantCulture;
                 dataAdapter.Fill(table);
-            }
-            catch(Exception ex)
-            {
-
-            }
+            
+           
             
             return table;
         }

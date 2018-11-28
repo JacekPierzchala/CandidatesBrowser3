@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,12 +42,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CandidateRepository.cs" />
+    <Compile Include="ConfigAreaRepository.cs" />
+    <Compile Include="ConfigCompanyRepository.cs" />
+    <Compile Include="ConfigProjectRepository.cs" />
     <Compile Include="ConfigProjectsLibRepository.cs" />
-    <Compile Include="ConfigProjectsRepository.cs" />
+    <Compile Include="ConfigProjectsCandidateRepository.cs" />
     <Compile Include="DBObjects.cs" />
     <Compile Include="ICandidateRepository.cs" />
+    <Compile Include="IConfigAreaRepository.cs" />
+    <Compile Include="IConfigCompanyRepository.cs" />
+    <Compile Include="IConfigProjectRepository.cs" />
     <Compile Include="IConfigProjectsLibRepository.cs" />
-    <Compile Include="IConfigProjectsRepository.cs" />
+    <Compile Include="IConfigProjectsCandidateRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
