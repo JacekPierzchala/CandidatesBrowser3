@@ -156,6 +156,16 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+        private ObservableCollection<CandidateCompany> candidateCompanies;
+        public ObservableCollection<CandidateCompany> CandidateCompanies
+        {
+            get { return candidateCompanies; }
+            set {
+                candidateCompanies = value;
+                RaisePropertyChange("CandidateCompanies");
+                }
+        }
+
 
         public void RaisePropertyChange(string propertyName)
         {

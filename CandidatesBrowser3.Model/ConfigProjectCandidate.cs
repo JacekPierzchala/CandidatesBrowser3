@@ -72,8 +72,6 @@ namespace CandidatesBrowser3.Model
             ConfigGroupID = row.Field<int>("CONFIG_GROUP_ID");
             ConfigCandidateID = row.Field<int>("CANDIDATES_ID");
             
-                
-                
         }
 
         public ConfigProjectCandidate()

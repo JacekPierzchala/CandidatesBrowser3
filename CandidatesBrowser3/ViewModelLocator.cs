@@ -16,9 +16,14 @@ namespace CandidatesBrowser3
         private static IConfigAreaRepository configAreaRepository = new ConfigAreaRepository();
         private static IConfigProjectRepository configProjectRepository = new ConfigProjectRepository();
         private static IConfigCompanyRepository configCompanyRepository = new ConfigCompanyRepository();
+        private static ICandidateCompanyRepository candidateCompanyRepository = new CandidateCompanyRepository();
+        private static IConfigCompanyProjectRepository configCompanyProjectRepository = new ConfigCompanyProjectRepository();
 
-        private static MainListViewModel mainListViewModel = new MainListViewModel(candidateRepository, configProjectsLibRepository, 
-            configProjectsCandidateRepository,configAreaRepository,configProjectRepository, configCompanyRepository);
+        private static MainListViewModel mainListViewModel = 
+            new MainListViewModel(candidateRepository, configProjectsLibRepository, 
+            configProjectsCandidateRepository,configAreaRepository,configProjectRepository, 
+            configCompanyRepository,candidateCompanyRepository,configCompanyProjectRepository);
+
         public static MainListViewModel MainListViewModel
         {
             get

@@ -41,15 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CandidateCompanyRepository.cs" />
     <Compile Include="CandidateRepository.cs" />
     <Compile Include="ConfigAreaRepository.cs" />
+    <Compile Include="ConfigCompanyProjectRepository.cs" />
     <Compile Include="ConfigCompanyRepository.cs" />
     <Compile Include="ConfigProjectRepository.cs" />
     <Compile Include="ConfigProjectsLibRepository.cs" />
     <Compile Include="ConfigProjectsCandidateRepository.cs" />
     <Compile Include="DBObjects.cs" />
+    <Compile Include="ICandidateCompanyRepository.cs" />
     <Compile Include="ICandidateRepository.cs" />
     <Compile Include="IConfigAreaRepository.cs" />
+    <Compile Include="IConfigCompanyProjectRepository.cs" />
     <Compile Include="IConfigCompanyRepository.cs" />
     <Compile Include="IConfigProjectRepository.cs" />
     <Compile Include="IConfigProjectsLibRepository.cs" />
