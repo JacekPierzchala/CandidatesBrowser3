@@ -29,6 +29,17 @@ namespace CandidatesBrowser3.ViewModel
         private ICandidateCompanyRepository candidateCompanyRepository;
         private IConfigCompanyProjectRepository configCompanyProjectRepository;
 
+        private bool combinedRefreshNeeded;
+        public bool CombinedRefreshNeeded
+        {
+            get { return combinedRefreshNeeded; }
+            set {
+                combinedRefreshNeeded = value;
+                RaisePropertyChange("CombinedRefreshNeeded");
+                }
+        }
+
+
         private bool allProjectsSelected;
         public bool AllProjectsSelected
         {
@@ -36,7 +47,11 @@ namespace CandidatesBrowser3.ViewModel
             set {
                 allProjectsSelected = value;
                 RaisePropertyChange("AllProjectsSelected");
-                ViewRefresh();
+                if (CombinedRefreshNeeded)
+                {
+                    ViewRefresh();
+                }
+                
             }
         }
 
@@ -47,9 +62,12 @@ namespace CandidatesBrowser3.ViewModel
             set {
                 allAreasSelected = value;
                 RaisePropertyChange("AllAreasSelected");
-                ViewRefresh();
-
+                if (CombinedRefreshNeeded)
+                {
+                    ViewRefresh();
                 }
+
+            }
         }
 
         private bool allCompaniesSelected;
@@ -59,7 +77,11 @@ namespace CandidatesBrowser3.ViewModel
             set {
                 allCompaniesSelected = value;
                 RaisePropertyChange("AllCompaniesSelected");
-                ViewRefresh();
+                if (CombinedRefreshNeeded)
+                {
+                    ViewRefresh();
+                }
+
             }
         }
 
@@ -94,10 +116,11 @@ namespace CandidatesBrowser3.ViewModel
             public ICommand AreaSelectionChangeCommand { get; set; }
             public ICommand ResetFiltersCommand { get; set; }
             public ICommand CompaniesListOpenedChangeCommand { get; set; }
+            public ICommand SelectCandidateChangeCommand { get; set; }
         #endregion
         #region methodsForCommands
-             #region SelectAllProjectsCommand
-                private bool CanSelectAllProjects(object obj)
+        #region SelectAllProjectsCommand
+        private bool CanSelectAllProjects(object obj)
                 {
                     return true;
                 }      
@@ -186,10 +209,12 @@ namespace CandidatesBrowser3.ViewModel
 
                     private void ResetFilters(object obj)
                     {
+                        CombinedRefreshNeeded = false;
                         FirstNameFilter = null;
                         LastNameFilter = null;
                         ProjectNameFilter = null;
                         AreaNameFilter = null;
+                        PositionNameFilter = null;
                         CompanyNameFilter = null;
                         AllProjectsSelected = true;
                         AllAreasSelected = true;
@@ -197,6 +222,8 @@ namespace CandidatesBrowser3.ViewModel
                         SelectAllProjects(AllProjectsSelected);
                         SelectAllAreas(AllAreasSelected);
                         SelectAllCompanies(AllCompaniesSelected);
+                        ViewRefresh();
+                        CombinedRefreshNeeded = true;   
                         
                     
                     }
@@ -219,7 +246,7 @@ namespace CandidatesBrowser3.ViewModel
         #endregion
 
 
-        #region CompanySelectionChangeCommand
+             #region CompanySelectionChangeCommand
             private bool CanCompanySelectionChange(object obj)
             {
                 return true;
@@ -238,6 +265,24 @@ namespace CandidatesBrowser3.ViewModel
 
             }
         #endregion
+
+             #region SelectCandidateChangeCommand
+                private bool CanSelectCandidateChange(object o)
+                 {
+                        if(SelectedCandidate!=null)
+                        {
+                        return true;
+                        }
+                        return false;
+                }
+             
+                private void SelectCandidateChange(object o)
+                {
+                    Candidate SelectedCandidateTemp = new Candidate();
+                    GlobalFunctions.CopyProperties(SelectedCandidate, SelectedCandidateTemp);
+                    Messenger.Default.Send<Candidate>(SelectedCandidate);
+                }
+             #endregion
         #endregion
 
         #region collections
@@ -368,8 +413,6 @@ namespace CandidatesBrowser3.ViewModel
         #endregion
 
 
-
-
         public MainListViewModel(ICandidateRepository CandidateRepository, IConfigProjectsLibRepository configProjectsLibRepository,
             IConfigProjectsCandidateRepository configProjectsCandidateRepository, IConfigAreaRepository configAreaRepository,
             IConfigProjectRepository configProjectRepository, IConfigCompanyRepository configCompanyRepository,
@@ -387,17 +430,22 @@ namespace CandidatesBrowser3.ViewModel
             AllProjectsSelected = true;
             AllAreasSelected = true;
             AllCompaniesSelected = true;
+            CombinedRefreshNeeded = true;
             #region loadData           
             try
             {
                 LoadData();
                 addConfigsToCandidates();
+               
+              
             }
             catch (Exception e)
             {
 
             }
             #endregion
+
+            
             #region loadView
             try
             {
@@ -418,7 +466,16 @@ namespace CandidatesBrowser3.ViewModel
             CompaniesListOpenedChangeCommand = new CustomCommand(CompaniesListOpenedChange, CanCompaniesListOpenedChange);
             SelectAllCompaniesCommand = new CustomCommand(SelectAllCompanies, CanSelectAllCompanies);
             CompanySelectionChangeCommand = new CustomCommand(CompanySelectionChange, CanCompanySelectionChange);
+            SelectCandidateChangeCommand = new CustomCommand(SelectCandidateChange, CanSelectCandidateChange);
             #endregion
+
+            Messenger.Default.Register<UpdateListMessage>(this, OnUpdateListMessageReceived);
+        }
+
+        private void OnUpdateListMessageReceived(UpdateListMessage obj)
+        {
+            LoadData();
+         
         }
 
         private void LoadViews()
@@ -495,10 +552,12 @@ namespace CandidatesBrowser3.ViewModel
             if (string.IsNullOrEmpty(FirstNameFilter)
                 &&
                 string.IsNullOrEmpty(LastNameFilter)
+                && string.IsNullOrEmpty(PositionNameFilter)
                 && ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count()
                 && ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count()
                 )
             {
+
                 return true;
             }
             else
@@ -512,13 +571,21 @@ namespace CandidatesBrowser3.ViewModel
                      && ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count()
                      && ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count()
                      )
-                     || 
+                     ||
                      (
-                     ((Candidate)item).CandidateProjects.Join((ConfigProjectsLibsView.Cast<ConfigProjectsLib>().Where(e => e.Selected.Equals(true))).ToList(), cp=>cp.ConfigProjectLibID,cpl=>cpl.Id,(cp,cpl)=>cp.ConfigCandidateID).ToList().Count>0
+                     ((Candidate)item).CandidateProjects.Join((ConfigProjectsLibsView.Cast<ConfigProjectsLib>().Where(e => e.Selected.Equals(true))).ToList(), cp => cp.ConfigProjectLibID, cpl => cpl.Id, (cp, cpl) => cp.ConfigCandidateID).ToList().Count > 0
                      &&
-                     ((Candidate)item).CandidateCompanies.Join((ConfigCompanyCollectionView.Cast<ConfigCompany>().Where(e=>e.Selected.Equals(true))).ToList(), cc=>cc.ID,ccc=>ccc.ID,(cc,ccc)=> cc).ToList().Count>0
+                     ((Candidate)item).CandidateCompanies.Join((ConfigCompanyCollectionView.Cast<ConfigCompany>().Where(e => e.Selected.Equals(true))).ToList(), cc => cc.ID, ccc => ccc.ID, (cc, ccc) => cc).ToList().Count > 0
+                                       
                      )
+                     
                     )
+                    &&
+                      (string.IsNullOrEmpty(PositionNameFilter)
+                     ||
+                     ((Candidate)item).CandidateCompanies.Where(e => e.Position.ToLower().Contains(PositionNameFilter.ToLower())).Count() > 0
+                     )
+
                    )
                    {
                        return true;
@@ -638,9 +705,32 @@ namespace CandidatesBrowser3.ViewModel
             {
                 lastNameFilter = value;
                 RaisePropertyChange("LastNameFilter");
-                CandidatesView.Refresh();
+                if(CombinedRefreshNeeded)
+                {
+                    CandidatesView.Refresh();
+                }
+                
             }
         }
+
+        private string positionNameFilter;
+        public string PositionNameFilter
+        {
+            get { return positionNameFilter; }
+            set
+            {
+                positionNameFilter = value;
+                RaisePropertyChange("PositionNameFilter"); 
+              
+                
+                if (CombinedRefreshNeeded)
+                {
+                    CandidatesView.Refresh();
+                }
+
+            }
+        }
+
 
         private string projectNameFilter;
         public string ProjectNameFilter
@@ -650,7 +740,11 @@ namespace CandidatesBrowser3.ViewModel
             {
                 projectNameFilter = value;
                 RaisePropertyChange("ProjectNameFilter");
-                ViewRefresh();
+                if (CombinedRefreshNeeded)
+                {
+                    ViewRefresh();
+                }
+                
             }
         }
 
@@ -662,7 +756,11 @@ namespace CandidatesBrowser3.ViewModel
             {
                 areaNameFilter = value;
                 RaisePropertyChange("AreaNameFilter");
-                ViewRefresh();
+                if (CombinedRefreshNeeded)
+                {
+                    ViewRefresh();
+                }
+               
             }
         }
 
@@ -674,7 +772,10 @@ namespace CandidatesBrowser3.ViewModel
             {
                 companyNameFilter = value;
                 RaisePropertyChange("CompanyNameFilter");
-                ViewRefresh();
+                if (CombinedRefreshNeeded)
+                {
+                    ViewRefresh();
+                }
             }
         }
 

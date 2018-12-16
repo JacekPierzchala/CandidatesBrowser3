@@ -58,7 +58,7 @@ namespace CandidatesBrowser3.Model
 
         public override string ToString()
         {
-            return this.ID + " (" + this.Company + ")";
+            return base.ID + " (" + base.Company + ")";
         }
 
         public new object Clone()

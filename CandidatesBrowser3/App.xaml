@@ -4,15 +4,48 @@
              xmlns:local="clr-namespace:CandidatesBrowser3"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
              StartupUri="View/MainListView.xaml"
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Startup="AppStartUp">
     <Application.Resources>
         <ResourceDictionary>
          
-                <local:ViewModelLocator x:Key="viewModelLocator"></local:ViewModelLocator>
+            <local:ViewModelLocator x:Key="viewModelLocator"></local:ViewModelLocator>
+
+            <Style x:Key="chevronTabItemStyle" TargetType="{x:Type TabItem}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabItem}">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,-7,0" Height="30">
+                                <Path Data="M0,0 10,0 10,30 0,30 10,15" Fill="#FF3F9EEE"/>
+                                <!--//<Path Data="M0,0 10,0 10,30 0,30 10,15" Fill="{TemplateBinding Background}"/>-->
+                                <Grid >
+                                    <!--<Rectangle Fill="{TemplateBinding Background}" />-->
+                                    <Rectangle Fill="#FF3F9EEE"></Rectangle>
+                                    <TextBlock Name="HeaderArrow" Text="{TemplateBinding Header}" Margin="15,5" VerticalAlignment="Center" Foreground="White" />
+                           
+                                </Grid>
+                                <Path Data="M0,0 10,15 0,30" Fill="#FF3F9EEE" />
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="HeaderArrow" Property="FontWeight" Value="ExtraBold" />
+                                    <Setter TargetName="HeaderArrow" Property="FontSize" Value="14" />
+                                    <!--<Setter TargetName="HeaderArrow" Property="Foreground" Value="Yellow" />-->
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="HeaderArrow" Property="Foreground" Value="Blue" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}"/>
 
             <Style x:Key="labeStyle" TargetType="{x:Type Label}">
-
+                <Setter Property="BorderBrush" Value="Gray"/>
+                <Setter Property="BorderThickness" Value="1"/>
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="Background" Value="#FF3F9EEE"/>
                 <Setter Property="Foreground" Value="White"/>

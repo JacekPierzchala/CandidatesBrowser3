@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="CandidatesBrowser3.View.CandidateDetailsUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CandidatesBrowser3.View"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="12"
+        TextBlock.FontSize="12"
+        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=CandidateDetailsViewModel}"
+        mc:Ignorable="d" 
+        d:DesignHeight="600" d:DesignWidth="600" >
+    
+    <Grid >
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource labeStyle}"/>
+        </Grid.Resources>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+     
+        <StackPanel Orientation="Horizontal"  Grid.Row="0">
+                <Button Margin="10,1"  >
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Margin="2,0" VerticalAlignment="Center">Save</TextBlock>
+                        <materialdesign:PackIcon VerticalAlignment="Center" Kind="Approve"></materialdesign:PackIcon>
+                    </StackPanel>
+                </Button>
+                <Button Margin="20,1"  >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>UndoChanges</TextBlock>
+                        <materialdesign:PackIcon VerticalAlignment="Center" Kind="Cancel"></materialdesign:PackIcon>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        <Separator VerticalAlignment="Top" Grid.Row="1" Height="2" Background="Gray"></Separator>
+        <Grid Grid.Row="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Grid.Column="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                  
+                        <Label   Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Padding="1" Content="First Name:"></Label>
+                        <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"  Padding="1"  Content="Last Name:"></Label>
+                        <TextBox Grid.Column="0" Grid.Row="1" Padding="1"  Text="{Binding SelectedCandidateTemp.FirstName}"/>
+                        <TextBox Grid.Column="1" Grid.Row="1" Padding="1"  Text="{Binding SelectedCandidateTemp.LastName}"/>
+                        
+                    <Label Grid.Column="0" Grid.Row="2"  Content="First Phone:"></Label>
+                    <Label Grid.Column="1" Grid.Row="2" Content="Second Phone:"></Label>
+                    <TextBox  Grid.Column="0" Grid.Row="3" Text="{Binding SelectedCandidateTemp.FirstPhone}"/>
+                    <TextBox Grid.Column="1" Grid.Row="3"  Text="{Binding SelectedCandidateTemp.SecondPhone}"/>
+
+                    <Label  Grid.Column="0" Grid.Row="4" Content="First Email:"></Label>
+                    <Label Grid.Column="1" Grid.Row="4" Content="Second Email:"></Label>
+                    <TextBox  Grid.Column="0" Grid.Row="5" Text="{Binding SelectedCandidateTemp.FirstEmail}"/>
+                    <TextBox Grid.Column="1" Grid.Row="5"  Text="{Binding SelectedCandidateTemp.SecondEmail}"/>
+                </Grid>
+              
+    
+              
+                
+
+               
+             
+     
+            </StackPanel>
+
+        </Grid>
+       
+    </Grid>
+</UserControl>

@@ -31,5 +31,14 @@ namespace CandidatesBrowser3
                 return mainListViewModel;
             }
         }
+
+        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel();
+
+        public static CandidateDetailsViewModel CandidateDetailsViewModel
+        {
+            get { return candidateDetailsViewModel; }
+            
+        }
+
     }
 }

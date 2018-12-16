@@ -43,6 +43,18 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+        private string fullName;
+        public string FullName
+        {
+            get { return FirstName + " " + LastName; }
+            set
+            {
+                fullName = FirstName + " " + LastName;
+                RaisePropertyChange("FullName");
+            }
+        }
+
+
         private string firstEmail;
         public string FirstEmail
         {
@@ -118,6 +130,26 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+        private string positions;
+        public string Positions
+        {
+            get { return positions; }
+            set {
+                positions = value;
+                RaisePropertyChange("Positions");
+            }
+        }
+
+        private string companies;
+        public string Companies
+        {
+            get { return companies; }
+            set {
+                companies = value;
+                RaisePropertyChange("Companies");
+            }
+        }
+
 
         private bool deleted;
         public bool Deleted
@@ -143,6 +175,8 @@ namespace CandidatesBrowser3.Model
             Deleted = row.Field<bool>("DELETED");        
             Projects = row.Field<string>("PROJECTS");             
             CvUploaded = row.Field<bool>("CV_UPLOADED"); 
+            Positions = row.Field<string>("POSITIONS");
+            Companies= row.Field<string>("COMPANIES");
         }
 
         private ObservableCollection<ConfigProjectCandidate> candidateProjects;

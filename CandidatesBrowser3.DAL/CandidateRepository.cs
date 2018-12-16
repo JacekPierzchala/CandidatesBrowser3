@@ -39,7 +39,7 @@ namespace CandidatesBrowser3.DAL
                 }
             }
            
-            catch (Exception x)            {}
+            catch (Exception x) {}
         }
 
         public void DeleteCandidate(Candidate candidate)

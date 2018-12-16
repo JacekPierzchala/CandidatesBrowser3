@@ -19,19 +19,29 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"            
-        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}">
+        DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}" Icon="/CandidatesBrowser3;component/Resources/cv_icon_QsY_icon.ico"
+        >
    
         <Grid Margin="2">
-            <dragablz:TabablzControl>
+            <!--<dragablz:TabablzControl>
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController></dragablz:InterTabController>
-                </dragablz:TabablzControl.InterTabController>
-                <TabItem Header="Home">
-                    <Grid Margin="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="250"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                </dragablz:TabablzControl.InterTabController>-->
+        <TabControl ItemContainerStyle="{StaticResource  chevronTabItemStyle}" >
+                <TabItem x:Name="MainViewHeader" Header="Main View" >
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding ElementName=MainViewHeader}"></TextBlock>
+                            <materialdesign:PackIcon Kind="Calendar"></materialdesign:PackIcon>
+                        </Grid>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <Grid Margin="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1">
                         <StackPanel  Orientation="Vertical" Margin="1" >
                             <Button Content="Reset filters" Margin="4">
@@ -46,9 +56,9 @@
                                 </i:Interaction.Triggers>
                             </Button>
                             <TextBlock  Margin="1">First Name:</TextBlock>
-                            <TextBox Text="{Binding FirstNameFilter, UpdateSourceTrigger=PropertyChanged,Delay=10}" Margin="1" x:Name="txtFirstName"></TextBox>
+                            <TextBox Text="{Binding FirstNameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="1" x:Name="txtFirstName"></TextBox>
                             <TextBlock  Margin="1">Last Name:</TextBlock>
-                            <TextBox Text="{Binding LastNameFilter, UpdateSourceTrigger=PropertyChanged,Delay=10}" Margin="1" x:Name="txtLastName"></TextBox>
+                            <TextBox Text="{Binding LastNameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="1" x:Name="txtLastName"></TextBox>
                             <Expander x:Name="AreaExpander">
                                 <Expander.HeaderTemplate>
                                     <DataTemplate>
@@ -58,7 +68,7 @@
                                            Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AreaNameFilter,  UpdateSourceTrigger=PropertyChanged}"/>
                                             <CheckBox VerticalAlignment="Center"  HorizontalAlignment="Center" BorderBrush="Gray" BorderThickness="5" FontSize="12" Content="SelectAll" x:Name="selectAllAreasCheck"
                                                       IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AllAreasSelected}">
-                             
+
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Click">
                                                         <i:InvokeCommandAction
@@ -167,7 +177,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Label>
-                       
+
                             <Popup  materialdesign:ThemeAssist.Theme="Light" PopupAnimation="Fade"
                                 PlacementTarget="{Binding ElementName=CompanyLabel}" IsOpen="{Binding CompaniesListOpened}" Placement="Left">
                                 <Border>
@@ -182,7 +192,7 @@
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
                                             </Button>
-                                            
+
                                             <Label  Style="{StaticResource labeStyle}" FontSize="12" Content="Company"></Label>
                                             <TextBox x:Name="txtCompany" Background="White" Foreground="Black"
                                            Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.CompanyNameFilter,  UpdateSourceTrigger=PropertyChanged}"/>
@@ -233,39 +243,81 @@
                                         </ListBox>
                                     </StackPanel>
                                 </Border>
-                             
-                               
                             </Popup>
+
+                            <TextBlock   Margin="1,15,0,0">Position:</TextBlock>
+                            <TextBox Text="{Binding PositionNameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="1" x:Name="txtPosition"></TextBox>
                         </StackPanel>
                     </Border>
 
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"></RowDefinition>
-                                <RowDefinition Height="30"/>
-                            </Grid.RowDefinitions>
-                            <DataGrid Grid.Row="0" x:Name="datagridMainview" ItemsSource="{Binding CandidatesView}" AutoGenerateColumns="False" IsReadOnly="True">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="First Email" Binding="{Binding FirstEmail}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Second Email" Binding="{Binding SecondEmail}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="First Phone" Binding="{Binding FirstPhone}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Second Phone" Binding="{Binding SecondPhone}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Area" Binding="{Binding Area}"></DataGridTextColumn>
-                                    <DataGridTextColumn Header="Projects" Binding="{Binding Projects}"></DataGridTextColumn>
-                                    <DataGridCheckBoxColumn Header="CvUploaded" Binding="{Binding CvUploaded}"></DataGridCheckBoxColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid SelectionMode="Single" Grid.Row="0" x:Name="datagridMainview" ItemsSource="{Binding CandidatesView}" AutoGenerateColumns="False" IsReadOnly="True"
+                                      SelectedItem="{Binding SelectedCandidate}"
+                                      >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectCandidateChangeCommand}"></i:InvokeCommandAction>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Projects" Binding="{Binding Projects}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="First Email" Binding="{Binding FirstEmail}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="First Phone" Binding="{Binding FirstPhone}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Positions" Binding="{Binding Positions}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Companies" Binding="{Binding Companies}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Area" Binding="{Binding Area}"></DataGridTextColumn>
+                                <DataGridCheckBoxColumn Header="CvUploaded" Binding="{Binding CvUploaded}"></DataGridCheckBoxColumn>
 
-                            <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="{Binding ElementName=datagridMainview, Path=Items.Count, StringFormat='Items found:{0} '}" HorizontalAlignment="Center"/>
-                        </Grid> 
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <TextBlock Grid.Row="1" VerticalAlignment="Center" Text="{Binding ElementName=datagridMainview, Path=Items.Count, StringFormat='Items found:{0} '}" HorizontalAlignment="Center"/>
+                    </Grid>
 
                 </Grid>
-                </TabItem>
 
-                <TabItem Header="Reports"></TabItem>
-            </dragablz:TabablzControl>
+            </TabItem>
+
+
+            <TabItem x:Name="CandidateDetails" Header="{Binding SelectedCandidate.FullName}" >
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding ElementName=CandidateDetails, Path=Header}"></TextBlock>
+                            <materialdesign:PackIcon Kind="Account"/>
+                        </StackPanel>
+                    </DataTemplate>
+
+                </TabItem.HeaderTemplate>
+                <TabItem.Style>
+                    <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource chevronTabItemStyle}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=datagridMainview,Path=SelectedItems.Count}" Value="1">
+                                <Setter Property="Visibility" Value="Visible"/>
+
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TabItem.Style>
+                    <Grid>
+                        <local:CandidateDetailsUserControl></local:CandidateDetailsUserControl>
+                    </Grid>
+                </TabItem>
+             
+
+      
+            <TabItem Header="Reports"></TabItem>
+        </TabControl>
+             
+            <!--</dragablz:TabablzControl>-->
         </Grid>
    
 </Window>

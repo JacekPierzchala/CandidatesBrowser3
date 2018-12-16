@@ -53,6 +53,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.3.0.2.4\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -74,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\CandidateDetailsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -84,8 +90,14 @@
     </Compile>
     <Compile Include="Extensions\ListExtensionsClass.cs" />
     <Compile Include="Utilities\CustomCommand.cs" />
+    <Compile Include="Utilities\GlobalFunctions.cs" />
+    <Compile Include="Utilities\Messenger.cs" />
     <Compile Include="ViewModelLocator.cs" />
+    <Compile Include="ViewModel\CandidateDetailsViewModel.cs" />
     <Compile Include="ViewModel\MainListViewModel.cs" />
+    <Compile Include="View\CandidateDetailsUserControl.xaml.cs">
+      <DependentUpon>CandidateDetailsUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\MainListView.xaml.cs">
       <DependentUpon>MainListView.xaml</DependentUpon>
     </Compile>
@@ -129,6 +141,10 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\cv_icon_QsY_icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
