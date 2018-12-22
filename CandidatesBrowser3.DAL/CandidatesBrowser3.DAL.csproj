@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CandidateCompanyRepository.cs" />
+    <Compile Include="CandidateHistoryRepository.cs" />
     <Compile Include="CandidateRepository.cs" />
     <Compile Include="ConfigAreaRepository.cs" />
     <Compile Include="ConfigCompanyProjectRepository.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="ConfigProjectsCandidateRepository.cs" />
     <Compile Include="DBObjects.cs" />
     <Compile Include="ICandidateCompanyRepository.cs" />
+    <Compile Include="ICandidateHistoryRepository.cs" />
     <Compile Include="ICandidateRepository.cs" />
     <Compile Include="IConfigAreaRepository.cs" />
     <Compile Include="IConfigCompanyProjectRepository.cs" />

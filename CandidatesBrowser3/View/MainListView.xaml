@@ -23,10 +23,7 @@
         >
    
         <Grid Margin="2">
-            <!--<dragablz:TabablzControl>
-                <dragablz:TabablzControl.InterTabController>
-                    <dragablz:InterTabController></dragablz:InterTabController>
-                </dragablz:TabablzControl.InterTabController>-->
+         
         <TabControl ItemContainerStyle="{StaticResource  chevronTabItemStyle}" >
                 <TabItem x:Name="MainViewHeader" Header="Main View" >
                 <TabItem.HeaderTemplate>
@@ -48,10 +45,6 @@
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <i:InvokeCommandAction Command="{Binding ResetFiltersCommand}"></i:InvokeCommandAction>
-                                        <!--Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
-                                                            Path=DataContext.SelectAllProjectsCommand,UpdateSourceTrigger=PropertyChanged}"
-                                                            CommandParameter="{Binding ElementName=selectAllProjectCheck}"-->
-
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Button>
@@ -59,6 +52,9 @@
                             <TextBox Text="{Binding FirstNameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="1" x:Name="txtFirstName"></TextBox>
                             <TextBlock  Margin="1">Last Name:</TextBlock>
                             <TextBox Text="{Binding LastNameFilter, UpdateSourceTrigger=PropertyChanged}" Margin="1" x:Name="txtLastName"></TextBox>
+                            <TextBlock  Margin="1">Phone number:</TextBlock>
+                            <TextBox  Text="{Binding PhoneNumberFilter, UpdateSourceTrigger=PropertyChanged}" Margin="1" x:Name="txtPhone"></TextBox>
+                            <CheckBox Margin="1" HorizontalAlignment="Center" IsThreeState="True" IsChecked="{Binding CvUploaded}" Content="CV Uploaded"/>
                             <Expander x:Name="AreaExpander">
                                 <Expander.HeaderTemplate>
                                     <DataTemplate>
@@ -283,10 +279,10 @@
 
                 </Grid>
 
-            </TabItem>
+                </TabItem>
 
 
-            <TabItem x:Name="CandidateDetails" Header="{Binding SelectedCandidate.FullName}" >
+             <TabItem x:Name="CandidateDetails" Header="{Binding SelectedCandidate.FullName}" >
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

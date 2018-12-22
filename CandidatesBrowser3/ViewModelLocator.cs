@@ -10,6 +10,8 @@ namespace CandidatesBrowser3
 {
     public class ViewModelLocator
     {
+        #region fields
+        #region MainListViewModel
         private static ICandidateRepository candidateRepository = new CandidateRepository();
         private static IConfigProjectsLibRepository configProjectsLibRepository = new ConfigProjectsLibRepository();
         private static IConfigProjectsCandidateRepository configProjectsCandidateRepository = new ConfigProjectsCandidateRepository();
@@ -18,6 +20,15 @@ namespace CandidatesBrowser3
         private static IConfigCompanyRepository configCompanyRepository = new ConfigCompanyRepository();
         private static ICandidateCompanyRepository candidateCompanyRepository = new CandidateCompanyRepository();
         private static IConfigCompanyProjectRepository configCompanyProjectRepository = new ConfigCompanyProjectRepository();
+        #endregion
+
+        #region CandidateDetailsViewModel
+        private static ICandidateHistoryRepository candidateHistoryRepository = new CandidateHistoryRepository();
+        #endregion
+        #endregion
+
+
+
 
         private static MainListViewModel mainListViewModel = 
             new MainListViewModel(candidateRepository, configProjectsLibRepository, 
@@ -32,7 +43,7 @@ namespace CandidatesBrowser3
             }
         }
 
-        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel();
+        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel(candidateHistoryRepository);
 
         public static CandidateDetailsViewModel CandidateDetailsViewModel
         {

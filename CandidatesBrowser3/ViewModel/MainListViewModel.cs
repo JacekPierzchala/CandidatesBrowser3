@@ -39,6 +39,16 @@ namespace CandidatesBrowser3.ViewModel
                 }
         }
 
+        private bool? cvUploaded;
+        public bool? CvUploaded
+        {
+            get { return cvUploaded; }
+            set {
+                cvUploaded = value;
+                RaisePropertyChange("CvUploaded");
+                CandidatesView.Refresh();
+            }
+        }
 
         private bool allProjectsSelected;
         public bool AllProjectsSelected
@@ -550,9 +560,11 @@ namespace CandidatesBrowser3.ViewModel
         private bool CandidatesViewFilter(object item)
         {
             if (string.IsNullOrEmpty(FirstNameFilter)
-                &&
+                && CvUploaded==null
+                && 
                 string.IsNullOrEmpty(LastNameFilter)
                 && string.IsNullOrEmpty(PositionNameFilter)
+                && string.IsNullOrEmpty(PhoneNumberFilter)
                 && ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count()
                 && ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count()
                 )
@@ -565,7 +577,15 @@ namespace CandidatesBrowser3.ViewModel
                 if (
                     (string.IsNullOrEmpty(FirstNameFilter) || (((Candidate)item).FirstName.ToLower()).StartsWith(FirstNameFilter.ToLower()))
                  && (string.IsNullOrEmpty(LastNameFilter) || (((Candidate)item).LastName.ToLower()).StartsWith(LastNameFilter.ToLower()))
-                 && (
+                  && (string.IsNullOrEmpty(PhoneNumberFilter) ||
+                  (((Candidate)item).FirstPhone.ToLower().Trim()).StartsWith(PhoneNumberFilter.ToLower().Trim()) ||
+                  (((Candidate)item).SecondPhone.ToLower().Trim()).StartsWith(PhoneNumberFilter.ToLower().Trim())
+                  )
+                   && (CvUploaded == null || CvUploaded.Equals(((Candidate)item).CvUploaded))
+                 
+                 && 
+                 
+                 (
                      (
                      ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count()
                      && ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count()
@@ -775,6 +795,20 @@ namespace CandidatesBrowser3.ViewModel
                 if (CombinedRefreshNeeded)
                 {
                     ViewRefresh();
+                }
+            }
+        }
+
+        private string phoneNumberFilter;
+        public string PhoneNumberFilter
+        {
+            get { return phoneNumberFilter; }
+            set {
+                phoneNumberFilter = value;
+                RaisePropertyChange("PhoneNumberFilter");
+                if (CombinedRefreshNeeded)
+                {
+                    CandidatesView.Refresh();
                 }
             }
         }
