@@ -11,6 +11,10 @@ namespace CandidatesBrowser3.Model
 {
     public class Candidate : INotifyPropertyChanged, ICloneable
     {
+        public static string FolderPath = @"C:\Users\Zaneta\Documents\CandidatesBrowser3\source\";
+
+ 
+
         private int id;
         public int ID
         {
@@ -46,10 +50,10 @@ namespace CandidatesBrowser3.Model
         private string fullName;
         public string FullName
         {
-            get { return FirstName + " " + LastName; }
+            get { return FirstName + " " + LastName + " (ID:" + ID +")" ; }
             set
             {
-                fullName = FirstName + " " + LastName;
+                fullName = FirstName + " " + LastName + " (" + ID + ")";
                 RaisePropertyChange("FullName");
             }
         }

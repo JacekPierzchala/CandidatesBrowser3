@@ -263,6 +263,7 @@
                                 <DataGridTextColumn Header="Projects" Binding="{Binding Projects}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Candidate Id" Binding="{Binding ID}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="First Email" Binding="{Binding FirstEmail}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="First Phone" Binding="{Binding FirstPhone}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="Positions" Binding="{Binding Positions}"></DataGridTextColumn>

@@ -2,6 +2,7 @@
 using CandidatesBrowser3.Model;
 using CandidatesBrowser3.Utilities;
 using CandidatesBrowser3.Extensions;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.IO;
+using System.Windows;
 
 namespace CandidatesBrowser3.ViewModel
 {
@@ -52,8 +55,37 @@ namespace CandidatesBrowser3.ViewModel
                 }
         }
 
-   
 
+        public List<WPFMenuItem> OrderMenuOptions
+        {
+            get
+            {
+                return CreateMenus();
+            }
+        }
+
+        private List<WPFMenuItem> CreateMenus()
+        {
+            var menu = new List<WPFMenuItem>();
+
+            var miAddCV = new WPFMenuItem("Add new CV");
+            miAddCV.IconUrl = @"\Resources\clip.ico";
+            miAddCV.Command = ReadCVCommand;
+            menu.Add(miAddCV);
+
+            var miReadCV = new WPFMenuItem("Read CV's");
+            miReadCV.IconUrl = @"\Resources\magnifying_glass.ico";
+            miReadCV.Command = ReadCVCommand;
+            menu.Add(miReadCV);
+
+            var miDeleteCV = new WPFMenuItem("Delete CV");
+            miDeleteCV.IconUrl = @"\Resources\removeIcon.ico";
+            miDeleteCV.Command = ReadCVCommand;
+            menu.Add(miDeleteCV);
+
+            return menu;
+
+        }
 
         #endregion
 
@@ -93,6 +125,9 @@ namespace CandidatesBrowser3.ViewModel
         #endregion
         #region Commands
             public ICommand ProjectSelectionChangeCommand { get; set; }
+            public ICommand AddCVCommand { get; set; }
+            public ICommand ReadCVCommand { get; set; }
+            public ICommand DeleteCVCommand { get; set; }
         #endregion
 
         #region methodsForCommands
@@ -109,6 +144,45 @@ namespace CandidatesBrowser3.ViewModel
         {
             SelectedProjectHistory = CandidateHistoryCollection.Where(e => e.ProjectID.Equals(SelectedCandidateHistory.ProjectID)).ToObservableCollection();
         }
+        #endregion
+
+        #region ReadCVCommand
+        private void ReadCV(object o)
+        {
+            string[] files=null;
+            try
+            {
+               files = Directory.GetFiles(Candidate.FolderPath + SelectedCandidateTemp.ID.ToString() + @"\");
+                
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("requested folder as not found " + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            foreach (string file in files.Where(e=>!e.Contains("~")).ToList())
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(file);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("requested file " + Path.GetFileName(file) + " cannot be open" + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private bool CanReadCV(object o)
+        {
+            if (SelectedCandidateTemp.CvUploaded)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
         #endregion
 
         #endregion
@@ -151,7 +225,11 @@ namespace CandidatesBrowser3.ViewModel
         private void loadCommands()
         {
             ProjectSelectionChangeCommand = new CustomCommand(ProjectSelectionChange, CanProjectSelectionChange);
+            ReadCVCommand = new CustomCommand(ReadCV, CanReadCV);
         }
+
+
+       
 
         public void RaisePropertyChange(string propertyName)
         {
@@ -162,5 +240,24 @@ namespace CandidatesBrowser3.ViewModel
 
         }
         public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public class WPFMenuItem
+        {
+            #region Public Properties
+            public String Text { get; set; }
+            public String IconUrl { get; set; }
+            //public List<WPFMenuItem> Children { get; private set; }
+            public ICommand Command { get; set; }
+            #endregion
+
+            #region Ctor
+            public WPFMenuItem(string item)
+            {
+                Text = item;
+                //Children = new List<WPFMenuItem>();
+            }
+            #endregion
+        }
     }
 }

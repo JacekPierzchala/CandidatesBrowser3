@@ -18,12 +18,38 @@
         mc:Ignorable="d" 
    
         d:DesignHeight="600" d:DesignWidth="600" >
-    
-    <Grid >
+    <UserControl.ContextMenu>
+        <ContextMenu ItemsSource="{Binding OrderMenuOptions}">
+            <ContextMenu.ItemTemplate>
+
+                <DataTemplate>
+                    <StackPanel Margin="2"  Orientation="Horizontal" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDown" >
+                                <i:InvokeCommandAction Command="{Binding Command}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Image IsEnabled="False" Margin="1"  VerticalAlignment="Center" Source="{Binding IconUrl}"/>
+                        <Label IsEnabled="False" Margin="1" VerticalContentAlignment="Center" VerticalAlignment="Center" Content="{Binding Text}"/>
+                    </StackPanel>
+                   
+                    
+                </DataTemplate>
+            </ContextMenu.ItemTemplate>
+        </ContextMenu>
+    </UserControl.ContextMenu>
+    <Grid > 
         <Grid.Resources>
             <Style TargetType="{x:Type Label}" BasedOn="{StaticResource labeStyle}"/>
+            <Style x:Key="ContextMenuItemStyle">
+                <Setter Property="MenuItem.Header" Value="{Binding Text}"/>
+                <Setter Property="MenuItem.ItemsSource" Value="{Binding Children}"/>
+                <Setter Property="MenuItem.Command" Value="{Binding Command}" />
+                <!--<Setter Property="MenuItem.Icon" ></Setter>-->
+            </Style>
         </Grid.Resources>
-        
+
+      
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="2"/>
@@ -43,7 +69,9 @@
                         <materialdesign:PackIcon VerticalAlignment="Center" Kind="Cancel"></materialdesign:PackIcon>
                     </StackPanel>
                 </Button>
-            </StackPanel>
+
+         
+        </StackPanel>
         <Separator VerticalAlignment="Top" Grid.Row="1" Height="2" Background="Gray"></Separator>
         <Grid Grid.Row="2" >
             <Grid.RowDefinitions>

@@ -31,6 +31,12 @@ namespace CandidatesBrowser3
 
        void AppStartUp(object sender, StartupEventArgs e)
         {
+            SplashScreen sc = new SplashScreen(@"\Resources\cv_image.png");
+
+            sc.Show(false, true);
+            sc.Close(TimeSpan.FromMilliseconds(40));
+
+
             if (e.Args.Length > 1)
             {
                 try
