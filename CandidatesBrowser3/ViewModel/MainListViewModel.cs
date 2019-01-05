@@ -290,7 +290,7 @@ namespace CandidatesBrowser3.ViewModel
                 {
                     Candidate SelectedCandidateTemp = new Candidate();
                     GlobalFunctions.CopyProperties(SelectedCandidate, SelectedCandidateTemp);
-                    Messenger.Default.Send<Candidate>(SelectedCandidate);
+                    MessengerCandidate.Default.Send<Candidate>(SelectedCandidate);
                 }
              #endregion
         #endregion
@@ -479,7 +479,7 @@ namespace CandidatesBrowser3.ViewModel
             SelectCandidateChangeCommand = new CustomCommand(SelectCandidateChange, CanSelectCandidateChange);
             #endregion
 
-            Messenger.Default.Register<UpdateListMessage>(this, OnUpdateListMessageReceived);
+            MessengerCandidate.Default.Register<UpdateListMessage>(this, OnUpdateListMessageReceived);
         }
 
         private void OnUpdateListMessageReceived(UpdateListMessage obj)

@@ -1,4 +1,5 @@
 ﻿using CandidatesBrowser3.DAL;
+using CandidatesBrowser3.Utilities;
 using CandidatesBrowser3.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,10 @@ namespace CandidatesBrowser3
 
         #region CandidateDetailsViewModel
         private static ICandidateHistoryRepository candidateHistoryRepository = new CandidateHistoryRepository();
+        private static IDialogService dialogService = new DialogService();
         #endregion
+
+        
         #endregion
 
 
@@ -34,7 +38,6 @@ namespace CandidatesBrowser3
             new MainListViewModel(candidateRepository, configProjectsLibRepository, 
             configProjectsCandidateRepository,configAreaRepository,configProjectRepository, 
             configCompanyRepository,candidateCompanyRepository,configCompanyProjectRepository);
-
         public static MainListViewModel MainListViewModel
         {
             get
@@ -43,13 +46,23 @@ namespace CandidatesBrowser3
             }
         }
 
-        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel(candidateHistoryRepository);
-
+        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel(candidateHistoryRepository, dialogService);
         public static CandidateDetailsViewModel CandidateDetailsViewModel
         {
             get { return candidateDetailsViewModel; }
             
         }
+
+        private static FileDialogsViewModel fileDialogsViewModel = new FileDialogsViewModel(dialogService);
+        public static FileDialogsViewModel FileDialogsViewModel
+        {
+            get
+            {
+                return fileDialogsViewModel;
+            }
+        }
+
+
 
     }
 }

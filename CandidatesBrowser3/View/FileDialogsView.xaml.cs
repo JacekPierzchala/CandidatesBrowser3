@@ -10,23 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Plainion.Prism.Interactivity;
-using Prism.Interactivity.InteractionRequest;
-using Microsoft.Win32;
+
 namespace CandidatesBrowser3.View
 {
     /// <summary>
-    /// Interaction logic for CandidateDetailsUserControl.xaml
+    /// Interaction logic for FileDialogsView.xaml
     /// </summary>
-    public partial class CandidateDetailsUserControl : UserControl
+    public partial class FileDialogsView : Window
     {
-        public CandidateDetailsUserControl()
+        public FileDialogsView()
         {
             InitializeComponent();
         }
-
-   
     }
 }

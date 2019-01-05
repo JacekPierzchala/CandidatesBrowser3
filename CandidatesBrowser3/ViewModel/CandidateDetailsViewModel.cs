@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
 using System.Windows;
+using Prism.Interactivity.InteractionRequest;
 
 namespace CandidatesBrowser3.ViewModel
 {
@@ -20,6 +21,7 @@ namespace CandidatesBrowser3.ViewModel
     {
         #region fields
         private ICandidateHistoryRepository candidateHistoryRepository;
+        private IDialogService dialogService;
         #endregion
 
         #region properties
@@ -31,6 +33,17 @@ namespace CandidatesBrowser3.ViewModel
             {
                 selectedCandidate = value;
                 RaisePropertyChange("SelectedCandidate");
+            }
+        }
+
+        private Document documentToAction;
+        public Document DocumentToAction
+        {
+            get { return documentToAction; }
+            set
+            {
+                documentToAction = value;
+                RaisePropertyChange("DocumentToAction");
             }
         }
 
@@ -55,7 +68,6 @@ namespace CandidatesBrowser3.ViewModel
                 }
         }
 
-
         public List<WPFMenuItem> OrderMenuOptions
         {
             get
@@ -63,7 +75,6 @@ namespace CandidatesBrowser3.ViewModel
                 return CreateMenus();
             }
         }
-
         private List<WPFMenuItem> CreateMenus()
         {
             var menu = new List<WPFMenuItem>();
@@ -87,6 +98,15 @@ namespace CandidatesBrowser3.ViewModel
 
         }
 
+        private ICommand openDialogCommand = null;
+        public ICommand OpenDialogCommand
+        {
+            get { return this.openDialogCommand; }
+            set { this.openDialogCommand = value; }
+        }
+
+        public InteractionRequest<IConfirmation> OpenFileRequest { get; private set; }
+        
         #endregion
 
         #region collections
@@ -123,6 +143,7 @@ namespace CandidatesBrowser3.ViewModel
         }
 
         #endregion
+       
         #region Commands
             public ICommand ProjectSelectionChangeCommand { get; set; }
             public ICommand AddCVCommand { get; set; }
@@ -182,21 +203,87 @@ namespace CandidatesBrowser3.ViewModel
             return false;
         }
 
-
         #endregion
 
+        #region AddCVCommand
+        private void AddCV(object o)
+        {
+            MessengerCandidate.Default.Send<Document>(DocumentToAction);
+
+            dialogService.ShowDetailDialog();
+
+            string x = "";
+            //string[] files = null;
+            //try
+            //{
+            //    files = Directory.GetFiles(Candidate.FolderPath + SelectedCandidateTemp.ID.ToString() + @"\");
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("requested folder as not found " + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return;
+            //}
+            //foreach (string file in files.Where(e => !e.Contains("~")).ToList())
+            //{
+            //    try
+            //    {
+            //        System.Diagnostics.Process.Start(file);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show("requested file " + Path.GetFileName(file) + " cannot be open" + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    }
+            //}
+        }
+
+        private bool CanAddCV(object o)
+        {           
+                return true;
+            
+        }
+
+        #endregion
+        private void OnShowConfirmation()
+        {
+            var confirmation = new Confirmation();
+            confirmation.Title = "Really?";
+            confirmation.Content = "Here goes the question, doesn't it?";
+
+            OpenFileRequest.Raise(confirmation);
+        }
         #endregion
 
-        public CandidateDetailsViewModel(ICandidateHistoryRepository candidateHistoryRepository)
+        public CandidateDetailsViewModel(ICandidateHistoryRepository candidateHistoryRepository, IDialogService dialogService)
         {
             this.candidateHistoryRepository = candidateHistoryRepository;
+            this.dialogService = dialogService;
 
             SelectedCandidateTemp = new Candidate();
-            Messenger.Default.Register<Candidate>(this, OnCandidateReceived);
+            try
+            {
+                DocumentToAction = new Document();
+                // DocumentToAction.DcoumentName = "";
+                MessengerDocument.Default.Register<UpdateDocument>(this, OnUpdateDocumentMessageReceived);
+                
+                MessengerCandidate.Default.Register<Candidate>(this, OnCandidateReceived);
+              
+            }
+
+            catch(Exception x)
+            {
+
+            }
+           
+
 
             loadCommands();
         }
 
+        private void OnUpdateDocumentMessageReceived(UpdateDocument Obj)
+        {
+            dialogService.CloseDetailDialog();
+        }
 
         public void OnCandidateReceived(Candidate selectedCandidate)
         {
@@ -226,6 +313,8 @@ namespace CandidatesBrowser3.ViewModel
         {
             ProjectSelectionChangeCommand = new CustomCommand(ProjectSelectionChange, CanProjectSelectionChange);
             ReadCVCommand = new CustomCommand(ReadCV, CanReadCV);
+            AddCVCommand = new CustomCommand(AddCV, CanAddCV);
+            OpenFileRequest = new InteractionRequest<IConfirmation>();
         }
 
 
@@ -259,5 +348,7 @@ namespace CandidatesBrowser3.ViewModel
             }
             #endregion
         }
+
+
     }
 }

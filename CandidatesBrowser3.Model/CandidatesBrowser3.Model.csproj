@@ -49,6 +49,7 @@
     <Compile Include="ConfigProject.cs" />
     <Compile Include="ConfigProjectCandidate.cs" />
     <Compile Include="ConfigProjectsLib.cs" />
+    <Compile Include="Document.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
