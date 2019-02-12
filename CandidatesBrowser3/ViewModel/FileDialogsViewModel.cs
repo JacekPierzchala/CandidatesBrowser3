@@ -49,27 +49,25 @@ namespace CandidatesBrowser3.ViewModel
         private void Open(object o)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            //openFileDialog.Filter = "Word files(*.doc)|*.doc|PDF files(*.pdf)|*.pdf";
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+   
+            if (DocumentToAction.Action == ActionType.Delete)
+            {
+
+                openFileDialog.InitialDirectory =  DocumentToAction.FolderPath;
+
+
+            }
+            else
+            {
+                openFileDialog.InitialDirectory =Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            }
+           
+         
+            openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog();
 
-            DocumentToAction.DcoumentName = openFileDialog.FileName.ToString();
-            //OpenFileDialogService.Filter = Filter;
-            //OpenFileDialogService.FilterIndex = FilterIndex;
-            //DialogResult = OpenFileDialogService.ShowDialog();
-            //if (!DialogResult)
-            //{
-            //    ResultFileName = string.Empty;
-            //}
-            //else
-            //{
-            //    IFileInfo file = OpenFileDialogService.Files.First();
-            //    ResultFileName = file.Name;
-            //    using (var stream = file.OpenText())
-            //    {
-            //        FileBody = stream.ReadToEnd();
-            //    }
-            //}
+            DocumentToAction.DocumentNames = openFileDialog.FileNames;
+          
             MessengerDocument.Default.Send<UpdateDocument>(new UpdateDocument());
         }
 
@@ -98,12 +96,7 @@ namespace CandidatesBrowser3.ViewModel
         public FileDialogsViewModel(Utilities.IDialogService dialogService)
         {
             this.dialogService = dialogService;
-            //Filter = "Text Files (.txt)|*.txt|All Files (*.*)|*.*";
-            //FilterIndex = 1;
-            //Title = "Custom Dialog Title";
-            //DefaultExt = "txt";
-            //DefaultFileName = "Document1";
-            //OverwritePrompt = true;
+           
             Utilities.MessengerCandidate.Default.Register<Document>(this, OnDocumentReceived);
             OpenCommand = new CustomCommand(Open, CanOpen);
         }
@@ -115,23 +108,7 @@ namespace CandidatesBrowser3.ViewModel
 
         public void Save()
         { 
-        //{
-        //    SaveFileDialogService.DefaultExt = DefaultExt;
-        //    SaveFileDialogService.DefaultFileName = DefaultFileName;
-        //    SaveFileDialogService.Filter = Filter;
-        //    SaveFileDialogService.FilterIndex = FilterIndex;
-        //    DialogResult = SaveFileDialogService.ShowDialog();
-        //    if (!DialogResult)
-        //    {
-        //        ResultFileName = string.Empty;
-        //    }
-        //    else
-        //    {
-        //        using (var stream = new StreamWriter(SaveFileDialogService.OpenFile()))
-        //        {
-        //            stream.Write(FileBody);
-        //        }
-        //    }
+       
         }
 
         public void RaisePropertyChange(string propertyName)

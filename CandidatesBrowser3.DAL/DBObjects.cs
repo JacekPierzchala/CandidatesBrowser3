@@ -66,7 +66,7 @@ namespace CandidatesBrowser3.DAL
 
         }
 
-        public static System.Data.DataTable GetTableFromSQL(string sql)
+        public static DataTable GetTableFromSQL(string sql)
         {
                 DataTable table = new DataTable();
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, ConnectionString);
@@ -81,69 +81,71 @@ namespace CandidatesBrowser3.DAL
                                  
             return table;
         }
-        public static System.Data.DataTable GetTableFromSQL(string procedureName, Dictionary<string, string> Args)
+        public static DataTable GetTableFromSQL(string procedureName, Dictionary<string, string> Args)
         {
             DataTable table = new DataTable();
-            SqlDataAdapter dataAdapter = new SqlDataAdapter();
-            SqlConnection sqlConnection = new SqlConnection(ConnectionString);
-            SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
-            dataAdapter.SelectCommand = new SqlCommand();
-            dataAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
-            dataAdapter.SelectCommand.CommandText = procedureName;
-            dataAdapter.SelectCommand.CommandTimeout = 5000;
-            dataAdapter.SelectCommand.Connection = sqlConnection;
-            sqlConnection.Open();
-            
-            //cmd.CommandTimeout = 1000;
-            
-
-            foreach (var param in Args)
+            try
             {
-                dataAdapter.SelectCommand.Parameters.AddWithValue(param.Key, param.Value);
-            }
-            //dataAdapter.SelectCommand.Parameters.Add()
+             
+                SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+                SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
+                dataAdapter.SelectCommand = new SqlCommand();
+                dataAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
+                dataAdapter.SelectCommand.CommandText = procedureName;
+                dataAdapter.SelectCommand.CommandTimeout = 5000;
+                dataAdapter.SelectCommand.Connection = sqlConnection;
+                sqlConnection.Open();
 
-            table.Locale = System.Globalization.CultureInfo.InvariantCulture;
-            dataAdapter.Fill(table);
+
+                foreach (var param in Args)
+                {
+                    dataAdapter.SelectCommand.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+
+                table.Locale = System.Globalization.CultureInfo.InvariantCulture;
+                dataAdapter.Fill(table);
+
+            }
+            catch(Exception ex)
+            {
+                table = null;
+            }
+
 
             return table;
-            //DataTable table = new DataTable();
-            //SqlConnection sqlConnection = new SqlConnection(ConnectionString);
-            //SqlCommand cmd = new SqlCommand();
-
-            //cmd.CommandText = procedureName;
-            //cmd.CommandType = CommandType.StoredProcedure;
-            //cmd.CommandTimeout = 1000;
-            //cmd.Connection = sqlConnection;
-            //sqlConnection.Open();
-
-            //foreach (var param in Args)
-            //{
-            //    cmd.Parameters.AddWithValue(param.Key, param.Value);
-            //}
-
-            //cmd.
-
-            //return table;
+      
         }
 
-        public static void ExecProcedureWithArgs(string procedureName, Dictionary<string,string>Args)
+        public static void ExecProcedureWithArgs(string procedureName, Dictionary<dynamic, dynamic> Args)
         {
-            SqlConnection sqlConnection = new SqlConnection(ConnectionString);
-            SqlCommand cmd = new SqlCommand();
-
-            cmd.CommandText = procedureName;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandTimeout = 1000;
-            cmd.Connection = sqlConnection;
-            sqlConnection.Open();
-
-            foreach (var param in Args)
+            try
             {
-                cmd.Parameters.AddWithValue(param.Key, param.Value);
-            }
+                SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+                SqlCommand cmd = new SqlCommand();
 
-            cmd.ExecuteNonQuery();
+                cmd.CommandText = procedureName;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 1000;
+                cmd.Connection = sqlConnection;
+                sqlConnection.Open();
+
+                foreach (var param in Args)
+                {
+                    cmd.Parameters.AddWithValue(param.Key, param.Value);
+                }
+
+                cmd.ExecuteNonQuery();
+
+            }
+            
+            catch(Exception ex)
+            {
+
+            }
+           
+
         }
 
     }

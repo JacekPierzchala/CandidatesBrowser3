@@ -142,6 +142,7 @@
     </ApplicationDefinition>
     <Compile Include="Utilities\DialogService.cs" />
     <Compile Include="Utilities\IDialogService.cs" />
+    <Compile Include="Utilities\Messenger.cs" />
     <Compile Include="Utilities\MessengerDocument.cs" />
     <Compile Include="ViewModel\FileDialogsViewModel.cs" />
     <Compile Include="View\FileDialogsView.xaml.cs">

@@ -29,7 +29,7 @@
         <dxmvvm:SaveFileDialogService Title="{Binding Title}"/>
     </dxmvvm:Interaction.Behaviors>
     <Grid>
-        <Button Content="Select file">
+        <Button Content="Select files">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <i:InvokeCommandAction Command="{Binding OpenCommand}"/>

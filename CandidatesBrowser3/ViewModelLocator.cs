@@ -46,7 +46,7 @@ namespace CandidatesBrowser3
             }
         }
 
-        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel(candidateHistoryRepository, dialogService);
+        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel(candidateHistoryRepository, dialogService, candidateRepository);
         public static CandidateDetailsViewModel CandidateDetailsViewModel
         {
             get { return candidateDetailsViewModel; }

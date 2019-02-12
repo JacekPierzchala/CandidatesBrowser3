@@ -12,6 +12,7 @@ namespace CandidatesBrowser3.DAL
     public class CandidateRepository:ICandidateRepository
     {
         private static ObservableCollection<Candidate> Candidates;
+        private static Dictionary<dynamic, dynamic> Args= new Dictionary<dynamic, dynamic>();
 
         public CandidateRepository() {   }
 
@@ -72,6 +73,14 @@ namespace CandidatesBrowser3.DAL
             candidateToUpdate = candidate;
         }
 
+        public void UpdateCandidateDocumentInfo(Candidate candidate)
+        {
+            Args.Clear();
+            Args.Add("@CandidateID", candidate.ID);
+            Args.Add("@CVUploaded", candidate.CvUploaded);
 
+            DBObjects.ExecProcedureWithArgs("UPDATE_DOCUMENT_INFO", Args);
+
+        }
     }
 }

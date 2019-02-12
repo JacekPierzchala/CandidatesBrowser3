@@ -143,7 +143,7 @@ namespace CandidatesBrowser3.ViewModel
                 }
         #endregion
 
-             #region SelectAllAreasCommand
+             #region SelectAllAreasCommandSel
 
                 private bool CanSelectAllAreas(object obj)
                 {

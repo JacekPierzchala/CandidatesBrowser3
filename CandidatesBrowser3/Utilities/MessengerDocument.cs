@@ -12,7 +12,7 @@ namespace CandidatesBrowser3.Utilities
     }
 
 
-    public class MessengerDocument
+    public class MessengerDocument 
     {
         private static readonly object CreationLock = new object();
         private static readonly ConcurrentDictionary<MessengerKey, object> Dictionary = new ConcurrentDictionary<MessengerKey, object>();

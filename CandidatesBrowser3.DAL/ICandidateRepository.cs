@@ -15,5 +15,6 @@ namespace CandidatesBrowser3.DAL
         Candidate CandidateByID(int id);
         ObservableCollection<Candidate> GetCandidates();
         void UpdateCandidate(Candidate candidate);
+        void UpdateCandidateDocumentInfo(Candidate candidate);
     }
 }
