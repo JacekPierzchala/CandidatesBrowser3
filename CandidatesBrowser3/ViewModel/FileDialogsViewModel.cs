@@ -52,17 +52,13 @@ namespace CandidatesBrowser3.ViewModel
    
             if (DocumentToAction.Action == ActionType.Delete)
             {
-
                 openFileDialog.InitialDirectory =  DocumentToAction.FolderPath;
-
-
             }
             else
             {
                 openFileDialog.InitialDirectory =Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             }
-           
-         
+                  
             openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog();
 

@@ -12,6 +12,7 @@ namespace CandidatesBrowser3.DAL
     public class CandidateHistoryRepository: ICandidateHistoryRepository
     {
         private static ObservableCollection<CandidateHistory> CandidateHistorys;
+
         public void DeleteCandidateHistory(CandidateHistory CandidateHistory)
         {
             CandidateHistorys.Remove(CandidateHistory);
@@ -47,8 +48,7 @@ namespace CandidatesBrowser3.DAL
         }
 
         public ObservableCollection<CandidateHistory> GetCandidateHistorysByID(int id)
-        {
-           
+        {         
                 LoadCandidateHistorysByID(id);
             
             return CandidateHistorys;
@@ -58,6 +58,20 @@ namespace CandidatesBrowser3.DAL
         {
             CandidateHistory CandidateHistoryToUpdate = CandidateHistorys.Where(e => e.ID.Equals(CandidateHistory.ID)).FirstOrDefault();
             CandidateHistoryToUpdate = CandidateHistory;
+        }
+
+        public void AddCandidateHistory(CandidateHistory CandidateHistory)
+        {
+            Dictionary<dynamic, dynamic> Args = new Dictionary<dynamic, dynamic>();
+            Args.Add("@SEQ", CandidateHistory.Seq);
+            Args.Add("@CONFIG_STATUS_ID", CandidateHistory.ConfigStatusID);
+            Args.Add("@TIMESTAMP", CandidateHistory.Timestamp);
+            Args.Add("@COMMENTS", CandidateHistory.Comments);
+            Args.Add("@HISTORY_OF_CONTACT", CandidateHistory.HistoryOfContact);
+            Args.Add("@CV_RECEIVED", false);
+            Args.Add("@CANDIDATES_PROJECTS_ID", CandidateHistory.CandidatesProjectsID);
+
+            DBObjects.ExecProcedureWithArgs("ADD_CANDIDATE_HISTORY", Args);
         }
     }
 }

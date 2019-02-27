@@ -23,9 +23,21 @@ namespace CandidatesBrowser3.ViewModel
         private ICandidateHistoryRepository candidateHistoryRepository;
         private ICandidateRepository candidateRepository;
         private IDialogService dialogService;
+        private IConfigStatusLibRepository configStatusLibRepository;
         #endregion
 
         #region properties
+
+        private bool projectEverSelected;
+        public bool ProjectEverSelected
+        {
+            get { return projectEverSelected; }
+            set {
+                projectEverSelected = value;
+                RaisePropertyChange("ProjectEverSelected");
+                }
+        }
+
 
         private Candidate selectedCandidate;
         public Candidate SelectedCandidate
@@ -38,15 +50,6 @@ namespace CandidatesBrowser3.ViewModel
             }
         }
 
-        private List<Attachment> attachments;
-        public List<Attachment> Attachments
-        {
-            get { return attachments; }
-            set {
-                attachments = value;
-                RaisePropertyChange("Attachments");
-            }
-        }
 
         public string DestinationDirectory
         {
@@ -89,6 +92,32 @@ namespace CandidatesBrowser3.ViewModel
                 RaisePropertyChange("SelectedCandidateHistory");
             }
         }
+
+        private CandidateHistory selectedCandidateHstoryTemp;
+        public CandidateHistory SelectedCandidateHstoryTemp
+        {
+            get { return selectedCandidateHstoryTemp; }
+            set {
+                selectedCandidateHstoryTemp = value;
+                RaisePropertyChange("SelectedCandidateHstoryTemp");
+                }
+        }
+
+
+
+        private ConfigStatusLib selectedConfigStatusLib;
+        public ConfigStatusLib SelectedConfigStatusLib
+        {
+            get { return selectedConfigStatusLib; }
+            set
+            {
+                selectedConfigStatusLib = value;
+                RaisePropertyChange("SelectedConfigStatusLib");
+            }
+        }
+
+
+
 
         //public List<WPFMenuItem> OrderMenuOptions
         //{
@@ -133,8 +162,8 @@ namespace CandidatesBrowser3.ViewModel
 
         #region collections
 
-        ObservableCollection<CandidateHistory> candidateHistoryCollection;
-        ObservableCollection<CandidateHistory> CandidateHistoryCollection
+        private ObservableCollection<CandidateHistory> candidateHistoryCollection;
+        public ObservableCollection<CandidateHistory> CandidateHistoryCollection
         {
             get { return candidateHistoryCollection; }
             set {
@@ -150,6 +179,28 @@ namespace CandidatesBrowser3.ViewModel
             set {
                 candidateHistoryCollectionLastStatus = value;
                 RaisePropertyChange("CandidateHistoryCollectionLastStatus");
+            }
+        }
+
+        private ObservableCollection<ConfigStatusLib> configStatusLibCollection;
+        public ObservableCollection<ConfigStatusLib> ConfigStatusLibCollection
+        {
+            get { return configStatusLibCollection; }
+            set
+            {
+                configStatusLibCollection = value;
+                RaisePropertyChange("ConfigStatusLibCollection");
+            }
+        }
+
+        private List<Attachment> attachments;
+        public List<Attachment> Attachments
+        {
+            get { return attachments; }
+            set
+            {
+                attachments = value;
+                RaisePropertyChange("Attachments");
             }
         }
 
@@ -171,6 +222,9 @@ namespace CandidatesBrowser3.ViewModel
         public ICommand AddCVCommand { get; set; }
         public ICommand ReadCVCommand { get; set; }
         public ICommand DeleteCVCommand { get; set; }
+        public ICommand AddNewHistoryItemCommand { get; set; }
+        public ICommand RemoveHistoryItemCommand { get; set; }
+        public ICommand AssignNewProjectCommand { get; set; }
         #endregion
 
         #region methodsForCommands
@@ -186,8 +240,26 @@ namespace CandidatesBrowser3.ViewModel
         private void ProjectSelectionChange(object obj)
         {
             SelectedProjectHistory = CandidateHistoryCollection.Where(e => e.ProjectID.Equals(SelectedCandidateHistory.ProjectID)).ToObservableCollection();
+            SelectedCandidateHstoryTemp = new CandidateHistory();
+            SelectedConfigStatusLib = null;
+            ProjectEverSelected = true;
+
         }
         #endregion
+        
+        #region AssignNewProjectCommand
+        private void AssignNewProject(object obj)
+        {
+            MessengerProject.Default.Send<ConfigProject>(null);
+            dialogService.ShowDetailDialog();
+        }
+        private bool CanAssignNewProject(object obj)
+        {
+            return true;
+        }
+
+        #endregion
+
 
         #region ReadCVCommand
         private void ReadCV(object o)
@@ -300,6 +372,55 @@ namespace CandidatesBrowser3.ViewModel
 
         #endregion
 
+        #region RemoveHistoryItemCommand
+
+        private void RemoveHistoryItem(object obj)
+        {
+
+        }
+
+        private bool CanRemoveHistoryItem(object obj)
+        {
+            return true;
+        }
+
+        #endregion
+
+        #region AddNewHistoryItemCommand
+        private void AddNewHistoryItem(object obj)
+        {
+            SelectedCandidateHstoryTemp.Seq = SelectedProjectHistory.Max(e => e.Seq)+1;
+            SelectedCandidateHstoryTemp.ConfigStatusID = SelectedConfigStatusLib.ID;
+            SelectedCandidateHstoryTemp.StatusName = SelectedConfigStatusLib.Description;
+            SelectedCandidateHstoryTemp.ProjectID = SelectedProjectHistory.ToList().Select(e => e.ProjectID).FirstOrDefault();
+            SelectedCandidateHstoryTemp.ProjectName = SelectedProjectHistory.ToList().Select(e => e.ProjectName).FirstOrDefault();
+            SelectedCandidateHstoryTemp.CompanyID = SelectedProjectHistory.ToList().Select(e => e.CompanyID).FirstOrDefault();
+            SelectedCandidateHstoryTemp.CompanyName= SelectedProjectHistory.ToList().Select(e => e.CompanyName).FirstOrDefault();
+            SelectedCandidateHstoryTemp.Position= SelectedProjectHistory.ToList().Select(e => e.Position).FirstOrDefault();
+            SelectedCandidateHstoryTemp.CandidatesProjectsID= SelectedProjectHistory.ToList().Select(e => e.CandidatesProjectsID).FirstOrDefault();
+            SelectedCandidateHstoryTemp.CandidateID = SelectedProjectHistory.ToList().Select(e => e.CandidateID).FirstOrDefault();
+            SelectedProjectHistory.Add(SelectedCandidateHstoryTemp);
+            CandidateHistoryCollection.Add(SelectedCandidateHstoryTemp);
+            
+            SelectedConfigStatusLib = null;
+
+            candidateHistoryRepository.AddCandidateHistory(SelectedCandidateHstoryTemp);
+            SelectedCandidateHstoryTemp.Timestamp = null;
+            SelectedCandidateHstoryTemp.Comments = null;
+            SelectedCandidateHstoryTemp.HistoryOfContact = null;
+            prepareCollection();
+        }
+        private bool CanAddNewHistoryItem(object obj)
+        {
+         if( SelectedProjectHistory != null && SelectedConfigStatusLib!=null
+             && SelectedCandidateHstoryTemp.Timestamp !=null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
         //  private void OnShowConfirmation()
         //{
         //    var confirmation = new Confirmation();
@@ -311,11 +432,13 @@ namespace CandidatesBrowser3.ViewModel
         #endregion
 
         public CandidateDetailsViewModel(ICandidateHistoryRepository candidateHistoryRepository, IDialogService dialogService,
-            ICandidateRepository candidateRepository)
+            ICandidateRepository candidateRepository, IConfigStatusLibRepository configStatusLibRepository
+            )
         {
             this.candidateHistoryRepository = candidateHistoryRepository;
             this.dialogService = dialogService;
             this.candidateRepository = candidateRepository;
+            this.configStatusLibRepository = configStatusLibRepository;
 
             SelectedCandidateTemp = new Candidate();
             try
@@ -333,9 +456,13 @@ namespace CandidatesBrowser3.ViewModel
 
             }
 
-
-
+            //loadData();
+            MessengerProject.Default.Register<UpdateProject>(this, OnUpdateListMessageReceived);
             loadCommands();
+        }
+        private void OnUpdateListMessageReceived(UpdateProject obj)
+        {
+            
         }
 
         private void OnUpdateDocumentMessageReceived(UpdateDocument Obj)
@@ -404,6 +531,7 @@ namespace CandidatesBrowser3.ViewModel
         public void OnCandidateReceived(Candidate selectedCandidate)
         {
             SelectedProjectHistory = null;
+            SelectedConfigStatusLib = null;
             SelectedCandidate = selectedCandidate;
 
             GlobalFunctions.CopyProperties(SelectedCandidate, SelectedCandidateTemp);
@@ -423,6 +551,7 @@ namespace CandidatesBrowser3.ViewModel
             if (SelectedCandidate != null)
             {
                 CandidateHistoryCollection = candidateHistoryRepository.GetCandidateHistorysByID(SelectedCandidate.ID);
+                ConfigStatusLibCollection = configStatusLibRepository.GetConfigStatusLibs();
             }
 
         }
@@ -433,6 +562,8 @@ namespace CandidatesBrowser3.ViewModel
             ReadCVCommand = new CustomCommand(ReadCV, CanReadCV);
             AddCVCommand = new CustomCommand(AddCV, CanAddCV);
             DeleteCVCommand = new CustomCommand(DeleteCV, CanDeleteCV);
+            AddNewHistoryItemCommand = new CustomCommand(AddNewHistoryItem, CanAddNewHistoryItem);
+            AssignNewProjectCommand = new CustomCommand(AssignNewProject, CanAssignNewProject);
             // OpenFileRequest = new InteractionRequest<IConfirmation>();
         }
 

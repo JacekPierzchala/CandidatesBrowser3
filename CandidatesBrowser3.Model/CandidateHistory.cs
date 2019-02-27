@@ -61,8 +61,8 @@ namespace CandidatesBrowser3.Model
                 }
         }
 
-        private DateTime timestamp;
-        public DateTime Timestamp
+        private DateTime? timestamp;
+        public DateTime? Timestamp
         {
             get { return timestamp; }
             set {
@@ -110,6 +110,17 @@ namespace CandidatesBrowser3.Model
                 RaisePropertyChange("HistoryOfContact");
                 }
         }
+
+        private int candidatesProjectsID;
+        public int CandidatesProjectsID
+        {
+            get { return candidatesProjectsID; }
+            set {
+                candidatesProjectsID = value;
+                RaisePropertyChange("CandidatesProjectsID");
+                }
+        }
+
 
         private string statusName;
         public string StatusName
@@ -164,7 +175,8 @@ namespace CandidatesBrowser3.Model
             CompanyID= row.Field<int>("COMPANY_ID");
             Position= row.Field<string>("POSITION");
             ProjectID= row.Field<int>("PROJECT_ID");
-            Timestamp= row.Field<DateTime>("TIMESTAMP");
+            CandidatesProjectsID= row.Field<int>("CANDIDATES_PROJECTS_ID");
+            Timestamp = row.Field<DateTime>("TIMESTAMP");
             Seq= row.Field<int>("SEQ");
             ConfigStatusID= row.Field<int>("CONFIG_STATUS_ID");
             ProjectName = row.Field<string>("PROJECT_NAME");

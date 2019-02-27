@@ -144,13 +144,22 @@
     <Compile Include="Utilities\IDialogService.cs" />
     <Compile Include="Utilities\Messenger.cs" />
     <Compile Include="Utilities\MessengerDocument.cs" />
+    <Compile Include="Utilities\MessengerProject.cs" />
+    <Compile Include="ViewModel\AssignNewProjectViewModel.cs" />
     <Compile Include="ViewModel\FileDialogsViewModel.cs" />
+    <Compile Include="View\AssignNewProjectUserControl.xaml.cs">
+      <DependentUpon>AssignNewProjectUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FileDialogsView.xaml.cs">
       <DependentUpon>FileDialogsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControlOpenFileDialog.xaml.cs">
       <DependentUpon>UserControlOpenFileDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\AssignNewProjectUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\CandidateDetailsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

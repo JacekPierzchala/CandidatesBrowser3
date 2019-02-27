@@ -164,15 +164,15 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
                             </Expander>
-                            <Label  x:Name="CompanyLabel" Style="{StaticResource labeStyle}" Margin="25,0,60,0" FontSize="12" Content="Company">
+                            <Button  x:Name="CompanyLabel"  Margin="25,0,60,0" FontSize="12" Content="Company">
                                 <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseEnter">
+                                    <i:EventTrigger EventName="Click">
                                         <i:InvokeCommandAction
                                                         Command="{Binding CompaniesListOpenedChangeCommand}"
                                                             CommandParameter="true"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </Label>
+                            </Button>
 
                             <Popup  materialdesign:ThemeAssist.Theme="Light" PopupAnimation="Fade"
                                 PlacementTarget="{Binding ElementName=CompanyLabel}" IsOpen="{Binding CompaniesListOpened}" Placement="Left">

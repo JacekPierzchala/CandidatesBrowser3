@@ -50,6 +50,7 @@
     <Compile Include="ConfigProjectRepository.cs" />
     <Compile Include="ConfigProjectsLibRepository.cs" />
     <Compile Include="ConfigProjectsCandidateRepository.cs" />
+    <Compile Include="ConfigStatusLibRepository.cs" />
     <Compile Include="DBObjects.cs" />
     <Compile Include="ICandidateCompanyRepository.cs" />
     <Compile Include="ICandidateHistoryRepository.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="IConfigProjectRepository.cs" />
     <Compile Include="IConfigProjectsLibRepository.cs" />
     <Compile Include="IConfigProjectsCandidateRepository.cs" />
+    <Compile Include="IConfigStatusLibRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

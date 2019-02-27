@@ -26,9 +26,10 @@ namespace CandidatesBrowser3
         #region CandidateDetailsViewModel
         private static ICandidateHistoryRepository candidateHistoryRepository = new CandidateHistoryRepository();
         private static IDialogService dialogService = new DialogService();
+        private static IConfigStatusLibRepository configStatusLibRepository = new ConfigStatusLibRepository();
         #endregion
 
-        
+
         #endregion
 
 
@@ -46,7 +47,7 @@ namespace CandidatesBrowser3
             }
         }
 
-        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel(candidateHistoryRepository, dialogService, candidateRepository);
+        private static CandidateDetailsViewModel candidateDetailsViewModel=new CandidateDetailsViewModel(candidateHistoryRepository, dialogService, candidateRepository, configStatusLibRepository);
         public static CandidateDetailsViewModel CandidateDetailsViewModel
         {
             get { return candidateDetailsViewModel; }
@@ -60,6 +61,15 @@ namespace CandidatesBrowser3
             {
                 return fileDialogsViewModel;
             }
+        }
+        
+        private static AssignNewProjectViewModel assignNewProjectViewModel= 
+            new AssignNewProjectViewModel(configStatusLibRepository,configProjectsLibRepository,configProjectRepository);
+
+        public static AssignNewProjectViewModel AssignNewProjectViewModel
+        {
+            get { return assignNewProjectViewModel; }
+            
         }
 
 

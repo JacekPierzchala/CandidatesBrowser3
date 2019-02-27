@@ -83,14 +83,26 @@
                         <materialdesign:PackIcon VerticalAlignment="Center" Kind="Cancel"></materialdesign:PackIcon>
                     </StackPanel>
                 </Button>
+            <Button Margin="20,1"  >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Assign Project</TextBlock>
+                    <materialdesign:PackIcon VerticalAlignment="Center" Kind="Add"></materialdesign:PackIcon>
+                </StackPanel>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding AssignNewProjectCommand}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
 
-         
         </StackPanel>
         <Separator VerticalAlignment="Top" Grid.Row="1" Height="2" Background="Gray"></Separator>
         <Grid Grid.Row="2" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="120"></RowDefinition>
                 <RowDefinition ></RowDefinition>
+                <RowDefinition Height="5" ></RowDefinition>
+                <RowDefinition Height="84" ></RowDefinition>
                 <RowDefinition ></RowDefinition>
             </Grid.RowDefinitions>
            
@@ -138,7 +150,7 @@
             </StackPanel>
             <StackPanel Grid.Row="1">
                 <Label  Grid.ColumnSpan="2" Content="Projects current Status"/>
-                <DataGrid  Grid.ColumnSpan="3" IsReadOnly="True"  AutoGenerateColumns="False" 
+                <DataGrid x:Name="candidateProjectsgrid"  Grid.ColumnSpan="3" IsReadOnly="True"  AutoGenerateColumns="False" 
                               ItemsSource="{Binding CandidateHistoryCollectionLastStatus}"
                            SelectedItem="{Binding SelectedCandidateHistory}"
                            >
@@ -157,10 +169,64 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
-            <StackPanel Grid.Row="2">
-                <Label Grid.ColumnSpan="2" Content="{Binding SelectedCandidateHistory.ProjectName}" ContentStringFormat="Project {0} history"/>
+            <Separator  Height="2" Background="Gray" Grid.Row="2"></Separator>
+            <StackPanel  Grid.Row="3" >
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ProjectEverSelected}" Value="true" >
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                    </Style>
+                </StackPanel.Style>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="28"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="75"/>
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button  Margin="8" Grid.RowSpan="2" Content="Add new entry">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <i:InvokeCommandAction Command="{Binding AddNewHistoryItemCommand}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                    <Label Margin="1" Grid.Column="1" Content="Status Name"/>
+                    <ComboBox Margin="1" IsEditable="True" IsTextSearchEnabled="True" Grid.Row="1"  SelectedItem="{ Binding SelectedConfigStatusLib}"
+                            
+                              Grid.Column="1" ItemsSource="{Binding ConfigStatusLibCollection}" DisplayMemberPath="Description"></ComboBox>
+                    <Label Margin="1" Grid.Column="2" Content="Timestamp"/>
+                    <DatePicker Grid.Column="2" Grid.Row="1" SelectedDate="{Binding SelectedCandidateHstoryTemp.Timestamp}" HorizontalContentAlignment="Center" ></DatePicker>
+                    <Label Margin="1" Grid.Column="3" Content="Comment"/>
+                    <TextBox Text="{Binding SelectedCandidateHstoryTemp.Comments}" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto"
+                             AcceptsReturn="True" Margin="1" Grid.Column="3" Grid.Row="1"
+                             TextWrapping="WrapWithOverflow" Grid.RowSpan="2"/>
+                    <Label Margin="1" Grid.Column="4" Content="History of contact"/>
+                    <TextBox Text="{Binding SelectedCandidateHstoryTemp.HistoryOfContact}" VerticalContentAlignment="Top"
+                             VerticalScrollBarVisibility="Auto" AcceptsReturn="True"
+                             Margin="1" Grid.Column="4" Grid.Row="1" TextWrapping="WrapWithOverflow" Grid.RowSpan="2"/>
+                </Grid>
+            </StackPanel>
+            <StackPanel Grid.Row="4">
+                <Label Height="25" Grid.ColumnSpan="2" Content="{Binding SelectedCandidateHistory.ProjectName}" ContentStringFormat="Project - {0} - History"/>
                 <DataGrid  Grid.ColumnSpan="3" IsReadOnly="True"  AutoGenerateColumns="False" 
                               ItemsSource="{Binding SelectedProjectHistory}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="KeyDown">
+                            
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="StatusName" Binding="{Binding StatusName}"></DataGridTextColumn>
                         <DataGridTextColumn Header="Seq" Binding="{Binding Seq}"></DataGridTextColumn>
