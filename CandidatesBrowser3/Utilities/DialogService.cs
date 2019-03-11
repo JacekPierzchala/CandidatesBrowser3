@@ -12,6 +12,7 @@ namespace CandidatesBrowser3.Utilities
     public class DialogService : IDialogService
     {
         Window Dialogwindow = null;
+        
 
         public DialogService()
         {
@@ -29,6 +30,13 @@ namespace CandidatesBrowser3.Utilities
         {
             if (Dialogwindow != null)
                 Dialogwindow.Close();
+        }
+
+        public void ShowAssignProjectDialog()
+        {
+            Dialogwindow = new AssignNewProjectView();
+            Dialogwindow.ShowDialog();
+
         }
     }
 }

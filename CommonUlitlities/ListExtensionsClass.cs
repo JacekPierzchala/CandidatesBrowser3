@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CandidatesBrowser3.Extensions
+namespace CommonUlitlities
 {
     public static class ListExtensionsClass
     {
@@ -23,6 +23,7 @@ namespace CandidatesBrowser3.Extensions
             {
                 return new List<T> { item };
             }
+
         }
     }
 }

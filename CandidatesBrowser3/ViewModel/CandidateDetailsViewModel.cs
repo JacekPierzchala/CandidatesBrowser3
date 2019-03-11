@@ -1,7 +1,7 @@
 ﻿using CandidatesBrowser3.DAL;
 using CandidatesBrowser3.Model;
 using CandidatesBrowser3.Utilities;
-using CandidatesBrowser3.Extensions;
+using CommonUlitlities;
 
 using System;
 using System.Collections.Generic;
@@ -239,7 +239,7 @@ namespace CandidatesBrowser3.ViewModel
         }
         private void ProjectSelectionChange(object obj)
         {
-            SelectedProjectHistory = CandidateHistoryCollection.Where(e => e.ProjectID.Equals(SelectedCandidateHistory.ProjectID)).ToObservableCollection();
+            SelectedProjectHistory = CandidateHistoryCollection.Where(e => e.ProjectID.Equals(SelectedCandidateHistory.ProjectID)).ToList().ToObservableCollection();
             SelectedCandidateHstoryTemp = new CandidateHistory();
             SelectedConfigStatusLib = null;
             ProjectEverSelected = true;
@@ -250,8 +250,9 @@ namespace CandidatesBrowser3.ViewModel
         #region AssignNewProjectCommand
         private void AssignNewProject(object obj)
         {
-            MessengerProject.Default.Send<ConfigProject>(null);
-            dialogService.ShowDetailDialog();
+            MessengerCandidateCompany.Default.Send<CandidateCompany>(SelectedCandidate.CandidateCompanies.FirstOrDefault());
+            dialogService.ShowAssignProjectDialog();
+            
         }
         private bool CanAssignNewProject(object obj)
         {
@@ -457,10 +458,10 @@ namespace CandidatesBrowser3.ViewModel
             }
 
             //loadData();
-            MessengerProject.Default.Register<UpdateProject>(this, OnUpdateListMessageReceived);
+            MessengerCandidateCompany.Default.Register<UpdateCandidateCompany>(this, OnUpdateListMessageReceived);
             loadCommands();
         }
-        private void OnUpdateListMessageReceived(UpdateProject obj)
+        private void OnUpdateListMessageReceived(UpdateCandidateCompany obj)
         {
             
         }

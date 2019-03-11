@@ -10,5 +10,6 @@ namespace CandidatesBrowser3.Utilities
     {
         void CloseDetailDialog();
         void ShowDetailDialog();
+        void ShowAssignProjectDialog();
     }
 }

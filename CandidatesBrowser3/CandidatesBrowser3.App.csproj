@@ -144,11 +144,11 @@
     <Compile Include="Utilities\IDialogService.cs" />
     <Compile Include="Utilities\Messenger.cs" />
     <Compile Include="Utilities\MessengerDocument.cs" />
-    <Compile Include="Utilities\MessengerProject.cs" />
+    <Compile Include="Utilities\MessengerCandidateCompany.cs" />
     <Compile Include="ViewModel\AssignNewProjectViewModel.cs" />
     <Compile Include="ViewModel\FileDialogsViewModel.cs" />
-    <Compile Include="View\AssignNewProjectUserControl.xaml.cs">
-      <DependentUpon>AssignNewProjectUserControl.xaml</DependentUpon>
+    <Compile Include="View\AssignNewProjectView.xaml.cs">
+      <DependentUpon>AssignNewProjectView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FileDialogsView.xaml.cs">
       <DependentUpon>FileDialogsView.xaml</DependentUpon>
@@ -156,7 +156,7 @@
     <Compile Include="View\UserControlOpenFileDialog.xaml.cs">
       <DependentUpon>UserControlOpenFileDialog.xaml</DependentUpon>
     </Compile>
-    <Page Include="View\AssignNewProjectUserControl.xaml">
+    <Page Include="View\AssignNewProjectView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,7 +176,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Extensions\ListExtensionsClass.cs" />
     <Compile Include="Utilities\CustomCommand.cs" />
     <Compile Include="Utilities\GlobalFunctions.cs" />
     <Compile Include="Utilities\MessengerCandidate.cs" />
@@ -230,6 +229,10 @@
       <Project>{70BB0E4A-FF84-4CE1-9DF8-7FFC0F561B8E}</Project>
       <Name>CandidatesBrowser3.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommonUlitlities\CommonUlitlities.csproj">
+      <Project>{39e6322a-665e-48fe-9a5f-13a7e25f604a}</Project>
+      <Name>CommonUlitlities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -263,6 +266,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

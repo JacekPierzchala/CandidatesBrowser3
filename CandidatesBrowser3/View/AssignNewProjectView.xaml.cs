@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CandidatesBrowser3.View
 {
     /// <summary>
-    /// Interaction logic for AssignNewProjectUserControl.xaml
+    /// Interaction logic for AssignNewProjectView.xaml
     /// </summary>
-    public partial class AssignNewProjectUserControl : UserControl
+    public partial class AssignNewProjectView : Window
     {
-        public AssignNewProjectUserControl()
+        public AssignNewProjectView()
         {
             InitializeComponent();
         }

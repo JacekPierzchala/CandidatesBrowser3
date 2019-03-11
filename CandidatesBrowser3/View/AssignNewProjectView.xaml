@@ -1,0 +1,70 @@
+﻿<Window x:Class="CandidatesBrowser3.View.AssignNewProjectView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CandidatesBrowser3.View"
+        mc:Ignorable="d"             
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"          
+             xmlns:pn="clr-namespace:CandidatesBrowser3.Utilities"
+             xmlns:readIco="clr-namespace:CandidatesBrowser3"            
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="12"
+             TextBlock.FontSize="12"
+             TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+        WindowStartupLocation="CenterOwner"
+             DataContext="{Binding Source={StaticResource viewModelLocator}, Path=AssignNewProjectViewModel}"
+        Title="AssignNewProjectView" Height="150" Width="800">
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource labeStyle}"/>
+
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Button HorizontalAlignment="Center"  Width="100" Margin="2,2"  Grid.Column="0" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction Command="{Binding AssignNewProjectCommand}"></i:InvokeCommandAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                <TextBlock Margin="2,0" VerticalAlignment="Center">Save</TextBlock>
+                <materialdesign:PackIcon VerticalAlignment="Center" Kind="Approve"></materialdesign:PackIcon>
+            </StackPanel>
+        </Button>
+        <Label Margin="10,2" Content="Position:" Grid.Column="1"/>
+        <TextBox Margin="2" Grid.Column="2" Text="{Binding SelectedPosition}"></TextBox>
+        <Label Margin="2" Content="Project" Grid.Row="1" Grid.Column="0"/>
+        <ComboBox HorizontalContentAlignment="Center" SelectedItem="{Binding SelectedProject}"  IsTextSearchEnabled="True"  Margin="1" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding ConfigPojectsCollection}" DisplayMemberPath="ProjectName">
+            
+        </ComboBox>
+        <Label Margin="2" Content="Status" Grid.Row="1" Grid.Column="1"/>
+        <ComboBox IsTextSearchEnabled="True" SelectedItem="{Binding SelectedStatus}" ToolTip="{Binding SelectedStatus.Definition}"
+                  HorizontalContentAlignment="Center"   Margin="1" Grid.Column="1" Grid.Row="2" 
+                  ItemsSource="{Binding ConfigStatusLibCollection}" DisplayMemberPath="Description">
+
+        </ComboBox>
+        <Label Margin="2" Content="Company" Grid.Row="1" Grid.Column="2"/>
+        <ComboBox IsTextSearchEnabled="True" IsEditable="True" IsEnabled="True" SelectedItem="{Binding SelectedCompany}" 
+                  HorizontalContentAlignment="Center"   Margin="1" Grid.Column="2" Grid.Row="2" 
+                  ItemsSource="{Binding ConfigCompanyCollection}" DisplayMemberPath="Company">
+
+        </ComboBox>
+
+
+    </Grid>
+</Window>

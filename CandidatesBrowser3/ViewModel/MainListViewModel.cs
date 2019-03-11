@@ -6,14 +6,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using CandidatesBrowser3.Utilities;
 using CandidatesBrowser3.DAL;
 using System.Windows.Data;
 using System.Windows.Input;
-using CandidatesBrowser3.Utilities;
 using System.Windows.Controls;
-using CandidatesBrowser3.Extensions;
 using System.Windows;
+using CommonUlitlities;
 
 namespace CandidatesBrowser3.ViewModel
 {

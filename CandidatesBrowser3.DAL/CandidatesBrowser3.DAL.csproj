@@ -69,6 +69,10 @@
       <Project>{70bb0e4a-ff84-4ce1-9df8-7ffc0f561b8e}</Project>
       <Name>CandidatesBrowser3.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommonUlitlities\CommonUlitlities.csproj">
+      <Project>{39e6322a-665e-48fe-9a5f-13a7e25f604a}</Project>
+      <Name>CommonUlitlities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

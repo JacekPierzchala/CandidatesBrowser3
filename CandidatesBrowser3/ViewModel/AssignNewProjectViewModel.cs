@@ -8,7 +8,7 @@ using System.ComponentModel;
 using CandidatesBrowser3.DAL;
 using CandidatesBrowser3.Model;
 using CandidatesBrowser3.Utilities;
-using CandidatesBrowser3.Extensions;
+using System.Windows.Input;
 
 namespace CandidatesBrowser3.ViewModel
 {
@@ -18,7 +18,42 @@ namespace CandidatesBrowser3.ViewModel
         private IConfigStatusLibRepository configStatusLibRepository;
         private IConfigProjectsLibRepository configProjectsLibRepository;
         private IConfigProjectRepository configProjectRepository;
+        private IConfigCompanyRepository configCompanyRepository;
+        private IDialogService dialogService;
         #endregion
+
+        #region commands
+        public ICommand AssignNewProjectCommand { get; set; }
+        #endregion
+
+        #region methodsForcommands
+
+        #region AssignNewProjectCommand
+        private void AssignNewProject(object obj)
+        {
+
+        }
+
+        private bool CanAssignNewProject(object obj)
+        {
+            if(SelectedCompany!=null && SelectedPosition !=null && SelectedProject !=null && SelectedStatus!=null )
+            {
+                return true;
+            }
+            return false;
+        }
+        #endregion
+        #endregion
+
+        private CandidateCompany receivedCandidateCompany;
+        public CandidateCompany ReceivedCandidateCompany
+        {
+            get { return receivedCandidateCompany; }
+            set {
+                receivedCandidateCompany = value;
+                RaisePropertyChange("ReceivedCandidateCompany");
+                }
+        }
 
 
         private ObservableCollection<ConfigProjectsLib> configPojectsCollection;
@@ -41,29 +76,90 @@ namespace CandidatesBrowser3.ViewModel
                 }
         }
 
+        private ObservableCollection<ConfigCompany> configCompanyCollection;
+        public ObservableCollection<ConfigCompany> ConfigCompanyCollection
+        {
+            get { return configCompanyCollection; }
+            set {
+                configCompanyCollection = value;
+                RaisePropertyChange("ConfigCompanyCollection");
+                }
+        }
 
+        private string selectedPosition;
+        public string SelectedPosition
+        {
+            get { return selectedPosition; }
+            set {
+                selectedPosition = value;
+                RaisePropertyChange("SelectedPosition");
+                }
+        }
+
+
+        private ConfigProjectsLib selectedProject;
+        public ConfigProjectsLib SelectedProject
+        {
+            get { return selectedProject; }
+            set
+            {
+                selectedProject = value;
+                RaisePropertyChange("SelectedProject");
+            }
+        }
+
+        private ConfigStatusLib selectedStatus;
+        public ConfigStatusLib SelectedStatus
+        {
+            get { return selectedStatus; }
+            set
+            {
+                selectedStatus = value;
+                RaisePropertyChange("SelectedProject");
+            }
+        }
+
+        private ConfigCompany selectedCompany;
+        public ConfigCompany SelectedCompany
+        {
+            get { return selectedCompany; }
+            set {
+                selectedCompany = value;
+                RaisePropertyChange("SelectedCompany");
+                }
+        }
 
 
         public AssignNewProjectViewModel(IConfigStatusLibRepository configStatusLibRepository,
-            IConfigProjectsLibRepository configProjectsLibRepository, IConfigProjectRepository configProjectRepository)
+            IConfigProjectsLibRepository configProjectsLibRepository, IConfigProjectRepository configProjectRepository, IConfigCompanyRepository configCompanyRepository,
+            IDialogService dialogService)
         {
+            this.dialogService = dialogService;
             this.configStatusLibRepository = configStatusLibRepository;
             this.configProjectsLibRepository = configProjectsLibRepository;
             this.configProjectRepository = configProjectRepository;
+            this.configCompanyRepository = configCompanyRepository;
 
-
-            MessengerProject.Default.Register<ConfigProject>(this, OnProjectReceived);
+            MessengerCandidateCompany.Default.Register<CandidateCompany>(this, OnCandidateCompanyReceived);
 
         }
 
-        private void OnProjectReceived(ConfigProject obj)
+        private void OnCandidateCompanyReceived(CandidateCompany obj)
         {
+            ReceivedCandidateCompany = obj;
             loadData();
+            loadCommands();
+        }
+        private void loadCommands()
+        {
+            AssignNewProjectCommand = new CustomCommand(AssignNewProject, CanAssignNewProject);
         }
 
         private void loadData()
         {
             ConfigStatusLibCollection = configStatusLibRepository.GetConfigStatusLibs();
+            ConfigPojectsCollection = configProjectsLibRepository.GetConfigProjectsLibs();
+            ConfigCompanyCollection = configCompanyRepository.GetConfigCompanysForCandidate(ReceivedCandidateCompany);
         }
 
         public void RaisePropertyChange(string propertyName)

@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CommonUlitlities;
+
 
 namespace CandidatesBrowser3.DAL
 {
@@ -66,6 +68,11 @@ namespace CandidatesBrowser3.DAL
         {
             ConfigCompany ConfigCompanysToUpdate = ConfigCompanys.Where(e => e.ID.Equals(ConfigCompany.ID)).FirstOrDefault();
             ConfigCompanysToUpdate = ConfigCompany;
+        }
+
+        public ObservableCollection<ConfigCompany> GetConfigCompanysForCandidate(CandidateCompany cc)
+        {
+            return ConfigCompanys.Where(e => e.ID.Equals(cc.ID)).ToList().ToObservableCollection();
         }
     }
 }
