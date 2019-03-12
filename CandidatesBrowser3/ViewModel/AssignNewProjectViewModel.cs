@@ -36,7 +36,7 @@ namespace CandidatesBrowser3.ViewModel
 
         private bool CanAssignNewProject(object obj)
         {
-            if(SelectedCompany!=null && SelectedPosition !=null && SelectedProject !=null && SelectedStatus!=null )
+            if(  !string.IsNullOrWhiteSpace(obj.ToString()) &&   !string.IsNullOrWhiteSpace(SelectedPosition) && SelectedProject !=null && SelectedStatus!=null )
             {
                 return true;
             }

@@ -38,7 +38,7 @@
         <Button HorizontalAlignment="Center"  Width="100" Margin="2,2"  Grid.Column="0" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
-                    <i:InvokeCommandAction Command="{Binding AssignNewProjectCommand}"></i:InvokeCommandAction>
+                    <i:InvokeCommandAction Command="{Binding AssignNewProjectCommand}" CommandParameter="{Binding ElementName=companyCombo,Path=Text}"></i:InvokeCommandAction>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
@@ -59,7 +59,7 @@
 
         </ComboBox>
         <Label Margin="2" Content="Company" Grid.Row="1" Grid.Column="2"/>
-        <ComboBox IsTextSearchEnabled="True" IsEditable="True" IsEnabled="True" SelectedItem="{Binding SelectedCompany}" 
+        <ComboBox x:Name="companyCombo" IsTextSearchEnabled="True" IsEditable="True" IsEnabled="True"  SelectedItem="{Binding SelectedCompany}" 
                   HorizontalContentAlignment="Center"   Margin="1" Grid.Column="2" Grid.Row="2" 
                   ItemsSource="{Binding ConfigCompanyCollection}" DisplayMemberPath="Company">
 
