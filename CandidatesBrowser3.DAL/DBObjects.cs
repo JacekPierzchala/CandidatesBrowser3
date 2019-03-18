@@ -148,5 +148,39 @@ namespace CandidatesBrowser3.DAL
 
         }
 
+        public static object GetExecProcedureWithArgsResult(string procedureName, Dictionary<dynamic, dynamic> Args)
+        {
+            object result=null;
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+                SqlCommand cmd = new SqlCommand();
+
+                cmd.CommandText = procedureName;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 1000;
+                cmd.Connection = sqlConnection;
+                sqlConnection.Open();
+
+                foreach (var param in Args)
+                {
+                    cmd.Parameters.AddWithValue(param.Key, param.Value);
+                }
+                cmd.Parameters.Add("@NewID",SqlDbType.Int);
+                cmd.Parameters["@NewID"].Direction = ParameterDirection.Output; 
+               // result = cmd.Parameters.Add("@NewID");
+                cmd.ExecuteNonQuery();
+                result = cmd.Parameters["@NewID"].Value;
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+
+
+            return result;
+        }
+
     }
 }

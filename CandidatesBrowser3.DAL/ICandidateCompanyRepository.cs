@@ -14,6 +14,7 @@ namespace CandidatesBrowser3.DAL
         CandidateCompany GetCandidateCompany();
         CandidateCompany CandidateCompanyByID(int id);
         ObservableCollection<CandidateCompany> GetCandidateCompanys();
+        int AddCandidateCompany(int candidateID, ConfigCompany configCompany, string position, ConfigProject configProject);
         void UpdateCandidateCompany(CandidateCompany CandidateCompany);
     }
 }

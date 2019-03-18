@@ -14,6 +14,7 @@ namespace CandidatesBrowser3.DAL
     public class ConfigCompanyRepository: IConfigCompanyRepository
     {
         private static ObservableCollection<ConfigCompany> ConfigCompanys;
+        private static Dictionary<dynamic, dynamic> Args = new Dictionary<dynamic, dynamic>();
         public void DeleteConfigCompany(ConfigCompany ConfigCompany)
         {
             ConfigCompanys.Remove(ConfigCompany);
@@ -74,5 +75,25 @@ namespace CandidatesBrowser3.DAL
         {
             return ConfigCompanys.Where(e => e.ID.Equals(cc.ID)).ToList().ToObservableCollection();
         }
+
+        public int AddConfigCompany(ConfigCompany ConfigCompany)
+        {
+            //Args.Clear();
+            //Args.Add("@CandidateID", candidate.ID);
+            //Args.Add("@CVUploaded", candidate.CvUploaded);
+
+            //DBObjects.ExecProcedureWithArgs("UPDATE_DOCUMENT_INFO", Args);
+            return 1;
+        }
+
+        public int AddConfigCompany(string companyName)
+        {
+            Args.Clear();
+            Args.Add("@CompanyName", companyName);
+                        
+            return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_COMPANY", Args).ToString());
+            
+        }
+
     }
 }

@@ -8,7 +8,7 @@ using System.Data;
 
 namespace CandidatesBrowser3.Model
 {
-    public class ConfigProject : INotifyPropertyChanged, ICloneable
+    public class ConfigProject : ConfigProjectsLib,INotifyPropertyChanged, ICloneable
     {
         private int id;
         public int ID
@@ -71,6 +71,7 @@ namespace CandidatesBrowser3.Model
             ConfigAreaID = row.Field<int>("CONFIG_AREA_ID");
             ConfigProjectLibID = row.Field<int>("CONFIG_PROJECT_LIB_ID");
             ConfigGroupID = row.Field<int>("CONFIG_GROUP_ID");
+            ProjectName = row.Field<string>("PROJECT_NAME");
     
         }
 

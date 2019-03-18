@@ -49,7 +49,8 @@
         <Label Margin="10,2" Content="Position:" Grid.Column="1"/>
         <TextBox Margin="2" Grid.Column="2" Text="{Binding SelectedPosition}"></TextBox>
         <Label Margin="2" Content="Project" Grid.Row="1" Grid.Column="0"/>
-        <ComboBox HorizontalContentAlignment="Center" SelectedItem="{Binding SelectedProject}"  IsTextSearchEnabled="True"  Margin="1" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding ConfigPojectsCollection}" DisplayMemberPath="ProjectName">
+        <ComboBox HorizontalContentAlignment="Center" SelectedItem="{Binding SelectedProject}"  
+                  IsTextSearchEnabled="True"  Margin="1" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding ConfigPojectsCollection}" DisplayMemberPath="ProjectName">
             
         </ComboBox>
         <Label Margin="2" Content="Status" Grid.Row="1" Grid.Column="1"/>

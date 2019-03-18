@@ -12,6 +12,7 @@ namespace CandidatesBrowser3.DAL
     public class CandidateCompanyRepository: ICandidateCompanyRepository
     {
         private static ObservableCollection<CandidateCompany> CandidateCompanys;
+        private static Dictionary<dynamic, dynamic> Args = new Dictionary<dynamic, dynamic>();
 
         public CandidateCompanyRepository() { }
 
@@ -72,5 +73,15 @@ namespace CandidatesBrowser3.DAL
             CandidateCompanyToUpdate = CandidateCompany;
         }
 
+        public int AddCandidateCompany(int candidateId, ConfigCompany configCompany, string position, ConfigProject configProject)
+        {
+            Args.Clear();
+            Args.Add("@CompanyID", configCompany.ID);
+            Args.Add("@CandidateID", candidateId);
+            Args.Add("@Position", position);
+            Args.Add("@ProjectID", configProject.ID);
+
+            return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_CANDIDATE_COMPANY", Args).ToString());
+        }
     }
 }

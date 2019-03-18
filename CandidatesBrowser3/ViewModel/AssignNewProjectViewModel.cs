@@ -9,7 +9,7 @@ using CandidatesBrowser3.DAL;
 using CandidatesBrowser3.Model;
 using CandidatesBrowser3.Utilities;
 using System.Windows.Input;
-
+using CommonUlitlities;
 namespace CandidatesBrowser3.ViewModel
 {
     public class AssignNewProjectViewModel : INotifyPropertyChanged
@@ -19,6 +19,8 @@ namespace CandidatesBrowser3.ViewModel
         private IConfigProjectsLibRepository configProjectsLibRepository;
         private IConfigProjectRepository configProjectRepository;
         private IConfigCompanyRepository configCompanyRepository;
+        private ICandidateCompanyRepository candidateCompanyRepository;
+        
         private IDialogService dialogService;
         #endregion
 
@@ -31,7 +33,21 @@ namespace CandidatesBrowser3.ViewModel
         #region AssignNewProjectCommand
         private void AssignNewProject(object obj)
         {
+           int? newId;
+           if (ConfigCompanyCollection.Where(e => e.Company.ToUpper().Equals(obj.ToString().ToUpper())).FirstOrDefault() ==null)
+            {
+                newId = configCompanyRepository.AddConfigCompany(obj.ToString() );
+                ConfigCompanyCollection.Add(new ConfigCompany() { ID = (int)newId, Company = obj.ToString() });                
+            }
+            newId= candidateCompanyRepository.AddCandidateCompany
+                  (ReceivedCandidateCompany.CandidateID,
+                   ConfigCompanyCollection.Where(e => e.Company.ToUpper().Equals(obj.ToString().ToUpper())).FirstOrDefault(),
+                    SelectedPosition, SelectedProject);
 
+
+
+                
+            //new CandidateCompany() { }
         }
 
         private bool CanAssignNewProject(object obj)
@@ -56,8 +72,8 @@ namespace CandidatesBrowser3.ViewModel
         }
 
 
-        private ObservableCollection<ConfigProjectsLib> configPojectsCollection;
-        public ObservableCollection<ConfigProjectsLib> ConfigPojectsCollection
+        private ObservableCollection<ConfigProject> configPojectsCollection;
+        public ObservableCollection<ConfigProject> ConfigPojectsCollection
         {
             get { return configPojectsCollection; }
             set {
@@ -97,8 +113,8 @@ namespace CandidatesBrowser3.ViewModel
         }
 
 
-        private ConfigProjectsLib selectedProject;
-        public ConfigProjectsLib SelectedProject
+        private ConfigProject selectedProject;
+        public ConfigProject SelectedProject
         {
             get { return selectedProject; }
             set
@@ -132,13 +148,14 @@ namespace CandidatesBrowser3.ViewModel
 
         public AssignNewProjectViewModel(IConfigStatusLibRepository configStatusLibRepository,
             IConfigProjectsLibRepository configProjectsLibRepository, IConfigProjectRepository configProjectRepository, IConfigCompanyRepository configCompanyRepository,
-            IDialogService dialogService)
+            IDialogService dialogService, ICandidateCompanyRepository candidateCompanyRepository)
         {
             this.dialogService = dialogService;
             this.configStatusLibRepository = configStatusLibRepository;
             this.configProjectsLibRepository = configProjectsLibRepository;
             this.configProjectRepository = configProjectRepository;
             this.configCompanyRepository = configCompanyRepository;
+            this.candidateCompanyRepository = candidateCompanyRepository;
 
             MessengerCandidateCompany.Default.Register<CandidateCompany>(this, OnCandidateCompanyReceived);
 
@@ -158,8 +175,8 @@ namespace CandidatesBrowser3.ViewModel
         private void loadData()
         {
             ConfigStatusLibCollection = configStatusLibRepository.GetConfigStatusLibs();
-            ConfigPojectsCollection = configProjectsLibRepository.GetConfigProjectsLibs();
-            ConfigCompanyCollection = configCompanyRepository.GetConfigCompanysForCandidate(ReceivedCandidateCompany);
+            ConfigPojectsCollection = configProjectRepository.GetConfigProjects().OrderBy(e=>e.ProjectName).ToObservableCollection();
+            ConfigCompanyCollection = configCompanyRepository.GetConfigCompanysForCandidate(ReceivedCandidateCompany).OrderBy(e => e.Company).ToObservableCollection() ;
         }
 
         public void RaisePropertyChange(string propertyName)

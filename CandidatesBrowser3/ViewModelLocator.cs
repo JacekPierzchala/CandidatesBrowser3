@@ -64,7 +64,7 @@ namespace CandidatesBrowser3
         }
         
         private static AssignNewProjectViewModel assignNewProjectViewModel= 
-            new AssignNewProjectViewModel(configStatusLibRepository,configProjectsLibRepository,configProjectRepository,configCompanyRepository, dialogService);
+            new AssignNewProjectViewModel(configStatusLibRepository,configProjectsLibRepository,configProjectRepository,configCompanyRepository, dialogService,  candidateCompanyRepository);
 
         public static AssignNewProjectViewModel AssignNewProjectViewModel
         {
