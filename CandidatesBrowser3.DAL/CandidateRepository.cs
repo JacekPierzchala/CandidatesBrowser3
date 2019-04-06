@@ -69,8 +69,19 @@ namespace CandidatesBrowser3.DAL
 
         public void UpdateCandidate(Candidate candidate)
         {
-            Candidate candidateToUpdate = Candidates.Where(c => c.ID.Equals(candidate.ID)).FirstOrDefault();
-            candidateToUpdate = candidate;
+            //Candidate candidateToUpdate = Candidates.Where(c => c.ID.Equals(candidate.ID)).FirstOrDefault();
+            //candidateToUpdate = candidate;
+            Args.Clear();
+            Args.Add("@CandidateId", candidate.ID);
+            Args.Add("@FirstName", candidate.FirstName);
+            Args.Add("@LastName", candidate.LastName);
+            Args.Add("@FirstPhone", candidate.FirstPhone);
+            Args.Add("@SecondPhone", candidate.SecondPhone);
+            Args.Add("@FirstEmail", candidate.FirstEmail);
+            Args.Add("@SecondEmail", candidate.SecondEmail);
+
+            DBObjects.ExecProcedureWithArgs("UPDATE_CANDIDATE_INFO", Args);
+
         }
 
         public void UpdateCandidateDocumentInfo(Candidate candidate)

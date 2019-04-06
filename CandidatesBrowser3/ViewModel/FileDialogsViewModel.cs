@@ -63,8 +63,8 @@ namespace CandidatesBrowser3.ViewModel
             openFileDialog.ShowDialog();
 
             DocumentToAction.DocumentNames = openFileDialog.FileNames;
-          
-            MessengerDocument.Default.Send<UpdateDocument>(new UpdateDocument());
+
+            MessengerCandidateCompany.Default.Send<UpdateCandidateCompany>(new UpdateCandidateCompany());
         }
 
         private bool CanOpen(object o)

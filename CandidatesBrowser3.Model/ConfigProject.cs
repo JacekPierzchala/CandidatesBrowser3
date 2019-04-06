@@ -32,6 +32,8 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+        public string AreaName { get; set; }
+
         private int configProjectLibID;
         public int ConfigProjectLibID
         {
@@ -69,20 +71,20 @@ namespace CandidatesBrowser3.Model
         {
             ID = row.Field<int>("ID");
             ConfigAreaID = row.Field<int>("CONFIG_AREA_ID");
+            AreaName = row.Field<string>("AREA_NAME");
             ConfigProjectLibID = row.Field<int>("CONFIG_PROJECT_LIB_ID");
             ConfigGroupID = row.Field<int>("CONFIG_GROUP_ID");
             ProjectName = row.Field<string>("PROJECT_NAME");
     
         }
-
         public ConfigProject()
         {
 
         }
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void RaisePropertyChanged(string propertyName)
+        public new event PropertyChangedEventHandler PropertyChanged;
+        public new void RaisePropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
             {
@@ -91,7 +93,7 @@ namespace CandidatesBrowser3.Model
 
         }
 
-        public object Clone()
+        public new object Clone()
         {
             return this.MemberwiseClone();
         }

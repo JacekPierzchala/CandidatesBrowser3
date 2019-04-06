@@ -20,7 +20,9 @@ namespace CandidatesBrowser3.ViewModel
         private IConfigProjectRepository configProjectRepository;
         private IConfigCompanyRepository configCompanyRepository;
         private ICandidateCompanyRepository candidateCompanyRepository;
-        
+        private IConfigProjectsCandidateRepository configProjectsCandidateRepository;
+        private ICandidateHistoryRepository candidateHistoryRepository;
+
         private IDialogService dialogService;
         #endregion
 
@@ -33,20 +35,45 @@ namespace CandidatesBrowser3.ViewModel
         #region AssignNewProjectCommand
         private void AssignNewProject(object obj)
         {
-           int? newId;
-           if (ConfigCompanyCollection.Where(e => e.Company.ToUpper().Equals(obj.ToString().ToUpper())).FirstOrDefault() ==null)
+            int? newcandidateCompanyId;
+            int? newCompanyId;
+            int? newcandidateProjectsId;
+            if (ConfigCompanyCollection.Where(e => e.Company.ToUpper().Equals(obj.ToString().ToUpper())).FirstOrDefault() ==null)
             {
-                newId = configCompanyRepository.AddConfigCompany(obj.ToString() );
-                ConfigCompanyCollection.Add(new ConfigCompany() { ID = (int)newId, Company = obj.ToString() });                
+                newCompanyId = configCompanyRepository.AddConfigCompany(obj.ToString() );
+                ConfigCompanyCollection.Add(new ConfigCompany() { ID = (int)newCompanyId, Company = obj.ToString() });                
             }
-            newId= candidateCompanyRepository.AddCandidateCompany
+            newcandidateCompanyId = candidateCompanyRepository.AddCandidateCompany
                   (ReceivedCandidateCompany.CandidateID,
                    ConfigCompanyCollection.Where(e => e.Company.ToUpper().Equals(obj.ToString().ToUpper())).FirstOrDefault(),
                     SelectedPosition, SelectedProject);
 
 
+            newcandidateProjectsId = configProjectsCandidateRepository.AddConfigProjectCandidate(ReceivedCandidateCompany.CandidateID, SelectedProject);
 
-                
+            CandidateHistory = new CandidateHistory()
+            {
+                CandidateID = ReceivedCandidateCompany.CandidateID,
+                ProjectID= SelectedProject.ID,
+                ProjectName=SelectedProject.ProjectName,
+                Position=SelectedPosition,
+                Timestamp=DateTime.Now,
+                StatusName=SelectedStatus.Description,
+                CompanyID= ConfigCompanyCollection.Where(e => e.Company.ToUpper().Equals(obj.ToString().ToUpper())).FirstOrDefault().ID,
+                CompanyName= ConfigCompanyCollection.Where(e => e.Company.ToUpper().Equals(obj.ToString().ToUpper())).FirstOrDefault().Company,
+                ConfigAreaId=SelectedProject.ConfigAreaID,
+                AreaName=SelectedProject.AreaName,
+                Seq = 1,
+                ConfigStatusID = SelectedStatus.ID,
+                Comments = Comment,
+                CandidatesProjectsID = (int)newcandidateProjectsId,
+                CandidatesCompanyId= (int)newcandidateCompanyId
+            };
+
+            MessengerCandidateHistory.Default.Send<CandidateHistory>(CandidateHistory);
+
+
+
             //new CandidateCompany() { }
         }
 
@@ -59,57 +86,78 @@ namespace CandidatesBrowser3.ViewModel
             return false;
         }
         #endregion
+       
         #endregion
 
+        #region properties
         private CandidateCompany receivedCandidateCompany;
         public CandidateCompany ReceivedCandidateCompany
         {
             get { return receivedCandidateCompany; }
-            set {
+            set
+            {
                 receivedCandidateCompany = value;
                 RaisePropertyChange("ReceivedCandidateCompany");
-                }
+            }
         }
+
+        
+        public CandidateHistory CandidateHistory { get; set; }
+        
 
 
         private ObservableCollection<ConfigProject> configPojectsCollection;
         public ObservableCollection<ConfigProject> ConfigPojectsCollection
         {
             get { return configPojectsCollection; }
-            set {
+            set
+            {
                 configPojectsCollection = value;
                 RaisePropertyChange("ConfigPojectsCollection");
-                }
+            }
         }
 
         private ObservableCollection<ConfigStatusLib> configStatusLibCollection;
         public ObservableCollection<ConfigStatusLib> ConfigStatusLibCollection
         {
             get { return configStatusLibCollection; }
-            set {
+            set
+            {
                 configStatusLibCollection = value;
                 RaisePropertyChange("ConfigStatusLibCollection");
-                }
+            }
         }
 
         private ObservableCollection<ConfigCompany> configCompanyCollection;
         public ObservableCollection<ConfigCompany> ConfigCompanyCollection
         {
             get { return configCompanyCollection; }
-            set {
+            set
+            {
                 configCompanyCollection = value;
                 RaisePropertyChange("ConfigCompanyCollection");
-                }
+            }
         }
 
         private string selectedPosition;
         public string SelectedPosition
         {
             get { return selectedPosition; }
-            set {
+            set
+            {
                 selectedPosition = value;
                 RaisePropertyChange("SelectedPosition");
-                }
+            }
+        }
+
+        private string comment;
+        public string Comment
+        {
+            get { return comment; }
+            set {
+                comment = value;
+                RaisePropertyChange("Comment");
+            }
         }
 
 
@@ -131,7 +179,7 @@ namespace CandidatesBrowser3.ViewModel
             set
             {
                 selectedStatus = value;
-                RaisePropertyChange("SelectedProject");
+                RaisePropertyChange("SelectedStatus");
             }
         }
 
@@ -139,16 +187,21 @@ namespace CandidatesBrowser3.ViewModel
         public ConfigCompany SelectedCompany
         {
             get { return selectedCompany; }
-            set {
+            set
+            {
                 selectedCompany = value;
                 RaisePropertyChange("SelectedCompany");
-                }
+            }
         }
+
+        #endregion
+
 
 
         public AssignNewProjectViewModel(IConfigStatusLibRepository configStatusLibRepository,
             IConfigProjectsLibRepository configProjectsLibRepository, IConfigProjectRepository configProjectRepository, IConfigCompanyRepository configCompanyRepository,
-            IDialogService dialogService, ICandidateCompanyRepository candidateCompanyRepository)
+            IDialogService dialogService, ICandidateCompanyRepository candidateCompanyRepository, 
+            IConfigProjectsCandidateRepository configProjectsCandidateRepository, ICandidateHistoryRepository candidateHistoryRepository)
         {
             this.dialogService = dialogService;
             this.configStatusLibRepository = configStatusLibRepository;
@@ -156,9 +209,18 @@ namespace CandidatesBrowser3.ViewModel
             this.configProjectRepository = configProjectRepository;
             this.configCompanyRepository = configCompanyRepository;
             this.candidateCompanyRepository = candidateCompanyRepository;
+            this.configProjectsCandidateRepository = configProjectsCandidateRepository;
+            this.candidateHistoryRepository = candidateHistoryRepository;
 
+           
             MessengerCandidateCompany.Default.Register<CandidateCompany>(this, OnCandidateCompanyReceived);
+            MessengerCandidateHistory.Default.Register<UpdateCandidateHistory>(this, OnUpdateListMessageReceived);
 
+        }
+
+        private void OnUpdateListMessageReceived(UpdateCandidateHistory obj)
+        {
+           
         }
 
         private void OnCandidateCompanyReceived(CandidateCompany obj)
@@ -174,6 +236,11 @@ namespace CandidatesBrowser3.ViewModel
 
         private void loadData()
         {
+            SelectedPosition = "";
+            Comment = "";
+            SelectedCompany = null;
+            SelectedProject = null;
+            SelectedStatus = null;
             ConfigStatusLibCollection = configStatusLibRepository.GetConfigStatusLibs();
             ConfigPojectsCollection = configProjectRepository.GetConfigProjects().OrderBy(e=>e.ProjectName).ToObservableCollection();
             ConfigCompanyCollection = configCompanyRepository.GetConfigCompanysForCandidate(ReceivedCandidateCompany).OrderBy(e => e.Company).ToObservableCollection() ;

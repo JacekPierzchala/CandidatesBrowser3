@@ -7,24 +7,25 @@ using System.Threading.Tasks;
 
 namespace CandidatesBrowser3.Utilities
 {
-    public class UpdateListMessage
+    public class UpdateListMessageCompany
     {
     }
 
-  
-    public class MessengerCandidate
+    
+
+    public class MessengerCompany
     {
         private static readonly object CreationLock = new object();
         private static readonly ConcurrentDictionary<MessengerKey, object> Dictionary = new ConcurrentDictionary<MessengerKey, object>();
 
         #region Default property
-        
-        private static MessengerCandidate _instance;
+
+        private static MessengerCompany _instance;
 
         /// <summary>
         /// Gets the single instance of the Messenger.
         /// </summary>
-        public static MessengerCandidate Default
+        public static MessengerCompany Default
         {
             get
             {
@@ -34,7 +35,7 @@ namespace CandidatesBrowser3.Utilities
                     {
                         if (_instance == null)
                         {
-                            _instance = new MessengerCandidate();
+                            _instance = new MessengerCompany();
                         }
                     }
                 }
@@ -48,7 +49,7 @@ namespace CandidatesBrowser3.Utilities
         /// <summary>
         /// Initializes a new instance of the Messenger class.
         /// </summary>
-        private MessengerCandidate()
+        private MessengerCompany()
         {
         }
 
@@ -194,4 +195,4 @@ namespace CandidatesBrowser3.Utilities
             }
         }
     }
-    }
+}

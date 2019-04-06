@@ -10,6 +10,14 @@ namespace CandidatesBrowser3.Model
 {
     public class ConfigProjectCandidate : INotifyPropertyChanged, ICloneable
     {
+        private int id;
+        public int ID
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
+
         private int configProjectID;
         public int ConfigProjectID
         {

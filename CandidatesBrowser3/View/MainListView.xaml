@@ -96,7 +96,7 @@
                                                         <i:EventTrigger EventName="Unchecked">
                                                             <i:InvokeCommandAction
                                                         Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},
-                                                            Path=DataContext.ProjectSelectionChangeCommand}"
+                                                            Path=DataContext.AreaSelectionChangeCommand}"
                                                                 CommandParameter="{Binding ElementName=SelectedAreaCheck}"
                                                            />
                                                         </i:EventTrigger>

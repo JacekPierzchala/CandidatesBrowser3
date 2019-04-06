@@ -200,6 +200,12 @@ namespace CandidatesBrowser3.Model
             get { return candidateCompanies; }
             set {
                 candidateCompanies = value;
+                if (CandidateCompanies!=null)
+                {
+                    Positions = String.Join(", ", CandidateCompanies.Select(e => e.Position).Distinct());
+                    Companies = String.Join(", ", CandidateCompanies.Select(e => e.Company).Distinct());
+                }
+               
                 RaisePropertyChange("CandidateCompanies");
                 }
         }

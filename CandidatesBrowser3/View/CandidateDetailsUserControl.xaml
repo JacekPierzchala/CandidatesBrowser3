@@ -72,11 +72,16 @@
      
         <StackPanel Orientation="Horizontal"  Grid.Row="0">
                 <Button Margin="10,1"  >
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
                         <TextBlock Margin="2,0" VerticalAlignment="Center">Save</TextBlock>
                         <materialdesign:PackIcon VerticalAlignment="Center" Kind="Approve"></materialdesign:PackIcon>
                     </StackPanel>
-                </Button>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding SaveCommand}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
                 <Button Margin="20,1"  >
                     <StackPanel Orientation="Horizontal">
                         <TextBlock>UndoChanges</TextBlock>

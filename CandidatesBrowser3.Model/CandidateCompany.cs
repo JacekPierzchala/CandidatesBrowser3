@@ -38,7 +38,8 @@ namespace CandidatesBrowser3.Model
             base.ID= row.Field<int>("COMPANY_ID");
             ProjectID= row.Field<int>("PROJECT_ID");
             Position= row.Field<string>("POSITION");
-       }
+            base.Company = row.Field<string>("NAME");
+        }
 
         public CandidateCompany()
         {

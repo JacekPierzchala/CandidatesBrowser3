@@ -16,7 +16,7 @@ using CommonUlitlities;
 
 namespace CandidatesBrowser3.ViewModel
 {
-   public class MainListViewModel:INotifyPropertyChanged
+    public class MainListViewModel : INotifyPropertyChanged
     {
         #region properties
         private ICandidateRepository candidateRepository;
@@ -32,17 +32,19 @@ namespace CandidatesBrowser3.ViewModel
         public bool CombinedRefreshNeeded
         {
             get { return combinedRefreshNeeded; }
-            set {
+            set
+            {
                 combinedRefreshNeeded = value;
                 RaisePropertyChange("CombinedRefreshNeeded");
-                }
+            }
         }
 
         private bool? cvUploaded;
         public bool? CvUploaded
         {
             get { return cvUploaded; }
-            set {
+            set
+            {
                 cvUploaded = value;
                 RaisePropertyChange("CvUploaded");
                 CandidatesView.Refresh();
@@ -53,14 +55,15 @@ namespace CandidatesBrowser3.ViewModel
         public bool AllProjectsSelected
         {
             get { return allProjectsSelected; }
-            set {
+            set
+            {
                 allProjectsSelected = value;
                 RaisePropertyChange("AllProjectsSelected");
                 if (CombinedRefreshNeeded)
                 {
                     ViewRefresh();
                 }
-                
+
             }
         }
 
@@ -68,7 +71,8 @@ namespace CandidatesBrowser3.ViewModel
         public bool AllAreasSelected
         {
             get { return allAreasSelected; }
-            set {
+            set
+            {
                 allAreasSelected = value;
                 RaisePropertyChange("AllAreasSelected");
                 if (CombinedRefreshNeeded)
@@ -83,7 +87,8 @@ namespace CandidatesBrowser3.ViewModel
         public bool AllCompaniesSelected
         {
             get { return allCompaniesSelected; }
-            set {
+            set
+            {
                 allCompaniesSelected = value;
                 RaisePropertyChange("AllCompaniesSelected");
                 if (CombinedRefreshNeeded)
@@ -98,10 +103,11 @@ namespace CandidatesBrowser3.ViewModel
         public bool CompaniesListOpened
         {
             get { return companiesListOpened; }
-            set {
+            set
+            {
                 companiesListOpened = value;
                 RaisePropertyChange("CompaniesListOpened");
-                }
+            }
         }
 
         private Candidate selectedCandidate;
@@ -114,184 +120,188 @@ namespace CandidatesBrowser3.ViewModel
                 RaisePropertyChange("SelectedCandidate");
             }
         }
-        
+
         #endregion
+       
         #region Commands
-            public ICommand SelectAllProjectsCommand { get; set; }
-            public ICommand SelectAllAreasCommand { get; set; }
-            public ICommand SelectAllCompaniesCommand { get; set; }
-            public ICommand ProjectSelectionChangeCommand { get; set; }
-            public ICommand CompanySelectionChangeCommand { get; set; }
-            public ICommand AreaSelectionChangeCommand { get; set; }
-            public ICommand ResetFiltersCommand { get; set; }
-            public ICommand CompaniesListOpenedChangeCommand { get; set; }
-            public ICommand SelectCandidateChangeCommand { get; set; }
+        public ICommand SelectAllProjectsCommand { get; set; }
+        public ICommand SelectAllAreasCommand { get; set; }
+        public ICommand SelectAllCompaniesCommand { get; set; }
+        public ICommand ProjectSelectionChangeCommand { get; set; }
+        public ICommand CompanySelectionChangeCommand { get; set; }
+        public ICommand AreaSelectionChangeCommand { get; set; }
+        public ICommand ResetFiltersCommand { get; set; }
+        public ICommand CompaniesListOpenedChangeCommand { get; set; }
+        public ICommand SelectCandidateChangeCommand { get; set; }
         #endregion
+        
         #region methodsForCommands
         #region SelectAllProjectsCommand
         private bool CanSelectAllProjects(object obj)
-                {
-                    return true;
-                }      
-                private void SelectAllProjects(object obj)
-                {
-                    bool isChecked = (bool)obj;
-                    //((CheckBox)obj).IsChecked;
-                    ConfigProjectsLibs.ToList().ForEach(e => e.Selected = (bool)isChecked);
-                    AllProjectsSelected = (bool)isChecked;
-                }
+        {
+            return true;
+        }
+        private void SelectAllProjects(object obj)
+        {
+            bool isChecked = (bool)obj;
+            //((CheckBox)obj).IsChecked;
+            ConfigProjectsLibs.ToList().ForEach(e => e.Selected = (bool)isChecked);
+            AllProjectsSelected = (bool)isChecked;
+        }
         #endregion
 
-             #region SelectAllAreasCommandSel
+        #region SelectAllAreasCommandSel
 
-                private bool CanSelectAllAreas(object obj)
-                {
-                    return true;
-                }
-                private void SelectAllAreas(object obj)
-                {
-                    bool isChecked = (bool)obj;
-                    //((CheckBox)obj).IsChecked;
-                    ConfigAreaCollection.ToList().ForEach(e => e.Selected = (bool)isChecked);
-                    AllAreasSelected = (bool)isChecked;
-                }
+        private bool CanSelectAllAreas(object obj)
+        {
+            return true;
+        }
+        private void SelectAllAreas(object obj)
+        {
+            bool isChecked = (bool)obj;
+            //((CheckBox)obj).IsChecked;
+            ConfigAreaCollection.ToList().ForEach(e => e.Selected = (bool)isChecked);
+            AllAreasSelected = (bool)isChecked;
+        }
 
-             #endregion
+        #endregion
 
-             #region SelectAllCompaniesCommand
+        #region SelectAllCompaniesCommand
 
-            private bool CanSelectAllCompanies(object obj)
+        private bool CanSelectAllCompanies(object obj)
+        {
+            return true;
+        }
+        private void SelectAllCompanies(object obj)
+        {
+            bool isChecked = (bool)obj;
+            //((CheckBox)obj).IsChecked;
+            ConfigCompanyCollection.ToList().ForEach(e => e.Selected = (bool)isChecked);
+            AllCompaniesSelected = (bool)isChecked;
+        }
+
+        #endregion
+
+        #region ProjectSelectionChangeCommand
+        private bool CanProjectSelectionChange(object obj)
+        {
+            return true;
+        }
+        private void ProjectSelectionChange(object obj)
+        {
+
+            if (ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count())
+            {
+                AllProjectsSelected = true;
+            }
+            else
+            {
+                AllProjectsSelected = false;
+            }
+
+        }
+        #endregion
+
+        #region AreaSelectionChangeCommand
+        private bool CanAreaSelectionChange(object obj)
+        {
+            return true;
+        }
+        private void AreaSelectionChange(object obj)
+        {
+            if (ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count())
+            {
+                AllAreasSelected = true;
+            }
+            else
+            {
+                AllAreasSelected = false;
+            }
+
+        }
+
+        #endregion
+
+        #region ResetFiltersCommand
+
+        private void ResetFilters(object obj)
+        {
+            CombinedRefreshNeeded = false;
+            FirstNameFilter = null;
+            LastNameFilter = null;
+            ProjectNameFilter = null;
+            AreaNameFilter = null;
+            PositionNameFilter = null;
+            CompanyNameFilter = null;
+            AllProjectsSelected = true;
+            AllAreasSelected = true;
+            AllCompaniesSelected = true;
+            SelectAllProjects(AllProjectsSelected);
+            SelectAllAreas(AllAreasSelected);
+            SelectAllCompanies(AllCompaniesSelected);
+            ViewRefresh();
+            CombinedRefreshNeeded = true;
+
+
+        }
+        private bool CanResetFilters(object obj)
+        {
+            return true;
+        }
+        #endregion
+
+        #region CompaniesListOpenedChangeCommand
+        private bool CanCompaniesListOpenedChange(object i)
+        {
+            return true;
+        }
+
+        private void CompaniesListOpenedChange(object i)
+        {
+            CompaniesListOpened = bool.Parse(i.ToString());
+        }
+        #endregion
+
+
+        #region CompanySelectionChangeCommand
+        private bool CanCompanySelectionChange(object obj)
+        {
+            return true;
+        }
+        private void CompanySelectionChange(object obj)
+        {
+
+            if (ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count())
+            {
+                AllCompaniesSelected = true;
+            }
+            else
+            {
+                AllCompaniesSelected = false;
+            }
+
+        }
+        #endregion
+
+        #region SelectCandidateChangeCommand
+        private bool CanSelectCandidateChange(object o)
+        {
+            if (SelectedCandidate != null)
             {
                 return true;
             }
-            private void SelectAllCompanies(object obj)
-            {
-                bool isChecked = (bool)obj;
-                //((CheckBox)obj).IsChecked;
-                ConfigCompanyCollection.ToList().ForEach(e => e.Selected = (bool)isChecked);
-                AllCompaniesSelected = (bool)isChecked; 
-            }
+            return false;
+        }
 
+        private void SelectCandidateChange(object o)
+        {
+            Candidate SelectedCandidateTemp = new Candidate();
+            GlobalFunctions.CopyProperties(SelectedCandidate, SelectedCandidateTemp);
+            MessengerCandidate.Default.Send<Candidate>(SelectedCandidate);
+        }
+       
         #endregion
-
-             #region ProjectSelectionChangeCommand
-                private bool CanProjectSelectionChange(object obj)
-                            {
-                            return true;
-                            }               
-                private void ProjectSelectionChange(object obj)
-                    {
-          
-                               if (ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count())
-                                {
-                                    AllProjectsSelected = true;
-                                }
-                                else
-                                {
-                                    AllProjectsSelected = false;
-                                }
-                       
-                     }
-             #endregion
-
-             #region AreaSelectionChangeCommand
-            private bool CanAreaSelectionChange(object obj)
-            {
-                return true;
-            }
-            private void AreaSelectionChange(object obj)
-            {
-                if (ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count())
-                {
-                    AllAreasSelected = true;
-                }
-                else
-                {
-                    AllAreasSelected = false;
-                }
-
-            }
-
-            #endregion
-             
-             #region ResetFiltersCommand
-
-                    private void ResetFilters(object obj)
-                    {
-                        CombinedRefreshNeeded = false;
-                        FirstNameFilter = null;
-                        LastNameFilter = null;
-                        ProjectNameFilter = null;
-                        AreaNameFilter = null;
-                        PositionNameFilter = null;
-                        CompanyNameFilter = null;
-                        AllProjectsSelected = true;
-                        AllAreasSelected = true;
-                        AllCompaniesSelected = true;    
-                        SelectAllProjects(AllProjectsSelected);
-                        SelectAllAreas(AllAreasSelected);
-                        SelectAllCompanies(AllCompaniesSelected);
-                        ViewRefresh();
-                        CombinedRefreshNeeded = true;   
-                        
-                    
-                    }
-                    private bool CanResetFilters(object obj)
-                    {
-                        return true;
-                    }
-        #endregion
-
-             #region CompaniesListOpenedChangeCommand
-                private bool CanCompaniesListOpenedChange(object i)
-                {
-                 return true;
-                }
-                
-                private void CompaniesListOpenedChange(object i)
-                {
-                   CompaniesListOpened= bool.Parse(i.ToString());
-                }
-        #endregion
-
-
-             #region CompanySelectionChangeCommand
-            private bool CanCompanySelectionChange(object obj)
-            {
-                return true;
-            }
-            private void CompanySelectionChange(object obj)
-            {
-
-                if (ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count())
-                {
-                    AllCompaniesSelected = true;
-                }
-                else
-                {
-                     AllCompaniesSelected = false;
-                }
-
-            }
-        #endregion
-
-             #region SelectCandidateChangeCommand
-                private bool CanSelectCandidateChange(object o)
-                 {
-                        if(SelectedCandidate!=null)
-                        {
-                        return true;
-                        }
-                        return false;
-                }
-             
-                private void SelectCandidateChange(object o)
-                {
-                    Candidate SelectedCandidateTemp = new Candidate();
-                    GlobalFunctions.CopyProperties(SelectedCandidate, SelectedCandidateTemp);
-                    MessengerCandidate.Default.Send<Candidate>(SelectedCandidate);
-                }
-             #endregion
+       
         #endregion
 
         #region collections
@@ -300,7 +310,8 @@ namespace CandidatesBrowser3.ViewModel
         public ObservableCollection<Candidate> Candidates
         {
             get { return candidates; }
-            set {
+            set
+            {
                 candidates = value;
                 RaisePropertyChange("Candidates");
             }
@@ -333,10 +344,15 @@ namespace CandidatesBrowser3.ViewModel
         public ObservableCollection<ConfigCompany> ConfigCompanyCollection
         {
             get { return configCompanyCollection; }
-            set {
+            set
+            {
                 configCompanyCollection = value;
+  
                 RaisePropertyChange("ConfigCompanyCollection");
-                }
+               // RaisePropertyChange("ConfigCompanyCollectionView");
+                //ConfigCompanyCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(ConfigCompanyCollection);
+                //ConfigCompanyCollectionView.Filter = ConfigCompanyFilter;
+            }
         }
 
         private CollectionView configCompanyCollectionView;
@@ -354,10 +370,11 @@ namespace CandidatesBrowser3.ViewModel
         public ObservableCollection<CandidateCompany> CandidateCompanyCollection
         {
             get { return candidateCompanyCollection; }
-            set {
+            set
+            {
                 candidateCompanyCollection = value;
                 RaisePropertyChange("CandidateCompanyCollection");
-                }
+            }
         }
 
         private ObservableCollection<ConfigCompanyProject> configCompanyProjectCollection;
@@ -365,10 +382,11 @@ namespace CandidatesBrowser3.ViewModel
         public ObservableCollection<ConfigCompanyProject> ConfigCompanyProjectCollection
         {
             get { return configCompanyProjectCollection; }
-            set {
+            set
+            {
                 configCompanyProjectCollection = value;
                 RaisePropertyChange("ConfigCompanyProjectCollection");
-                }
+            }
         }
 
 
@@ -376,10 +394,11 @@ namespace CandidatesBrowser3.ViewModel
         public ObservableCollection<ConfigProjectsLib> ConfigProjectsLibs
         {
             get { return configProjectsLibs; }
-            set {
+            set
+            {
                 configProjectsLibs = value;
                 RaisePropertyChange("ConfigProjectsLibs");
-                }
+            }
         }
 
         private CollectionView configProjectsLibsView;
@@ -413,10 +432,11 @@ namespace CandidatesBrowser3.ViewModel
         public ObservableCollection<ConfigProject> ConfigProjectCollection
         {
             get { return configProjectCollection; }
-            set {
+            set
+            {
                 configProjectCollection = value;
                 RaisePropertyChange("ConfigProjectCollection");
-                }
+            }
         }
 
         #endregion
@@ -444,9 +464,9 @@ namespace CandidatesBrowser3.ViewModel
             try
             {
                 LoadData();
-                addConfigsToCandidates();
-               
-              
+        
+
+
             }
             catch (Exception e)
             {
@@ -454,7 +474,7 @@ namespace CandidatesBrowser3.ViewModel
             }
             #endregion
 
-            
+
             #region loadView
             try
             {
@@ -465,6 +485,8 @@ namespace CandidatesBrowser3.ViewModel
 
             }
             #endregion
+
+            addConfigsToCandidates();
 
             #region commandsInitialisation
             SelectAllProjectsCommand = new CustomCommand(SelectAllProjects, CanSelectAllProjects);
@@ -479,12 +501,28 @@ namespace CandidatesBrowser3.ViewModel
             #endregion
 
             MessengerCandidate.Default.Register<UpdateListMessage>(this, OnUpdateListMessageReceived);
+
+            
+            MessengerCompany.Default.Register<List<CandidateCompany>>(this, OnCompanyReceived);
+        }
+
+        private void OnCompanyReceived(List<CandidateCompany> companylist)
+        {
+
+            foreach (var CandidateCompany in companylist.Where(e => !ConfigCompanyCollection.Any(cc=>cc.ID==e.ID)))
+            {
+                ConfigCompanyCollection.Add(new ConfigCompany { ID = CandidateCompany.ID, Company = CandidateCompany.Company });
+            }
+        
+            ConfigCompanyCollection = ConfigCompanyCollection.OrderBy(e => e.Company).ToObservableCollection();
+            ConfigCompanyCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(ConfigCompanyCollection);
+            ConfigCompanyCollectionView.Filter = ConfigCompanyFilter;
         }
 
         private void OnUpdateListMessageReceived(UpdateListMessage obj)
         {
             LoadData();
-         
+
         }
 
         private void LoadViews()
@@ -498,7 +536,7 @@ namespace CandidatesBrowser3.ViewModel
             ConfigCompanyCollectionView.Filter = ConfigCompanyFilter;
             CandidatesView = (CollectionView)CollectionViewSource.GetDefaultView(Candidates);
             CandidatesView.Filter = CandidatesViewFilter;
-            
+
         }
         private void LoadData()
         {
@@ -513,7 +551,7 @@ namespace CandidatesBrowser3.ViewModel
                 CandidateCompanyCollection = candidateCompanyRepository.GetCandidateCompanys();
                 ConfigCompanyProjectCollection = configCompanyProjectRepository.GetConfigCompanyProjects();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //MessageBox.Show(e.Message);
                 //return;
@@ -523,7 +561,7 @@ namespace CandidatesBrowser3.ViewModel
         }
 
         private void addConfigsToCandidates()
-        {        
+        {
             Candidates.ToList().ForEach(e => e.CandidateProjects = ConfigProjectCandidateCollection.Where(cp => cp.ConfigCandidateID.Equals(e.ID)).ToList().ToObservableCollection());
             Candidates.ToList().ForEach(e => e.CandidateCompanies = CandidateCompanyCollection.Where(ccp => ccp.CandidateID.Equals(e.ID)).ToList().ToObservableCollection());
         }
@@ -531,36 +569,36 @@ namespace CandidatesBrowser3.ViewModel
         #region Filters
 
         private void ViewRefresh()
-        {            
+        {
             if (ConfigAreaView != null)
             {
                 ConfigAreaView.Refresh();
-            }   
-                
-            if (ConfigProjectsLibsView!=null)
+            }
+
+            if (ConfigProjectsLibsView != null)
             {
                 ConfigProjectsLibsView.Refresh();
             }
 
-            if (ConfigCompanyCollectionView!=null)
+            if (ConfigCompanyCollectionView != null)
             {
                 ConfigCompanyCollectionView.Refresh();
             }
 
-            if (CandidatesView != null )
+            if (CandidatesView != null)
             {
                 CandidatesView.Refresh();
             }
-            
 
-                
+
+
         }
 
         private bool CandidatesViewFilter(object item)
         {
             if (string.IsNullOrEmpty(FirstNameFilter)
-                && CvUploaded==null
-                && 
+                && CvUploaded == null
+                &&
                 string.IsNullOrEmpty(LastNameFilter)
                 && string.IsNullOrEmpty(PositionNameFilter)
                 && string.IsNullOrEmpty(PhoneNumberFilter)
@@ -581,9 +619,9 @@ namespace CandidatesBrowser3.ViewModel
                   (((Candidate)item).SecondPhone.ToLower().Trim()).StartsWith(PhoneNumberFilter.ToLower().Trim())
                   )
                    && (CvUploaded == null || CvUploaded.Equals(((Candidate)item).CvUploaded))
-                 
-                 && 
-                 
+
+                 &&
+
                  (
                      (
                      ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count()
@@ -595,9 +633,9 @@ namespace CandidatesBrowser3.ViewModel
                      ((Candidate)item).CandidateProjects.Join((ConfigProjectsLibsView.Cast<ConfigProjectsLib>().Where(e => e.Selected.Equals(true))).ToList(), cp => cp.ConfigProjectLibID, cpl => cpl.Id, (cp, cpl) => cp.ConfigCandidateID).ToList().Count > 0
                      &&
                      ((Candidate)item).CandidateCompanies.Join((ConfigCompanyCollectionView.Cast<ConfigCompany>().Where(e => e.Selected.Equals(true))).ToList(), cc => cc.ID, ccc => ccc.ID, (cc, ccc) => cc).ToList().Count > 0
-                                       
+
                      )
-                     
+
                     )
                     &&
                       (string.IsNullOrEmpty(PositionNameFilter)
@@ -606,18 +644,18 @@ namespace CandidatesBrowser3.ViewModel
                      )
 
                    )
-                   {
-                       return true;
-                   }
-              
-                  return false;
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
 
         private bool ConfigProjectsLibsFilter(object item)
         {
             if (string.IsNullOrEmpty(ProjectNameFilter) &&
-                
+
                 ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count()
                 )
             {
@@ -625,54 +663,54 @@ namespace CandidatesBrowser3.ViewModel
             }
             else
             {
-                if ((string.IsNullOrEmpty(ProjectNameFilter)|| ((ConfigProjectsLib)item).ProjectName.ToLower().StartsWith(ProjectNameFilter.ToLower()))
+                if ((string.IsNullOrEmpty(ProjectNameFilter) || ((ConfigProjectsLib)item).ProjectName.ToLower().StartsWith(ProjectNameFilter.ToLower()))
                   &&
                     (
-                    ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count()||
-                    ConfigProjectCollection.Join((ConfigAreaView.Cast<ConfigArea>().Where(e => e.Selected.Equals(true))).ToList(), cp => cp.ConfigAreaID, ca => ca.ID, (cp, ca) => cp).Where(cp => cp.ConfigProjectLibID.Equals(((ConfigProjectsLib)item).Id)).ToList().Count()>0
-                    )   
+                    ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count() ||
+                    ConfigProjectCollection.Join((ConfigAreaView.Cast<ConfigArea>().Where(e => e.Selected.Equals(true))).ToList(), cp => cp.ConfigAreaID, ca => ca.ID, (cp, ca) => cp).Where(cp => cp.ConfigProjectLibID.Equals(((ConfigProjectsLib)item).Id)).ToList().Count() > 0
+                    )
                   )
-                    
-                    
+
+
                 {
                     return true;
-                }  
+                }
                 return false;
             }
-            
+
         }
 
         private bool ConfigCompanyFilter(object item)
         {
-            
+
             if (string.IsNullOrEmpty(CompanyNameFilter) &&
-               
-                ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count()
-                &&
+
+                //ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count()
+                //&&
                 ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count()
                 &&
                  ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count()
                 )
-                {
-                    return true;
-                }
+            {
+                return true;
+            }
             else
             {
                 if ((string.IsNullOrEmpty(CompanyNameFilter) || ((ConfigCompany)item).Company.ToLower().StartsWith(CompanyNameFilter.ToLower()))
                   &&
-                    (           
+                    (
                         (
-                        ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count()
-                        &&
+                        //ConfigCompanyCollectionView.Cast<ConfigCompany>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigCompanyCollectionView.SourceCollection.Cast<ConfigCompany>().ToList().Count()
+                        //&&
                         ConfigProjectsLibsView.Cast<ConfigProjectsLib>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigProjectsLibsView.SourceCollection.Cast<ConfigProjectsLib>().ToList().Count()
                         &&
                         ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count()
                         )
                     ||
                   ConfigProjectCollection.
-                  Join((ConfigProjectsLibsView.Cast<ConfigProjectsLib>().Where(e => e.Selected.Equals(true))).ToList(),cp=>cp.ConfigProjectLibID,cpl=>cpl.Id,(cp,cpl)=>cp).
-                  Join(ConfigCompanyProjectCollection, cp=>cp.ID,ccp=>ccp.ProjectID,(cp,ccp)=>ccp).ToList().Where(ccp=>ccp.CompanyID.Equals(((ConfigCompany)item).ID)).ToList().Count>0
-                  
+                  Join((ConfigProjectsLibsView.Cast<ConfigProjectsLib>().Where(e => e.Selected.Equals(true))).ToList(), cp => cp.ConfigProjectLibID, cpl => cpl.Id, (cp, cpl) => cp).
+                  Join(ConfigCompanyProjectCollection, cp => cp.ID, ccp => ccp.ProjectID, (cp, ccp) => ccp).ToList().Where(ccp => ccp.CompanyID.Equals(((ConfigCompany)item).ID)).ToList().Count > 0
+
                    )
                   )
 
@@ -724,11 +762,11 @@ namespace CandidatesBrowser3.ViewModel
             {
                 lastNameFilter = value;
                 RaisePropertyChange("LastNameFilter");
-                if(CombinedRefreshNeeded)
+                if (CombinedRefreshNeeded)
                 {
                     CandidatesView.Refresh();
                 }
-                
+
             }
         }
 
@@ -739,9 +777,9 @@ namespace CandidatesBrowser3.ViewModel
             set
             {
                 positionNameFilter = value;
-                RaisePropertyChange("PositionNameFilter"); 
-              
-                
+                RaisePropertyChange("PositionNameFilter");
+
+
                 if (CombinedRefreshNeeded)
                 {
                     CandidatesView.Refresh();
@@ -763,7 +801,7 @@ namespace CandidatesBrowser3.ViewModel
                 {
                     ViewRefresh();
                 }
-                
+
             }
         }
 
@@ -779,7 +817,7 @@ namespace CandidatesBrowser3.ViewModel
                 {
                     ViewRefresh();
                 }
-               
+
             }
         }
 
@@ -802,7 +840,8 @@ namespace CandidatesBrowser3.ViewModel
         public string PhoneNumberFilter
         {
             get { return phoneNumberFilter; }
-            set {
+            set
+            {
                 phoneNumberFilter = value;
                 RaisePropertyChange("PhoneNumberFilter");
                 if (CombinedRefreshNeeded)
@@ -817,11 +856,11 @@ namespace CandidatesBrowser3.ViewModel
 
         public void RaisePropertyChange(string propertyName)
         {
-            if (PropertyChanged!=null)
+            if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-            
+
         }
         public event PropertyChangedEventHandler PropertyChanged;
     }

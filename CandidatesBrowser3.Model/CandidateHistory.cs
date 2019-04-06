@@ -50,7 +50,7 @@ namespace CandidatesBrowser3.Model
                 RaisePropertyChange("Position");
                 }
         }
-
+        
         private int projectID;
         public int ProjectID
         {
@@ -121,6 +121,16 @@ namespace CandidatesBrowser3.Model
                 }
         }
 
+        private int candidatesCompanyId;
+        public int CandidatesCompanyId
+        {
+            get { return candidatesCompanyId; }
+            set {
+                candidatesCompanyId = value;
+                RaisePropertyChange("CandidatesCompanyId");
+                }
+        }
+
 
         private string statusName;
         public string StatusName
@@ -154,6 +164,19 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+        private int configAreaId;
+        public int ConfigAreaId
+        {
+            get { return configAreaId; }
+            set {
+                configAreaId = value;
+                RaisePropertyChange("ConfigAreaId");
+                }
+        }
+
+
+        public int ConfigProjectLib { get; set; }
+
         private string  companyName;
         public string CompanyName
         {
@@ -185,8 +208,11 @@ namespace CandidatesBrowser3.Model
             StatusName = row.Field<string>("STATUS_NAME");
             CompanyName = row.Field<string>("COMPANY_NAME");
             AreaName= row.Field<string>("AREA_NAME");
+            ConfigAreaId= row.Field<int>("CONFIG_AREA_ID");
 
         }
+
+
 
         public new void RaisePropertyChange(string propertyName)
         {

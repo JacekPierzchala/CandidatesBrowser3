@@ -19,13 +19,14 @@
              Background="{DynamicResource MaterialDesignPaper}"
         WindowStartupLocation="CenterOwner"
              DataContext="{Binding Source={StaticResource viewModelLocator}, Path=AssignNewProjectViewModel}"
-        Title="AssignNewProjectView" Height="150" Width="800">
+        Title="AssignNewProjectView" Height="200" Width="800">
     <Grid>
         <Grid.Resources>
             <Style TargetType="{x:Type Label}" BasedOn="{StaticResource labeStyle}"/>
 
         </Grid.Resources>
         <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="35"/>
             <RowDefinition Height="35"/>
             <RowDefinition/>
@@ -48,20 +49,23 @@
         </Button>
         <Label Margin="10,2" Content="Position:" Grid.Column="1"/>
         <TextBox Margin="2" Grid.Column="2" Text="{Binding SelectedPosition}"></TextBox>
-        <Label Margin="2" Content="Project" Grid.Row="1" Grid.Column="0"/>
+
+        <Label Margin="2" Content="Comment:" Grid.Row="1" Grid.Column="0"/>
+        <TextBox Margin="2" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="{Binding Comment}"></TextBox>
+        <Label Margin="2" Content="Project" Grid.Row="2" Grid.Column="0"/>
         <ComboBox HorizontalContentAlignment="Center" SelectedItem="{Binding SelectedProject}"  
-                  IsTextSearchEnabled="True"  Margin="1" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding ConfigPojectsCollection}" DisplayMemberPath="ProjectName">
+                  IsTextSearchEnabled="True"  Margin="1" Grid.Column="0" Grid.Row="3" ItemsSource="{Binding ConfigPojectsCollection}" DisplayMemberPath="ProjectName">
             
         </ComboBox>
-        <Label Margin="2" Content="Status" Grid.Row="1" Grid.Column="1"/>
+        <Label Margin="2" Content="Status" Grid.Row="2" Grid.Column="1"/>
         <ComboBox IsTextSearchEnabled="True" SelectedItem="{Binding SelectedStatus}" ToolTip="{Binding SelectedStatus.Definition}"
-                  HorizontalContentAlignment="Center"   Margin="1" Grid.Column="1" Grid.Row="2" 
+                  HorizontalContentAlignment="Center"   Margin="1" Grid.Column="1" Grid.Row="3" 
                   ItemsSource="{Binding ConfigStatusLibCollection}" DisplayMemberPath="Description">
 
         </ComboBox>
-        <Label Margin="2" Content="Company" Grid.Row="1" Grid.Column="2"/>
+        <Label Margin="2" Content="Company" Grid.Row="2" Grid.Column="2"/>
         <ComboBox x:Name="companyCombo" IsTextSearchEnabled="True" IsEditable="True" IsEnabled="True"  SelectedItem="{Binding SelectedCompany}" 
-                  HorizontalContentAlignment="Center"   Margin="1" Grid.Column="2" Grid.Row="2" 
+                  HorizontalContentAlignment="Center"   Margin="1" Grid.Column="2" Grid.Row="3" 
                   ItemsSource="{Binding ConfigCompanyCollection}" DisplayMemberPath="Company">
 
         </ComboBox>

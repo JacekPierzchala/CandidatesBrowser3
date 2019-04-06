@@ -204,6 +204,7 @@ namespace CandidatesBrowser3.ViewModel
             }
         }
 
+        public ObservableCollection<CandidateCompany> CandidateCompaniesTemp { get; set; }
 
         private ObservableCollection<CandidateHistory> selectedProjectHistory;
         public ObservableCollection<CandidateHistory> SelectedProjectHistory
@@ -225,6 +226,7 @@ namespace CandidatesBrowser3.ViewModel
         public ICommand AddNewHistoryItemCommand { get; set; }
         public ICommand RemoveHistoryItemCommand { get; set; }
         public ICommand AssignNewProjectCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
         #endregion
 
         #region methodsForCommands
@@ -261,6 +263,42 @@ namespace CandidatesBrowser3.ViewModel
 
         #endregion
 
+        #region SaveCommand
+        private void Save(object obj)
+        {
+           foreach (CandidateHistory c in CandidateHistoryCollection.Where(e => e.Seq == 1))
+            {
+                CandidateCompaniesTemp.Add(new CandidateCompany()
+                {
+                    CandidateID =SelectedCandidateTemp.ID, ID=c.CompanyID, Company=c.CompanyName, ProjectID=c.ProjectID, Position=c.Position }
+                );
+            }
+            SelectedCandidateTemp.CandidateCompanies = CandidateCompaniesTemp;
+
+            foreach (CandidateHistory c in CandidateHistoryCollection.Where(e => !SelectedCandidateTemp.CandidateProjects.Any(cc => cc.ConfigProjectID == e.ProjectID) && e.Seq == 1))
+            {
+                SelectedCandidateTemp.CandidateProjects.Add(new ConfigProjectCandidate()
+                {
+                 ID=c.CandidatesProjectsID, ConfigAreaID=c.ConfigAreaId, ConfigCandidateID=c.CandidateID, ConfigProjectID=c.ProjectID, ConfigProjectLibID=c.ConfigProjectLib
+                }
+               );
+            }
+
+            GlobalFunctions.CopyProperties(SelectedCandidateTemp, selectedCandidate);
+
+            candidateRepository.UpdateCandidate(selectedCandidate);
+            //MessengerCandidate.Default.Send<Candidate>(SelectedCandidate);
+        
+            MessengerCompany.Default.Send<List<CandidateCompany>>(selectedCandidate.CandidateCompanies.ToList());
+            // MessengerCandidate.Default.Send<Candidate>(SelectedCandidate);
+
+        }
+        private bool CanSave(object obj)
+        {
+            return true;
+        }
+
+        #endregion
 
         #region ReadCVCommand
         private void ReadCV(object o)
@@ -440,6 +478,7 @@ namespace CandidatesBrowser3.ViewModel
             this.dialogService = dialogService;
             this.candidateRepository = candidateRepository;
             this.configStatusLibRepository = configStatusLibRepository;
+            CandidateCompaniesTemp = new ObservableCollection<CandidateCompany>();
 
             SelectedCandidateTemp = new Candidate();
             try
@@ -447,8 +486,12 @@ namespace CandidatesBrowser3.ViewModel
                 DocumentToAction = new Document();
 
                 MessengerDocument.Default.Register<UpdateDocument>(this, OnUpdateDocumentMessageReceived);
-
+             
                 MessengerCandidate.Default.Register<Candidate>(this, OnCandidateReceived);
+
+
+                MessengerCandidateHistory.Default.Register<CandidateHistory>(this, OnCandidateHistoryReceived);
+                MessengerCompany.Default.Register<UpdateListMessageCompany>(this, UpdateListMessageCompanyReceived);
 
             }
 
@@ -461,6 +504,21 @@ namespace CandidatesBrowser3.ViewModel
             MessengerCandidateCompany.Default.Register<UpdateCandidateCompany>(this, OnUpdateListMessageReceived);
             loadCommands();
         }
+
+        private void UpdateListMessageCompanyReceived(UpdateListMessageCompany obj)
+        {
+            
+        }
+
+        private void OnCandidateHistoryReceived(CandidateHistory candidateHistory)
+        {
+            dialogService.CloseDetailDialog();
+
+            candidateHistoryRepository.AddCandidateHistory(candidateHistory);
+            CandidateHistoryCollection.Add(candidateHistory);
+            prepareCollection();
+        }
+
         private void OnUpdateListMessageReceived(UpdateCandidateCompany obj)
         {
             
@@ -559,6 +617,7 @@ namespace CandidatesBrowser3.ViewModel
 
         private void loadCommands()
         {
+            SaveCommand = new CustomCommand(Save, CanSave);
             ProjectSelectionChangeCommand = new CustomCommand(ProjectSelectionChange, CanProjectSelectionChange);
             ReadCVCommand = new CustomCommand(ReadCV, CanReadCV);
             AddCVCommand = new CustomCommand(AddCV, CanAddCV);

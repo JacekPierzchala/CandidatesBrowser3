@@ -27,7 +27,9 @@ namespace CandidatesBrowser3.DAL
 
         private void LoadCandidateCompanys()
         {
-            DataTable dt = DBObjects.GetTableFromSQL("Select * FROM [CANDIDATE_COMPANY]");
+            DataTable dt = DBObjects.GetTableFromSQL(@"Select * FROM 
+                                                    CONFIG_COMPANY CC INNER JOIN
+                                                    [CANDIDATE_COMPANY] C ON CC.ID = C.COMPANY_ID");
             CandidateCompanys = new ObservableCollection<CandidateCompany>();
             try
             {
