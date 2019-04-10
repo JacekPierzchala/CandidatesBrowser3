@@ -14,7 +14,7 @@ namespace CandidatesBrowser3.DAL
         
         ObservableCollection<CandidateHistory> GetCandidateHistorysByID(int id);
         void UpdateCandidateHistory(CandidateHistory CandidateHistory);
-
+        void LoadHistorysByProjectID(int id);
         void AddCandidateHistory(CandidateHistory CandidateHistory);
     }
 }

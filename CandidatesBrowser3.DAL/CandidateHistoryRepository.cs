@@ -54,6 +54,27 @@ namespace CandidatesBrowser3.DAL
             return CandidateHistorys;
         }
 
+        private void LoadHistorysByProjectID(int id)
+        {
+            Dictionary<string, string> Args = new Dictionary<string, string>();
+            Args.Add("@PROJECT_ID", id.ToString());
+            DataTable dt = DBObjects.GetTableFromSQL("FIND_PROJECT_HISTORY", Args);
+            CandidateHistorys = new ObservableCollection<CandidateHistory>();
+            try
+            {
+                if (dt != null)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        CandidateHistorys.Add(new CandidateHistory(row));
+                    }
+                }
+            }
+            catch (Exception ex)
+            { }
+
+        }
+
         public void UpdateCandidateHistory(CandidateHistory CandidateHistory)
         {
             CandidateHistory CandidateHistoryToUpdate = CandidateHistorys.Where(e => e.ID.Equals(CandidateHistory.ID)).FirstOrDefault();

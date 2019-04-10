@@ -149,11 +149,15 @@
     <Compile Include="Utilities\MessengerCandidateCompany.cs" />
     <Compile Include="ViewModel\AssignNewProjectViewModel.cs" />
     <Compile Include="ViewModel\FileDialogsViewModel.cs" />
+    <Compile Include="ViewModel\ProjectsReportViewModel.cs" />
     <Compile Include="View\AssignNewProjectView.xaml.cs">
       <DependentUpon>AssignNewProjectView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FileDialogsView.xaml.cs">
       <DependentUpon>FileDialogsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProjectsReportUserControl.xaml.cs">
+      <DependentUpon>ProjectsReportUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControlOpenFileDialog.xaml.cs">
       <DependentUpon>UserControlOpenFileDialog.xaml</DependentUpon>
@@ -190,6 +194,10 @@
     <Compile Include="View\MainListView.xaml.cs">
       <DependentUpon>MainListView.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\ProjectsReportUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\UserControlOpenFileDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

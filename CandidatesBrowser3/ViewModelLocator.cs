@@ -12,6 +12,7 @@ namespace CandidatesBrowser3
     public class ViewModelLocator
     {
         #region fields
+      
         #region MainListViewModel
         private static ICandidateRepository candidateRepository = new CandidateRepository();
         private static IConfigProjectsLibRepository configProjectsLibRepository = new ConfigProjectsLibRepository();
@@ -73,7 +74,11 @@ namespace CandidatesBrowser3
             
         }
 
-
+        private static ProjectsReportViewModel projectsReportViewModel = new ProjectsReportViewModel(configProjectRepository, candidateHistoryRepository);
+        public static ProjectsReportViewModel ProjectsReportViewModel
+        {
+            get { return projectsReportViewModel; }
+        }
 
     }
 }

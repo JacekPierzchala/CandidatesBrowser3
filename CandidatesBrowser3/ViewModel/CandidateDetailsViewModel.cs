@@ -227,9 +227,11 @@ namespace CandidatesBrowser3.ViewModel
         public ICommand RemoveHistoryItemCommand { get; set; }
         public ICommand AssignNewProjectCommand { get; set; }
         public ICommand SaveCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
         #endregion
 
         #region methodsForCommands
+       
         #region ProjectSelectionChangeCommand
         private bool CanProjectSelectionChange(object obj)
         {
@@ -264,6 +266,7 @@ namespace CandidatesBrowser3.ViewModel
         #endregion
 
         #region SaveCommand
+
         private void Save(object obj)
         {
            foreach (CandidateHistory c in CandidateHistoryCollection.Where(e => e.Seq == 1))
@@ -298,6 +301,19 @@ namespace CandidatesBrowser3.ViewModel
             return true;
         }
 
+        #endregion
+
+        #region CancelCommand
+        
+        private void Cancel(object obj)
+        {
+            GlobalFunctions.CopyProperties(SelectedCandidate, SelectedCandidateTemp);
+        }
+
+        private bool CanCancel(object obj)
+        {
+            return true;
+        }
         #endregion
 
         #region ReadCVCommand
@@ -624,6 +640,7 @@ namespace CandidatesBrowser3.ViewModel
             DeleteCVCommand = new CustomCommand(DeleteCV, CanDeleteCV);
             AddNewHistoryItemCommand = new CustomCommand(AddNewHistoryItem, CanAddNewHistoryItem);
             AssignNewProjectCommand = new CustomCommand(AssignNewProject, CanAssignNewProject);
+            CancelCommand = new CustomCommand(Cancel, CanCancel);
             // OpenFileRequest = new InteractionRequest<IConfirmation>();
         }
 

@@ -311,7 +311,20 @@
              
 
       
-            <TabItem Header="Reports"></TabItem>
+            <TabItem Header="Reports">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding ElementName=MainViewHeader}"></TextBlock>
+                            <materialdesign:PackIcon Kind="Calendar"></materialdesign:PackIcon>
+                        </Grid>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <local:ProjectsReportUserControl></local:ProjectsReportUserControl>
+                </Grid>
+            </TabItem>
         </TabControl>
              
             <!--</dragablz:TabablzControl>-->
