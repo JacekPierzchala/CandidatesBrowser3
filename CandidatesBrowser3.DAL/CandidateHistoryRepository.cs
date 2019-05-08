@@ -54,10 +54,10 @@ namespace CandidatesBrowser3.DAL
             return CandidateHistorys;
         }
 
-        private void LoadHistorysByProjectID(int id)
+        public ObservableCollection<CandidateHistory> LoadHistorysByProjectID(int id)
         {
             Dictionary<string, string> Args = new Dictionary<string, string>();
-            Args.Add("@PROJECT_ID", id.ToString());
+            Args.Add("@ProjectID", id.ToString());
             DataTable dt = DBObjects.GetTableFromSQL("FIND_PROJECT_HISTORY", Args);
             CandidateHistorys = new ObservableCollection<CandidateHistory>();
             try
@@ -72,7 +72,7 @@ namespace CandidatesBrowser3.DAL
             }
             catch (Exception ex)
             { }
-
+            return CandidateHistorys;
         }
 
         public void UpdateCandidateHistory(CandidateHistory CandidateHistory)
@@ -94,5 +94,10 @@ namespace CandidatesBrowser3.DAL
 
             DBObjects.ExecProcedureWithArgs("ADD_CANDIDATE_HISTORY", Args);
         }
+
+        //private void LoadHistorysByProjectID(int id)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

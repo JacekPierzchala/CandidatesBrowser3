@@ -69,7 +69,7 @@ namespace CandidatesBrowser3.ViewModel
 
         private void ProjectSelectionChange(object obj)
         {
-            
+            CandidateHistoryCollection = candidateHistoryRepository.LoadHistorysByProjectID(SelectedProject.ID);
         }
         #endregion
 
@@ -92,8 +92,8 @@ namespace CandidatesBrowser3.ViewModel
 
         private void loadData()
         {
-            ConfigProjectCollection = configProjectRepository.GetConfigProjects();
-            ConfigProjectCollection = ConfigProjectCollection.OrderBy(e => e.ProjectName).ToObservableCollection();
+            ConfigProjectCollection = configProjectRepository.GetConfigProjects().OrderBy(e=>e.ProjectName).ToObservableCollection();
+         
         }
 
         public void RaisePropertyChange(string propertyName)

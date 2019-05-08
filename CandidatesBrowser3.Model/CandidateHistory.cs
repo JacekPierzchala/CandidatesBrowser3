@@ -194,8 +194,10 @@ namespace CandidatesBrowser3.Model
 
         public CandidateHistory(DataRow row)
         {
-            CandidateID = row.Field<int>("CANDIDATE_ID");
-            CompanyID= row.Field<int>("COMPANY_ID");
+            CandidateID = row.Field<int>("CANDIDATE_ID");      
+            FirstName = row.Field<string>("FIRST_NAME"); 
+            LastName= row.Field<string>("LAST_NAME");
+            CompanyID = row.Field<int>("COMPANY_ID");
             Position= row.Field<string>("POSITION");
             ProjectID= row.Field<int>("PROJECT_ID");
             CandidatesProjectsID= row.Field<int>("CANDIDATES_PROJECTS_ID");
@@ -209,6 +211,9 @@ namespace CandidatesBrowser3.Model
             CompanyName = row.Field<string>("COMPANY_NAME");
             AreaName= row.Field<string>("AREA_NAME");
             ConfigAreaId= row.Field<int>("CONFIG_AREA_ID");
+            FirstEmail= row.Field<string>("1ST_@");
+            FirstPhone = row.Field<string>("1ST_TEL");
+
 
         }
 

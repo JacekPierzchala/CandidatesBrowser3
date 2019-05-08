@@ -39,8 +39,17 @@
                 </i:Interaction.Triggers>
             </ComboBox>
         </StackPanel>
-        <DataGrid Grid.Row="1">
-            
+        <DataGrid Grid.Row="1" ItemsSource="{Binding CandidateHistoryCollection}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="FirstName" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="LastName" Binding="{Binding LastName}"/>
+                <DataGridTextColumn Header="Position" Binding="{Binding Position}"/>
+                <DataGridTextColumn Header="CompanyName" Binding="{Binding CompanyName}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding FirstEmail}"/>
+                <DataGridTextColumn Header="Phone" Binding="{Binding FirstPhone}"/>
+                <DataGridTextColumn Header="StatusName" Binding="{Binding StatusName}"/>
+                <DataGridTextColumn Header="Comments" Binding="{Binding Comments}"/>
+            </DataGrid.Columns>
         </DataGrid>
       
     </Grid>
