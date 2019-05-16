@@ -14,15 +14,29 @@ using System.Windows.Input;
 using System.IO;
 using System.Windows;
 using Prism.Interactivity.InteractionRequest;
+using System.Threading;
 
 namespace CandidatesBrowser3.ViewModel
 {
     public class ProjectsReportViewModel: INotifyPropertyChanged
     {
+        public static string[] Columns = 
+            {
+                "FirstName",
+                "LastName",
+                "Position",
+                "CompanyName",
+                "FirstEmail",
+                "FirstPhone",
+                "StatusName",
+                "Comments"
+            };
+
         private IConfigProjectRepository configProjectRepository;
         private ICandidateHistoryRepository candidateHistoryRepository;
 
         public ICommand ProjectSelectionChangeCommand { get; set; }
+        public ICommand ExportToFileCommand { get; set; }
 
         private ObservableCollection<CandidateHistory> candidateHistoryCollection;
         public ObservableCollection<CandidateHistory> CandidateHistoryCollection
@@ -73,6 +87,28 @@ namespace CandidatesBrowser3.ViewModel
         }
         #endregion
 
+        #region ExportToFileCommand 
+        private bool CanExportToFile(object obj)
+        {
+            return (obj != null && ((ObservableCollection<CandidateHistory>)obj).Count > 0);
+        
+        }
+
+        private void ExportToFile(object obj)
+        {
+            new Thread(() =>
+            {
+                //Thread.CurrentThread.IsBackground = true;
+
+                GlobalFunctions.ExportToExcel(GlobalFunctions.ToDataTableFromList(CandidateHistoryCollection.ToList(),Columns));
+
+            }).Start();
+           
+           
+           // CandidateHistoryCollection = candidateHistoryRepository.LoadHistorysByProjectID(SelectedProject.ID);
+        }
+
+        #endregion
 
         public ProjectsReportViewModel(IConfigProjectRepository configProjectRepository, ICandidateHistoryRepository candidateHistoryRepository)
         {
@@ -86,6 +122,7 @@ namespace CandidatesBrowser3.ViewModel
         private void commandsInitialize()
         {
             ProjectSelectionChangeCommand = new CustomCommand(ProjectSelectionChange, CanProjectSelectionChange);
+            ExportToFileCommand = new CustomCommand(ExportToFile, CanExportToFile);
         }
 
       

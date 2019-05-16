@@ -19,6 +19,9 @@
              DataContext="{Binding Source={StaticResource viewModelLocator}, Path=ProjectsReportViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
+
+
+  
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
@@ -39,7 +42,25 @@
                 </i:Interaction.Triggers>
             </ComboBox>
         </StackPanel>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding CandidateHistoryCollection}" AutoGenerateColumns="False" IsReadOnly="True">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding CandidateHistoryCollection}" x:Name="ProjectReportGrid" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.ContextMenu>
+                <ContextMenu Height="Auto">
+                    <MenuItem Header="export to file"  >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click" >
+                                <i:InvokeCommandAction Command="{Binding ExportToFileCommand}" CommandParameter="{Binding CandidateHistoryCollection}"  >
+                                 
+                                </i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <MenuItem.Icon>
+                            <materialdesign:PackIcon Kind="File"></materialdesign:PackIcon>
+
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="FirstName" Binding="{Binding FirstName}"/>
                 <DataGridTextColumn Header="LastName" Binding="{Binding LastName}"/>

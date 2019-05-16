@@ -61,7 +61,7 @@
                                         <StackPanel>
                                             <Label  Style="{StaticResource labeStyle}" FontSize="12" Content="Area"></Label>
                                             <TextBox x:Name="txtArea" 
-                                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AreaNameFilter,  UpdateSourceTrigger=PropertyChanged}"/>
+                                           Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}} ,Path=DataContext.AreaNameFilter,  UpdateSourceTrigger=PropertyChanged}"/>
                                             <CheckBox VerticalAlignment="Center"  HorizontalAlignment="Center" BorderBrush="Gray" BorderThickness="5" FontSize="12" Content="SelectAll" x:Name="selectAllAreasCheck"
                                                       IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.AllAreasSelected}">
 
