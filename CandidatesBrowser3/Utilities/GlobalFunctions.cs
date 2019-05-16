@@ -90,7 +90,7 @@ namespace CandidatesBrowser3.Utilities
         }
 
 
-        public static void ExportToExcel(DataTable DT)
+        public static void ExportToExcel(DataTable DT,string projectName)
         {
             Microsoft.Office.Interop.Excel.Application xlexcel;
             Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
@@ -144,6 +144,8 @@ namespace CandidatesBrowser3.Utilities
             HeaderRow.Cells.Font.Size = 11;
             HeaderRow.Cells.Font.Bold = true;
 
+
+            xlWorkSheet.Name = projectName;
 
             xlexcel.Visible = true;
 

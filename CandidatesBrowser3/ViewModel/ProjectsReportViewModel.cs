@@ -100,7 +100,7 @@ namespace CandidatesBrowser3.ViewModel
             {
                 //Thread.CurrentThread.IsBackground = true;
 
-                GlobalFunctions.ExportToExcel(GlobalFunctions.ToDataTableFromList(CandidateHistoryCollection.ToList(),Columns));
+                GlobalFunctions.ExportToExcel(GlobalFunctions.ToDataTableFromList(CandidateHistoryCollection.ToList(),Columns),SelectedProject.ProjectName);
 
             }).Start();
            
