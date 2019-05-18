@@ -20,8 +20,9 @@ namespace CandidatesBrowser3.ViewModel
 {
     public class ProjectsReportViewModel: INotifyPropertyChanged
     {
-        public static string[] Columns = 
-            {
+        #region fields
+        public static string[] Columns =
+           {
                 "FirstName",
                 "LastName",
                 "Position",
@@ -35,19 +36,36 @@ namespace CandidatesBrowser3.ViewModel
         private IConfigProjectRepository configProjectRepository;
         private ICandidateHistoryRepository candidateHistoryRepository;
 
+        #endregion
+
+        #region commands
         public ICommand ProjectSelectionChangeCommand { get; set; }
         public ICommand ExportToFileCommand { get; set; }
+        #endregion
 
+
+        #region collections
         private ObservableCollection<CandidateHistory> candidateHistoryCollection;
         public ObservableCollection<CandidateHistory> CandidateHistoryCollection
         {
             get { return candidateHistoryCollection; }
-            set {
+            set
+            {
                 candidateHistoryCollection = value;
                 RaisePropertyChange("CandidateHistoryCollection");
-                }
+            }
         }
 
+        private List<Attachment> attachments;
+        public List<Attachment> Attachments
+        {
+            get { return attachments; }
+            set
+            {
+                attachments = value;
+                RaisePropertyChange("Attachments");
+            }
+        }
 
         private ObservableCollection<ConfigProject> configProjectCollection;
         public ObservableCollection<ConfigProject> ConfigProjectCollection
@@ -59,7 +77,10 @@ namespace CandidatesBrowser3.ViewModel
                 RaisePropertyChange("ConfigProjectCollection");
             }
         }
+        #endregion
 
+
+        #region properties
         private ConfigProject selectedProject;
         public ConfigProject SelectedProject
         {
@@ -70,6 +91,32 @@ namespace CandidatesBrowser3.ViewModel
                 RaisePropertyChange("SelectedProject");
             }
         }
+
+
+        public string DestinationDirectory
+        {
+            get
+            {
+                return Path.Combine(Candidate.FolderPath, SelectedProject.ID.ToString());
+
+            }
+
+        }
+
+        private Document documentToAction;
+        public Document DocumentToAction
+        {
+            get { return documentToAction; }
+            set
+            {
+                documentToAction = value;
+                RaisePropertyChange("DocumentToAction");
+            }
+        }
+        #endregion
+
+
+
 
         #region ProjectSelectionChangeCommand
         private bool CanProjectSelectionChange(object obj)
@@ -84,6 +131,7 @@ namespace CandidatesBrowser3.ViewModel
         private void ProjectSelectionChange(object obj)
         {
             CandidateHistoryCollection = candidateHistoryRepository.LoadHistorysByProjectID(SelectedProject.ID);
+
         }
         #endregion
 

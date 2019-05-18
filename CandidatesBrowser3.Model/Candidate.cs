@@ -11,7 +11,7 @@ namespace CandidatesBrowser3.Model
 {
     public class Candidate : INotifyPropertyChanged, ICloneable
     {
-        public static string FolderPath = @"C:\Users\Zaneta\Documents\CandidatesBrowser3\source\";
+        public static string FolderPath = @"C:\Users\Zaneta\Documents\CandidatesBrowser3\source\candidates\";
 
  
 

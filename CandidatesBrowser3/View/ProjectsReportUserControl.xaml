@@ -58,6 +58,43 @@
 
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="Project Job Description">
+                        <MenuItem.Icon>
+                            <materialdesign:PackIcon Kind="AccountNetwork"></materialdesign:PackIcon>
+
+                        </MenuItem.Icon>
+                        <MenuItem Header="Read Job Descriptions"  >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click" >
+                                    <i:InvokeCommandAction Command="{Binding ReadCVCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <MenuItem.Icon>
+                                <Image Source="/CandidatesBrowser3;component/Resources/magnifying_glass.ico"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Add Job Description">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click" >
+                                    <i:InvokeCommandAction Command="{Binding AddCVCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <MenuItem.Icon>
+                                <Image Source="/CandidatesBrowser3;component/Resources/clip.ico"></Image>
+                            </MenuItem.Icon>
+
+                        </MenuItem>
+                        <MenuItem Header="Delete Job Description">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click" >
+                                    <i:InvokeCommandAction Command="{Binding DeleteCVCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <MenuItem.Icon>
+                                <Image Source="/CandidatesBrowser3;component/Resources/removeIcon.ico"></Image>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
                 </ContextMenu>
 
             </DataGrid.ContextMenu>

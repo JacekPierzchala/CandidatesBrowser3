@@ -58,7 +58,6 @@ namespace CandidatesBrowser3.ViewModel
                 return Path.Combine(Candidate.FolderPath, SelectedCandidateTemp.ID.ToString());
                     
             }
-
         }
 
         private Document documentToAction;
@@ -314,6 +313,7 @@ namespace CandidatesBrowser3.ViewModel
         {
             return true;
         }
+      
         #endregion
 
         #region ReadCVCommand
@@ -362,7 +362,7 @@ namespace CandidatesBrowser3.ViewModel
 
             dialogService.ShowDetailDialog();
 
-            if (DocumentToAction.DocumentNames != null)
+            if (DocumentToAction.DocumentNames != null && DocumentToAction.DocumentNames.Count()>0)
             {
                 if (saveFile(DocumentToAction.DocumentNames, SelectedCandidate.ID.ToString()))
                 {
@@ -398,7 +398,7 @@ namespace CandidatesBrowser3.ViewModel
 
             dialogService.ShowDetailDialog();
 
-            if (DocumentToAction.DocumentNames != null)
+            if (DocumentToAction.DocumentNames != null && DocumentToAction.DocumentNames.Count() > 0)
             {
                 if (deleteFile(DocumentToAction.DocumentNames, Attachments) && Attachments.Count==0)
                 {
@@ -560,12 +560,12 @@ namespace CandidatesBrowser3.ViewModel
 
                 try
                 {
-                    File.Copy(sourceFilePath, DestinationDirectory + fileName);
+                    File.Copy(sourceFilePath, DestinationDirectory + @"\"+    fileName);
 
 
                     MessageBox.Show("File attached succesfully ", "", MessageBoxButton.OK, MessageBoxImage.Information);
                     result = true;
-                    Attachments.Add(new Attachment(DestinationDirectory + fileName));
+                    Attachments.Add(new Attachment(DestinationDirectory + @"\" + fileName));
 
                 }
                 catch (Exception ex)
