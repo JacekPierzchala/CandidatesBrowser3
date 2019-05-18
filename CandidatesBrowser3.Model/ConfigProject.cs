@@ -10,6 +10,8 @@ namespace CandidatesBrowser3.Model
 {
     public class ConfigProject : ConfigProjectsLib,INotifyPropertyChanged, ICloneable
     {
+        public static string FolderPath = @"C:\Users\Zaneta\Documents\CandidatesBrowser3\source\projects\";
+
         private int id;
         public int ID
         {
@@ -67,6 +69,17 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+        private bool jdUploaded;
+        public bool JdUploaded
+        {
+            get { return jdUploaded; }
+            set {
+                jdUploaded = value;
+                RaisePropertyChanged("JdUploaded");
+                }
+        }
+
+
         public ConfigProject(DataRow row)
         {
             ID = row.Field<int>("ID");
@@ -75,7 +88,9 @@ namespace CandidatesBrowser3.Model
             ConfigProjectLibID = row.Field<int>("CONFIG_PROJECT_LIB_ID");
             ConfigGroupID = row.Field<int>("CONFIG_GROUP_ID");
             ProjectName = row.Field<string>("PROJECT_NAME");
-    
+            JdUploaded = row.Field<bool>("JD_UPLOADED");
+
+
         }
         public ConfigProject()
         {

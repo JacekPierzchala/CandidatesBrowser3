@@ -1,12 +1,14 @@
-﻿using System;
+﻿using CandidatesBrowser3.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows;
 
 namespace CandidatesBrowser3.Utilities
 {
@@ -89,6 +91,56 @@ namespace CandidatesBrowser3.Utilities
             return dt;
         }
 
+        public static bool DeleteFile(string[] sourceFilePaths, List<Attachment> attachmentsList)
+        {
+            var result = false;
+            foreach (string sourceFilePath in sourceFilePaths)
+            {
+                try
+                {
+                    File.Delete(sourceFilePath);
+                    MessageBox.Show("File deleted succesfully ", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                    result = true;
+                    attachmentsList.Remove(attachmentsList.Where(e => e.Path.Equals(sourceFilePath)).FirstOrDefault());
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("File was not deleted! " + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            return result;
+        }
+
+        public static bool SaveFile(string[] sourceFilePaths, string id, string destinationDirectory, List<Attachment> attachmentsList)
+        {
+            var result = false;
+            foreach (string sourceFilePath in sourceFilePaths)
+            {
+                string fileName = System.IO.Path.GetFileName(sourceFilePath);
+
+                if (!Directory.Exists(destinationDirectory))
+                {
+                    Directory.CreateDirectory(destinationDirectory);
+                }
+
+                try
+                {
+                    File.Copy(sourceFilePath, destinationDirectory + @"\" + fileName);
+
+
+                    MessageBox.Show("File attached succesfully ", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                    result = true;
+                    attachmentsList.Add(new Attachment(destinationDirectory + @"\" + fileName));
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("File was not attached! " + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                    // result =false;
+                }
+            }
+            return result;
+        }
 
         public static void ExportToExcel(DataTable DT,string projectName)
         {

@@ -11,7 +11,9 @@ namespace CandidatesBrowser3.DAL
 {
     public class ConfigProjectRepository:IConfigProjectRepository
     {
+        private static Dictionary<dynamic, dynamic> Args = new Dictionary<dynamic, dynamic>();
         private static ObservableCollection<ConfigProject> ConfigProjects;
+
         public void DeleteConfigProject(ConfigProject configProject)
         {
             ConfigProjects.Remove(configProject);
@@ -67,5 +69,15 @@ namespace CandidatesBrowser3.DAL
             ConfigProject configProjectToUpdate = ConfigProjects.Where(e => e.ID.Equals(configProject.ID)).FirstOrDefault();
             configProjectToUpdate = configProject;
         }
+
+        public void UpdateConfigProjectDocumentInfo(ConfigProject configProject)
+        {
+            Args.Clear();
+            Args.Add("@ConfigProjectID", configProject.ID);
+            Args.Add("@JDUploaded", configProject.JdUploaded);
+
+            DBObjects.ExecProcedureWithArgs("UPDATE_PROJECT_DOCUMENT_INFO", Args);
+        }
+
     }
 }

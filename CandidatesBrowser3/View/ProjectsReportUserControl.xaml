@@ -59,6 +59,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Project Job Description">
+                       
                         <MenuItem.Icon>
                             <materialdesign:PackIcon Kind="AccountNetwork"></materialdesign:PackIcon>
 
@@ -66,7 +67,7 @@
                         <MenuItem Header="Read Job Descriptions"  >
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click" >
-                                    <i:InvokeCommandAction Command="{Binding ReadCVCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding ReadJDCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <MenuItem.Icon>
@@ -76,7 +77,7 @@
                         <MenuItem Header="Add Job Description">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click" >
-                                    <i:InvokeCommandAction Command="{Binding AddCVCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding AddJDCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <MenuItem.Icon>
@@ -87,7 +88,7 @@
                         <MenuItem Header="Delete Job Description">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click" >
-                                    <i:InvokeCommandAction Command="{Binding DeleteCVCommand}"/>
+                                    <i:InvokeCommandAction Command="{Binding DeleteJDCommand}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <MenuItem.Icon>

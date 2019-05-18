@@ -35,12 +35,16 @@ namespace CandidatesBrowser3.ViewModel
 
         private IConfigProjectRepository configProjectRepository;
         private ICandidateHistoryRepository candidateHistoryRepository;
+        private IDialogService dialogService;
 
         #endregion
 
         #region commands
         public ICommand ProjectSelectionChangeCommand { get; set; }
         public ICommand ExportToFileCommand { get; set; }
+        public ICommand ReadJDCommand { get; set; }
+        public ICommand AddJDCommand { get; set; }
+        public ICommand DeleteJDCommand { get; set; }
         #endregion
 
 
@@ -97,7 +101,7 @@ namespace CandidatesBrowser3.ViewModel
         {
             get
             {
-                return Path.Combine(Candidate.FolderPath, SelectedProject.ID.ToString());
+                return Path.Combine(ConfigProject.FolderPath, SelectedProject.ID.ToString());
 
             }
 
@@ -116,7 +120,143 @@ namespace CandidatesBrowser3.ViewModel
         #endregion
 
 
+        #region ReadJDCommand2
+        private void ReadJD(object o)
+        {
+            string[] files = null;
+            try
+            {
+                files = Directory.GetFiles(ConfigProject.FolderPath + SelectedProject.ID.ToString() + @"\");
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("requested folder as not found " + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            foreach (string file in files.Where(e => !e.Contains("~")).ToList())
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(file);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("requested file " + Path.GetFileName(file) + " cannot be open" + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private bool CanReadJD(object o)
+        {
+            return SelectedProject!=null && SelectedProject.JdUploaded == true;           
+        }
+
+        #endregion
+
+        #region AddJDCommand
+        private void AddJD(object o)
+        {
+            DocumentToAction.Action = ActionType.Save;
+            MessengerCandidate.Default.Send<Document>(DocumentToAction);
+
+            dialogService.ShowDetailDialog();
+
+            if (DocumentToAction.DocumentNames != null && DocumentToAction.DocumentNames.Count() > 0)
+            {
+                if (GlobalFunctions.SaveFile(DocumentToAction.DocumentNames, SelectedProject.ID.ToString() ,DestinationDirectory,Attachments))
+                {
+                    SelectedProject.JdUploaded = true;
+                }
+                else
+                {
+                    return;
+                }
+
+                configProjectRepository.UpdateConfigProjectDocumentInfo(SelectedProject);
+               
+                    //,candidateRepository.UpdateCandidateDocumentInfo(SelectedCandidate);
+               
+            }
+        }
+
+        private bool CanAddJD(object o)
+        {
+            return SelectedProject != null; ;
+
+        }
+
+        #endregion
+
+        #region DeleteJobDescriptionCommand
+        private void DeleteJobDescription(object o)
+        {
+            DocumentToAction.Action = ActionType.Delete;
+            DocumentToAction.FolderPath = DestinationDirectory;
+            MessengerCandidate.Default.Send<Document>(DocumentToAction);
+
+            dialogService.ShowDetailDialog();
+
+            if (DocumentToAction.DocumentNames != null && DocumentToAction.DocumentNames.Count() > 0)
+            {
+                if (GlobalFunctions.DeleteFile(DocumentToAction.DocumentNames, Attachments) && Attachments.Count == 0)
+                {
+                    SelectedProject.JdUploaded = false;
+                }
+                else
+                {
+                    return;
+                }
+
+                configProjectRepository.UpdateConfigProjectDocumentInfo(SelectedProject);
+
+
+            }
+
+        }
+
+        private bool CanDeleteJobDescription(object o)
+        {
+            return SelectedProject != null && SelectedProject.JdUploaded;
+        }
+
+        #endregion
+
+        private bool saveFile(string[] sourceFilePaths, string id)
+        {
+            var result = false;
+            foreach (string sourceFilePath in sourceFilePaths)
+            {
+                string fileName = System.IO.Path.GetFileName(sourceFilePath);
+
+                if (!Directory.Exists(DestinationDirectory))
+                {
+                    Directory.CreateDirectory(DestinationDirectory);
+                }
+
+                try
+                {
+                    File.Copy(sourceFilePath, DestinationDirectory + @"\" + fileName);
+
+
+                    MessageBox.Show("File attached succesfully ", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                    result = true;
+                    Attachments.Add(new Attachment(DestinationDirectory + @"\" + fileName));
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("File was not attached! " + ex.Message, "", MessageBoxButton.OK, MessageBoxImage.Error);
+                    // result =false;
+                }
+            }
+
+            return result;
+
+
+
+
+        }
 
         #region ProjectSelectionChangeCommand
         private bool CanProjectSelectionChange(object obj)
@@ -131,6 +271,8 @@ namespace CandidatesBrowser3.ViewModel
         private void ProjectSelectionChange(object obj)
         {
             CandidateHistoryCollection = candidateHistoryRepository.LoadHistorysByProjectID(SelectedProject.ID);
+            Attachments = new List<Attachment>();
+            loadAttachments();
 
         }
         #endregion
@@ -158,19 +300,25 @@ namespace CandidatesBrowser3.ViewModel
 
         #endregion
 
-        public ProjectsReportViewModel(IConfigProjectRepository configProjectRepository, ICandidateHistoryRepository candidateHistoryRepository)
+        public ProjectsReportViewModel(IConfigProjectRepository configProjectRepository, ICandidateHistoryRepository candidateHistoryRepository,
+            IDialogService dialogService)
         {
             this.configProjectRepository = configProjectRepository;
             this.candidateHistoryRepository = candidateHistoryRepository;
-
+            this.dialogService = dialogService;
+            DocumentToAction = new Document();
             loadData();
             commandsInitialize();
         }
+
 
         private void commandsInitialize()
         {
             ProjectSelectionChangeCommand = new CustomCommand(ProjectSelectionChange, CanProjectSelectionChange);
             ExportToFileCommand = new CustomCommand(ExportToFile, CanExportToFile);
+            ReadJDCommand = new CustomCommand(ReadJD, CanReadJD);
+            AddJDCommand = new CustomCommand(AddJD, CanAddJD);
+            DeleteJDCommand = new CustomCommand(DeleteJobDescription, CanDeleteJobDescription);
         }
 
       
@@ -179,6 +327,21 @@ namespace CandidatesBrowser3.ViewModel
         {
             ConfigProjectCollection = configProjectRepository.GetConfigProjects().OrderBy(e=>e.ProjectName).ToObservableCollection();
          
+        }
+
+        private void loadAttachments()
+        {
+            if (SelectedProject.JdUploaded)
+            {
+                string[] files = Directory.GetFiles(DestinationDirectory);
+
+                foreach (string file in files)
+                {
+                    Attachments.Add(new Attachment(file));
+                }
+
+
+            }
         }
 
         public void RaisePropertyChange(string propertyName)

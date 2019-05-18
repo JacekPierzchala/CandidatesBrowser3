@@ -74,7 +74,7 @@ namespace CandidatesBrowser3
             
         }
 
-        private static ProjectsReportViewModel projectsReportViewModel = new ProjectsReportViewModel(configProjectRepository, candidateHistoryRepository);
+        private static ProjectsReportViewModel projectsReportViewModel = new ProjectsReportViewModel(configProjectRepository, candidateHistoryRepository,dialogService);
         public static ProjectsReportViewModel ProjectsReportViewModel
         {
             get { return projectsReportViewModel; }
