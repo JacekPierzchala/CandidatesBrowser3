@@ -143,14 +143,19 @@
     <Compile Include="Utilities\DialogService.cs" />
     <Compile Include="Utilities\IDialogService.cs" />
     <Compile Include="Utilities\Messenger.cs" />
+    <Compile Include="Utilities\MessengerCandidateCollection.cs" />
     <Compile Include="Utilities\MessengerCandidateHistory.cs" />
     <Compile Include="Utilities\MessengerCompany.cs" />
     <Compile Include="Utilities\MessengerDocument.cs" />
     <Compile Include="Utilities\MessengerCandidateCompany.cs" />
     <Compile Include="Utilities\MultiConverter.cs" />
+    <Compile Include="ViewModel\AddNewCandidateViewModel.cs" />
     <Compile Include="ViewModel\AssignNewProjectViewModel.cs" />
     <Compile Include="ViewModel\FileDialogsViewModel.cs" />
     <Compile Include="ViewModel\ProjectsReportViewModel.cs" />
+    <Compile Include="View\AddNewCandidateView.xaml.cs">
+      <DependentUpon>AddNewCandidateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AssignNewProjectView.xaml.cs">
       <DependentUpon>AssignNewProjectView.xaml</DependentUpon>
     </Compile>
@@ -163,6 +168,10 @@
     <Compile Include="View\UserControlOpenFileDialog.xaml.cs">
       <DependentUpon>UserControlOpenFileDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\AddNewCandidateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AssignNewProjectView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

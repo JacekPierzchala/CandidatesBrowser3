@@ -17,7 +17,7 @@
              TextOptions.TextFormattingMode="Ideal"
              TextOptions.TextRenderingMode="Auto"
              Background="{DynamicResource MaterialDesignPaper}"
-        WindowStartupLocation="CenterOwner"
+                WindowStartupLocation="CenterOwner"
              DataContext="{Binding Source={StaticResource viewModelLocator}, Path=AssignNewProjectViewModel}"
         Title="AssignNewProjectView" Height="200" Width="800">
     <Grid>

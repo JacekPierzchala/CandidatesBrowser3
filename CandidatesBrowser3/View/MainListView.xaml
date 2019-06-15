@@ -25,7 +25,7 @@
         <Grid Margin="2">
          
         <TabControl ItemContainerStyle="{StaticResource  chevronTabItemStyle}" >
-                <TabItem x:Name="MainViewHeader" Header="Main View" >
+            <TabItem x:Name="MainViewHeader" Header="Main View" >
                 <TabItem.HeaderTemplate>
                     <DataTemplate>
                         <Grid>
@@ -41,6 +41,13 @@
                     </Grid.ColumnDefinitions>
                     <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1">
                         <StackPanel  Orientation="Vertical" Margin="1" >
+                            <Button Margin="4" Content="Add New Candidate">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <i:InvokeCommandAction Command="{Binding AddNewCandidateCommand}"></i:InvokeCommandAction>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
                             <Button Content="Reset filters" Margin="4">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">

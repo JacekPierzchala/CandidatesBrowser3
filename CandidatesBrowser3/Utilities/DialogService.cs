@@ -26,6 +26,12 @@ namespace CandidatesBrowser3.Utilities
 
         }
 
+        public void ShowAddNewCandidateDialog()
+        {
+            Dialogwindow = new AddNewCandidateView();
+            Dialogwindow.ShowDialog();
+        }
+
         public void CloseDetailDialog()
         {
             if (Dialogwindow != null)

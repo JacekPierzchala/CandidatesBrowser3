@@ -27,6 +27,7 @@ namespace CandidatesBrowser3.ViewModel
         private IConfigCompanyRepository configCompanyRepository;
         private ICandidateCompanyRepository candidateCompanyRepository;
         private IConfigCompanyProjectRepository configCompanyProjectRepository;
+        private IDialogService dialogService;
 
         private bool combinedRefreshNeeded;
         public bool CombinedRefreshNeeded
@@ -133,8 +134,9 @@ namespace CandidatesBrowser3.ViewModel
         public ICommand ResetFiltersCommand { get; set; }
         public ICommand CompaniesListOpenedChangeCommand { get; set; }
         public ICommand SelectCandidateChangeCommand { get; set; }
+        public ICommand AddNewCandidateCommand { get; set; }
         #endregion
-        
+
         #region methodsForCommands
         #region SelectAllProjectsCommand
         private bool CanSelectAllProjects(object obj)
@@ -445,7 +447,8 @@ namespace CandidatesBrowser3.ViewModel
         public MainListViewModel(ICandidateRepository CandidateRepository, IConfigProjectsLibRepository configProjectsLibRepository,
             IConfigProjectsCandidateRepository configProjectsCandidateRepository, IConfigAreaRepository configAreaRepository,
             IConfigProjectRepository configProjectRepository, IConfigCompanyRepository configCompanyRepository,
-            ICandidateCompanyRepository candidateCompanyRepository, IConfigCompanyProjectRepository configCompanyProjectRepository)
+            ICandidateCompanyRepository candidateCompanyRepository,
+            IConfigCompanyProjectRepository configCompanyProjectRepository, IDialogService dialogService)
         {
             this.candidateRepository = CandidateRepository;
             this.configProjectsLibRepository = configProjectsLibRepository;
@@ -455,6 +458,7 @@ namespace CandidatesBrowser3.ViewModel
             this.configCompanyRepository = configCompanyRepository;
             this.candidateCompanyRepository = candidateCompanyRepository;
             this.configCompanyProjectRepository = configCompanyProjectRepository;
+            this.dialogService = dialogService;
 
             AllProjectsSelected = true;
             AllAreasSelected = true;
@@ -489,21 +493,17 @@ namespace CandidatesBrowser3.ViewModel
             addConfigsToCandidates();
 
             #region commandsInitialisation
-            SelectAllProjectsCommand = new CustomCommand(SelectAllProjects, CanSelectAllProjects);
-            ProjectSelectionChangeCommand = new CustomCommand(ProjectSelectionChange, CanProjectSelectionChange);
-            AreaSelectionChangeCommand = new CustomCommand(AreaSelectionChange, CanSelectAllAreas);
-            SelectAllAreasCommand = new CustomCommand(SelectAllAreas, CanSelectAllAreas);
-            ResetFiltersCommand = new CustomCommand(ResetFilters, CanResetFilters);
-            CompaniesListOpenedChangeCommand = new CustomCommand(CompaniesListOpenedChange, CanCompaniesListOpenedChange);
-            SelectAllCompaniesCommand = new CustomCommand(SelectAllCompanies, CanSelectAllCompanies);
-            CompanySelectionChangeCommand = new CustomCommand(CompanySelectionChange, CanCompanySelectionChange);
-            SelectCandidateChangeCommand = new CustomCommand(SelectCandidateChange, CanSelectCandidateChange);
+            CommandsInitialisation();
             #endregion
 
-            MessengerCandidate.Default.Register<UpdateListMessage>(this, OnUpdateListMessageReceived);
-
-            
+            MessengerCandidate.Default.Register<UpdateListMessage>(this, OnUpdateListMessageReceived);           
             MessengerCompany.Default.Register<List<CandidateCompany>>(this, OnCompanyReceived);
+            MessengerCandidateCollection.Default.Register<ObservableCollection<Candidate>>(this, OnCandidateCollectionReceived);
+        }
+
+        private void OnCandidateCollectionReceived(ObservableCollection<Candidate> candidateCollection)
+        {
+            dialogService.CloseDetailDialog();
         }
 
         private void OnCompanyReceived(List<CandidateCompany> companylist)
@@ -558,6 +558,31 @@ namespace CandidatesBrowser3.ViewModel
             }
 
 
+        }
+
+        private void CommandsInitialisation()
+        {
+            SelectAllProjectsCommand = new CustomCommand(SelectAllProjects, CanSelectAllProjects);
+            ProjectSelectionChangeCommand = new CustomCommand(ProjectSelectionChange, CanProjectSelectionChange);
+            AreaSelectionChangeCommand = new CustomCommand(AreaSelectionChange, CanSelectAllAreas);
+            SelectAllAreasCommand = new CustomCommand(SelectAllAreas, CanSelectAllAreas);
+            ResetFiltersCommand = new CustomCommand(ResetFilters, CanResetFilters);
+            CompaniesListOpenedChangeCommand = new CustomCommand(CompaniesListOpenedChange, CanCompaniesListOpenedChange);
+            SelectAllCompaniesCommand = new CustomCommand(SelectAllCompanies, CanSelectAllCompanies);
+            CompanySelectionChangeCommand = new CustomCommand(CompanySelectionChange, CanCompanySelectionChange);
+            SelectCandidateChangeCommand = new CustomCommand(SelectCandidateChange, CanSelectCandidateChange);
+            AddNewCandidateCommand = new CustomCommand(AddNewCandidate, CanAddNewCandidate);
+        }
+
+        private bool CanAddNewCandidate(object obj)
+        {
+            return true;
+        }
+
+        private void AddNewCandidate(object obj)
+        {
+            dialogService.ShowAddNewCandidateDialog();
+           
         }
 
         private void addConfigsToCandidates()

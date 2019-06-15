@@ -505,7 +505,7 @@ namespace CandidatesBrowser3.ViewModel
              
                 MessengerCandidate.Default.Register<Candidate>(this, OnCandidateReceived);
 
-
+               
                 MessengerCandidateHistory.Default.Register<CandidateHistory>(this, OnCandidateHistoryReceived);
                 MessengerCompany.Default.Register<UpdateListMessageCompany>(this, UpdateListMessageCompanyReceived);
 

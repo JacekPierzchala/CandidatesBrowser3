@@ -84,6 +84,19 @@ namespace CandidatesBrowser3.DAL
 
         }
 
+        public int AddCandidtate(Candidate candidate)
+        {
+            Args.Clear();
+            Args.Add("@FirstEmail", candidate.FirstEmail);
+            Args.Add("@SecondEmail", candidate.SecondEmail);
+            Args.Add("@FirstName", candidate.FirstName);
+            Args.Add("@LastName", candidate.LastName);
+            Args.Add("@FirstPhone", candidate.FirstPhone);
+            Args.Add("@SecondPhone", candidate.SecondPhone);
+
+            return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_CANDIDATE", Args).ToString());
+        }
+
         public void UpdateCandidateDocumentInfo(Candidate candidate)
         {
             Args.Clear();

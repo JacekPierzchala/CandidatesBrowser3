@@ -1,0 +1,108 @@
+﻿<Window x:Class="CandidatesBrowser3.View.AddNewCandidateView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CandidatesBrowser3.View"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"          
+             xmlns:pn="clr-namespace:CandidatesBrowser3.Utilities"
+             xmlns:readIco="clr-namespace:CandidatesBrowser3"            
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="12"
+             TextBlock.FontSize="12"
+             TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d"
+        Title="AddNewCandidateView" Height="300" Width="600"
+         DataContext="{Binding Source={StaticResource viewModelLocator}, Path=AddNewCandidateViewModel}">
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}" BasedOn="{StaticResource labeStyle}"/>
+
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal"  Grid.Row="0">
+            <Button Margin="10,1"  >
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                    <TextBlock Margin="2,0" VerticalAlignment="Center">Save</TextBlock>
+                    <materialdesign:PackIcon VerticalAlignment="Center" Kind="Approve"></materialdesign:PackIcon>
+                </StackPanel>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding SaveCommand}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+          
+          
+
+        </StackPanel>
+
+        <Separator VerticalAlignment="Top" Grid.Row="1" Height="2" Background="Gray"></Separator>
+        <Grid Grid.Row="2" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"></RowDefinition>
+                <RowDefinition ></RowDefinition>
+                <RowDefinition Height="5" ></RowDefinition>
+                <RowDefinition Height="84" ></RowDefinition>
+                <RowDefinition ></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" Orientation="Vertical" Grid.Column="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label   Grid.Column="0" Grid.Row="0" HorizontalAlignment="Stretch" Padding="1" Content="First Name:"></Label>
+                    <Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch"  Padding="1"  Content="Last Name:"></Label>
+                    <Label Grid.Column="2" Grid.Row="0"  Content="First Phone:"></Label>
+                    <Label Grid.Column="3" Grid.Row="0" Content="Second Phone:"></Label>
+                    <TextBox Grid.Column="0" Grid.Row="1" Padding="1"  Text="{Binding NewCandidate.FirstName}"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Padding="1"  Text="{Binding NewCandidate.LastName}"/>
+                    <TextBox  Grid.Column="2" Grid.Row="1" Text="{Binding NewCandidate.FirstPhone}"/>
+                    <TextBox Grid.Column="3" Grid.Row="1"  Text="{Binding NewCandidate.SecondPhone}"/>
+
+
+                    <Label  Grid.Column="0" Grid.Row="2" Content="First Email:"></Label>
+                    <Label Grid.Column="1" Grid.Row="2" Content="Second Email:"></Label>
+                    <TextBox  Grid.Column="0" Grid.Row="3" Text="{Binding NewCandidate.FirstEmail}"/>
+                    <TextBox Grid.Column="1" Grid.Row="3"  Text="{Binding NewCandidate.SecondEmail}"/>
+
+                    <Label  Grid.Column="2" Grid.Row="2" Content="CV Uploaded:"></Label>
+                    <Label Grid.Column="3" Grid.Row="2" Content="Second Email:"></Label>
+                    <Border Grid.Column="2" Grid.Row="3" BorderThickness="1" BorderBrush="Gray">
+                        <CheckBox BorderBrush="Gray"  IsEnabled="False"  HorizontalContentAlignment="Center" HorizontalAlignment="Center"  IsChecked="{Binding NewCandidate.CvUploaded}"/>
+                    </Border>
+                    <TextBox Grid.Column="3" Grid.Row="3"  Text="{Binding NewCandidate.SecondEmail}"/>
+                </Grid>
+            </StackPanel>
+           
+        </Grid>
+
+
+    </Grid>
+</Window>

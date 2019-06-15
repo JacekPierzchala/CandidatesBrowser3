@@ -13,7 +13,7 @@ namespace CandidatesBrowser3.Model
     {
         public static string FolderPath = @"C:\Users\Zaneta\Documents\CandidatesBrowser3\source\candidates\";
 
- 
+        public bool IsNew { get; set; }
 
         private int id;
         public int ID
@@ -181,6 +181,7 @@ namespace CandidatesBrowser3.Model
             CvUploaded = row.Field<bool>("CV_UPLOADED"); 
             Positions = row.Field<string>("POSITIONS");
             Companies= row.Field<string>("COMPANIES");
+            IsNew = false;
         }
 
         private ObservableCollection<ConfigProjectCandidate> candidateProjects;

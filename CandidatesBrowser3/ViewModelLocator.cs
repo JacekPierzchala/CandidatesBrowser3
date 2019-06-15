@@ -39,7 +39,7 @@ namespace CandidatesBrowser3
         private static MainListViewModel mainListViewModel = 
             new MainListViewModel(candidateRepository, configProjectsLibRepository, 
             configProjectsCandidateRepository,configAreaRepository,configProjectRepository, 
-            configCompanyRepository,candidateCompanyRepository,configCompanyProjectRepository);
+            configCompanyRepository,candidateCompanyRepository,configCompanyProjectRepository, dialogService);
         public static MainListViewModel MainListViewModel
         {
             get
@@ -78,6 +78,12 @@ namespace CandidatesBrowser3
         public static ProjectsReportViewModel ProjectsReportViewModel
         {
             get { return projectsReportViewModel; }
+        }
+
+        private static AddNewCandidateViewModel addNewCandidateViewModel = new AddNewCandidateViewModel(candidateRepository);
+        public static AddNewCandidateViewModel AddNewCandidateViewModel
+        {
+            get { return addNewCandidateViewModel; }
         }
 
     }
