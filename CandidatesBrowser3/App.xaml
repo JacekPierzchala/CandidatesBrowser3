@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CandidatesBrowser3"
              xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+             DispatcherUnhandledException="Application_DispatcherUnhandledException"
              StartupUri="View/MainListView.xaml"
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              Startup="AppStartUp">
@@ -72,6 +73,18 @@
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Datagrid.xaml"/>
                         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Label.xaml"/>
                     </ResourceDictionary.MergedDictionaries>
+                </ResourceDictionary>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingWave.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingThreeDots.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingFlipPlane.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingPulse.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles/LoadingDoubleBounce.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Colors.xaml"/>
+                        <ResourceDictionary Source="pack://application:,,,/LoadingIndicators.WPF;component/Styles.xaml"/>
+                    </ResourceDictionary.MergedDictionaries>
+
                 </ResourceDictionary>
                 <!--<ResourceDictionary>
                         <ResourceDictionary.MergedDictionaries>

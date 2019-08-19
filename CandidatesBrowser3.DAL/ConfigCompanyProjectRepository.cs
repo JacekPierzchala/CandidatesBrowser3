@@ -26,7 +26,7 @@ namespace CandidatesBrowser3.DAL
 
         private void LoadConfigCompanyProjects()
         {
-            DataTable dt = DBObjects.GetTableFromSQL("SELECT DISTINCT [COMPANY_ID],[PROJECT_ID] FROM[CANDIDATE_COMPANY]");
+            DataTable dt = DBObjects.GetTableFromSQL("SELECT DISTINCT [COMPANY_ID],[CONFIG_PROJECT_ID] FROM [CANDIDATES_PROJECTS]");
             ConfigCompanyProjects = new ObservableCollection<ConfigCompanyProject>();
             try
             {

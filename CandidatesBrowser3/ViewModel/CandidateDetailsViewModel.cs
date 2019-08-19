@@ -242,7 +242,7 @@ namespace CandidatesBrowser3.ViewModel
         }
         private void ProjectSelectionChange(object obj)
         {
-            SelectedProjectHistory = CandidateHistoryCollection.Where(e => e.ProjectID.Equals(SelectedCandidateHistory.ProjectID)).ToList().ToObservableCollection();
+            SelectedProjectHistory = CandidateHistoryCollection.Where(e => e.ProjectID.Equals(SelectedCandidateHistory.ProjectID)).ToList().OrderByDescending(e=>e.Seq).ToObservableCollection();
             SelectedCandidateHstoryTemp = new CandidateHistory();
             SelectedConfigStatusLib = null;
             ProjectEverSelected = true;
@@ -253,7 +253,7 @@ namespace CandidatesBrowser3.ViewModel
         #region AssignNewProjectCommand
         private void AssignNewProject(object obj)
         {
-            MessengerCandidateCompany.Default.Send<CandidateCompany>(SelectedCandidate.CandidateCompanies.FirstOrDefault());
+            MessengerCandidateProject.Default.Send<ObservableCollection<ConfigProjectCandidate>>(SelectedCandidate.CandidateProjects);
             dialogService.ShowAssignProjectDialog();
             
         }
@@ -268,16 +268,7 @@ namespace CandidatesBrowser3.ViewModel
 
         private void Save(object obj)
         {
-           foreach (CandidateHistory c in CandidateHistoryCollection.Where(e => e.Seq == 1))
-            {
-                CandidateCompaniesTemp.Add(new CandidateCompany()
-                {
-                    CandidateID =SelectedCandidateTemp.ID, ID=c.CompanyID, Company=c.CompanyName, ProjectID=c.ProjectID, Position=c.Position }
-                );
-            }
-            SelectedCandidateTemp.CandidateCompanies = CandidateCompaniesTemp;
-
-            foreach (CandidateHistory c in CandidateHistoryCollection.Where(e => !SelectedCandidateTemp.CandidateProjects.Any(cc => cc.ConfigProjectID == e.ProjectID) && e.Seq == 1))
+             foreach (CandidateHistory c in CandidateHistoryCollection.Where(e => !SelectedCandidateTemp.CandidateProjects.Any(cc => cc.ConfigProjectID == e.ProjectID) && e.Seq == 1))
             {
                 SelectedCandidateTemp.CandidateProjects.Add(new ConfigProjectCandidate()
                 {
@@ -289,11 +280,9 @@ namespace CandidatesBrowser3.ViewModel
             GlobalFunctions.CopyProperties(SelectedCandidateTemp, selectedCandidate);
 
             candidateRepository.UpdateCandidate(selectedCandidate);
-            //MessengerCandidate.Default.Send<Candidate>(SelectedCandidate);
-        
-            MessengerCompany.Default.Send<List<CandidateCompany>>(selectedCandidate.CandidateCompanies.ToList());
-            // MessengerCandidate.Default.Send<Candidate>(SelectedCandidate);
-
+            
+            MessengerCompany.Default.Send<List<ConfigProjectCandidate>>(selectedCandidate.CandidateProjects.ToList());
+            
         }
         private bool CanSave(object obj)
         {
@@ -460,10 +449,8 @@ namespace CandidatesBrowser3.ViewModel
             SelectedConfigStatusLib = null;
 
             candidateHistoryRepository.AddCandidateHistory(SelectedCandidateHstoryTemp);
-            SelectedCandidateHstoryTemp.Timestamp = null;
-            SelectedCandidateHstoryTemp.Comments = null;
-            SelectedCandidateHstoryTemp.HistoryOfContact = null;
             prepareCollection();
+            SelectedCandidateHistory = SelectedCandidateHstoryTemp;
         }
         private bool CanAddNewHistoryItem(object obj)
         {
@@ -517,7 +504,7 @@ namespace CandidatesBrowser3.ViewModel
             }
 
             //loadData();
-            MessengerCandidateCompany.Default.Register<UpdateCandidateCompany>(this, OnUpdateListMessageReceived);
+            MessengerCandidateProject.Default.Register<UpdateCandidateCompany>(this, OnUpdateListMessageReceived);
             loadCommands();
         }
 
@@ -529,9 +516,34 @@ namespace CandidatesBrowser3.ViewModel
         private void OnCandidateHistoryReceived(CandidateHistory candidateHistory)
         {
             dialogService.CloseDetailDialog();
+            if (candidateHistory.ProjectID==0)
+            {
+                return;
+            }
 
+            
             candidateHistoryRepository.AddCandidateHistory(candidateHistory);
             CandidateHistoryCollection.Add(candidateHistory);
+            
+            SelectedCandidate.CandidateProjects.Add(
+                new ConfigProjectCandidate
+                {
+                    ConfigCandidateID = SelectedCandidateTemp.ID,
+                    ConfigProjectID = candidateHistory.ProjectID,
+                    ConfigProjectLibID = candidateHistory.ConfigProjectLib,
+                    ProjectName = candidateHistory.ProjectName,
+                    Company=candidateHistory.CompanyName,
+                    Area=candidateHistory.AreaName,
+                    
+                    CompanyId=candidateHistory.CompanyID,
+                    Position=candidateHistory.Position,
+                    ConfigAreaID=candidateHistory.ConfigAreaId
+                    
+
+                });
+
+            var tempProjects = SelectedCandidate.CandidateProjects;
+            SelectedCandidate.CandidateProjects = tempProjects;
             prepareCollection();
         }
 
@@ -617,7 +629,7 @@ namespace CandidatesBrowser3.ViewModel
         }
 
         private void prepareCollection()
-        {
+        {         
             CandidateHistoryCollectionLastStatus = CandidateHistoryCollection.ToList().GroupBy(e => e.ProjectID).Select(s => s.OrderByDescending(i => i.Seq).First()).ToList().ToObservableCollection();
         }
 

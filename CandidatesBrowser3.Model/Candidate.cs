@@ -175,41 +175,62 @@ namespace CandidatesBrowser3.Model
             SecondEmail = row.Field<string>("2ND_@");           
             FirstPhone = row.Field<string>("1ST_TEL");              
             SecondPhone = row.Field<string>("2ND_TEL"); 
-            Area = row.Field<string>("AREA"); 
+            //Area = row.Field<string>("AREA"); 
             Deleted = row.Field<bool>("DELETED");        
-            Projects = row.Field<string>("PROJECTS");             
+            //Projects = row.Field<string>("PROJECTS");             
             CvUploaded = row.Field<bool>("CV_UPLOADED"); 
-            Positions = row.Field<string>("POSITIONS");
-            Companies= row.Field<string>("COMPANIES");
+            //Positions = row.Field<string>("POSITIONS");
+            //Companies= row.Field<string>("COMPANIES");
             IsNew = false;
         }
 
-        private ObservableCollection<ConfigProjectCandidate> candidateProjects;
+        private ObservableCollection<ConfigProjectCandidate> candidateProjects= new ObservableCollection<ConfigProjectCandidate>();
         public ObservableCollection<ConfigProjectCandidate> CandidateProjects
         {
             get { return candidateProjects; }
             set
             {
                 candidateProjects = value;
+                if (CandidateProjects != null)
+                {
+                    Projects = String.Join(", ", CandidateProjects
+                                     .Where(e=>e.ProjectName.ToLower() != "not assigned")
+                                     .Select(e => e.ProjectName).Distinct());
+                    Positions = String.Join(", ", CandidateProjects
+                                     .Where(e => e.Position != "")
+                                     .Select(e => e.Position).Distinct());
+                    Companies = String.Join(", ", CandidateProjects
+                                      .Where(e => e.Company.ToLower() != "not assigned")
+                                      .Select(e => e.Company).Distinct());
+                    Area = String.Join(", ", CandidateProjects
+                                      .Where(e => e.Area != null
+                                      && e.Area.ToLower() != "not assigned" && e.Area.ToLower() != "")
+                                      .Select(e => e.Area).Distinct());
+
+                }
                 RaisePropertyChange("CandidateProjects");
             }
         }
 
-        private ObservableCollection<CandidateCompany> candidateCompanies;
-        public ObservableCollection<CandidateCompany> CandidateCompanies
-        {
-            get { return candidateCompanies; }
-            set {
-                candidateCompanies = value;
-                if (CandidateCompanies!=null)
-                {
-                    Positions = String.Join(", ", CandidateCompanies.Select(e => e.Position).Distinct());
-                    Companies = String.Join(", ", CandidateCompanies.Select(e => e.Company).Distinct());
-                }
+       //private ObservableCollection<CandidateCompany> candidateCompanies= new ObservableCollection<CandidateCompany>();
+       // public ObservableCollection<CandidateCompany> CandidateCompanies
+       // {
+       //     get { return candidateCompanies; }
+       //     set {
+       //         candidateCompanies = value;
+       //         if (CandidateCompanies!=null)
+       //         {
+       //             Positions = String.Join(", ", CandidateCompanies
+       //                               .Where(e=>e.Position!="")
+       //                               .Select(e => e.Position).Distinct());
+       //             Companies = String.Join(", ", CandidateCompanies
+       //                               .Where(e=>e.Company.ToLower()!="not assigned")
+       //                               .Select(e => e.Company).Distinct());
+       //         }
                
-                RaisePropertyChange("CandidateCompanies");
-                }
-        }
+       //         RaisePropertyChange("CandidateCompanies");
+       //         }
+       // }
 
 
         public void RaisePropertyChange(string propertyName)

@@ -11,19 +11,19 @@ namespace CandidatesBrowser3.Utilities
     {
     }
 
-    public class MessengerCandidateCompany
+    public class MessengerCandidateProject
     {
         private static readonly object CreationLock = new object();
         private static readonly ConcurrentDictionary<MessengerKey, object> Dictionary = new ConcurrentDictionary<MessengerKey, object>();
 
         #region Default property
 
-        private static MessengerCandidateCompany _instance;
+        private static MessengerCandidateProject _instance;
 
         /// <summary>
         /// Gets the single instance of the Messenger.
         /// </summary>
-        public static MessengerCandidateCompany Default
+        public static MessengerCandidateProject Default
         {
             get
             {
@@ -33,7 +33,7 @@ namespace CandidatesBrowser3.Utilities
                     {
                         if (_instance == null)
                         {
-                            _instance = new MessengerCandidateCompany();
+                            _instance = new MessengerCandidateProject();
                         }
                     }
                 }
@@ -47,7 +47,7 @@ namespace CandidatesBrowser3.Utilities
         /// <summary>
         /// Initializes a new instance of the Messenger class.
         /// </summary>
-        private MessengerCandidateCompany()
+        private MessengerCandidateProject()
         {
         }
 

@@ -16,13 +16,13 @@ namespace CandidatesBrowser3.DAL
 
         public CandidateCompanyRepository() { }
 
-        public CandidateCompany CandidateCompanyByID(int id)
+        public CandidateCompany CandidateCompanyByID(int CandidateID, int companyId)
         {
             if (CandidateCompanys == null)
             {
                 LoadCandidateCompanys();
             }
-            return CandidateCompanys.Where(c => c.ID.Equals(id)).FirstOrDefault();
+            return CandidateCompanys.Where(c => c.CandidateID.Equals(CandidateID) && c.ID.Equals(companyId)).FirstOrDefault();
         }
 
         private void LoadCandidateCompanys()
@@ -83,7 +83,31 @@ namespace CandidatesBrowser3.DAL
             Args.Add("@Position", position);
             Args.Add("@ProjectID", configProject.ID);
 
-            return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_CANDIDATE_COMPANY", Args).ToString());
+            try
+            {
+                return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_CANDIDATE_COMPANY", Args).ToString());
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        public CandidateCompany AddAndCreateCandidateCompany(int candidateId,  string position)
+        {
+            CandidateCompany candidateCompany = new CandidateCompany();
+            Args.Clear();
+            Args.Add("@CandidateID", candidateId);
+            Args.Add("@Position", position);
+            
+
+            int id = int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_CANDIDATE_COMPANY", Args).ToString());
+
+            candidateCompany.ID = id;
+            candidateCompany.CandidateID = candidateId;
+            candidateCompany.Position = position;
+            candidateCompany.ProjectID = 0;
+            return candidateCompany;
         }
     }
 }

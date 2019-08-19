@@ -27,13 +27,13 @@ namespace CandidatesBrowser3.DAL
 
             return ConfigProjectsCandidates.FirstOrDefault();
         }
-        public ConfigProjectCandidate ConfigProjectCandidateByID(int id)
+        public ConfigProjectCandidate ConfigProjectCandidateByID(int projectId, int candidateId)
         {
             if (ConfigProjectsCandidates == null)
             {
                 LoadConfigProjectsCandidate();
             }
-            return ConfigProjectsCandidates.Where(e => e.ConfigProjectID.Equals(id)).FirstOrDefault();
+            return ConfigProjectsCandidates.Where(e => e.ConfigProjectID.Equals(projectId) && e.ConfigCandidateID.Equals(candidateId)).FirstOrDefault();
         }
         private void LoadConfigProjectsCandidate()
         {
@@ -69,13 +69,25 @@ namespace CandidatesBrowser3.DAL
             configProjectsCandidateToUpdate = configProjectCandidate;
         }
 
-        public int AddConfigProjectCandidate(int candidateId, ConfigProject configProject)
+        public int AddConfigProjectCandidate(int candidateId, ConfigProject configProject, string position, int companyId)
         {
             Args.Clear();          
             Args.Add("@CandidateID", candidateId);
             Args.Add("@ProjectID", configProject.ID);
+            Args.Add("@Position", position);
+            Args.Add("@CompanyID", companyId);
 
-            return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_CANDIDATE_PROJECT", Args).ToString());
+
+            
+            try
+            {
+                return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_CANDIDATE_PROJECT", Args).ToString());
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+           
         }
     }
 }

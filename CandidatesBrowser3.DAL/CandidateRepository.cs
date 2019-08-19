@@ -27,7 +27,7 @@ namespace CandidatesBrowser3.DAL
 
         private void LoadCandidates()
         {
-            DataTable dt = DBObjects.GetTableFromSQL("Select * FROM [Candidates_View]");
+            DataTable dt = DBObjects.GetTableFromSQL("Select * FROM CANDIDATES");
             Candidates = new ObservableCollection<Candidate>();
             try
             {
@@ -80,7 +80,7 @@ namespace CandidatesBrowser3.DAL
             Args.Add("@FirstEmail", candidate.FirstEmail);
             Args.Add("@SecondEmail", candidate.SecondEmail);
 
-            DBObjects.ExecProcedureWithArgs("UPDATE_CANDIDATE_INFO", Args);
+            DBObjects.ExecSqlProcedure("UPDATE_CANDIDATE_INFO", Args);
 
         }
 
@@ -103,7 +103,7 @@ namespace CandidatesBrowser3.DAL
             Args.Add("@CandidateID", candidate.ID);
             Args.Add("@CVUploaded", candidate.CvUploaded);
 
-            DBObjects.ExecProcedureWithArgs("UPDATE_DOCUMENT_INFO", Args);
+            DBObjects.ExecSqlProcedure("UPDATE_DOCUMENT_INFO", Args);
 
         }
     }

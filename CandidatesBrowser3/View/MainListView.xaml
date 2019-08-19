@@ -21,7 +21,8 @@
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"            
         DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainListViewModel}" Icon="/CandidatesBrowser3;component/Resources/cv_icon_QsY_icon.ico"
         >
-   
+    
+  
         <Grid Margin="2">
          
         <TabControl ItemContainerStyle="{StaticResource  chevronTabItemStyle}" >
@@ -261,6 +262,21 @@
                         <DataGrid SelectionMode="Single" Grid.Row="0" x:Name="datagridMainview" ItemsSource="{Binding CandidatesView}" AutoGenerateColumns="False" IsReadOnly="True"
                                       SelectedItem="{Binding SelectedCandidate}"
                                       >
+                            <DataGrid.ContextMenu>
+                                <ContextMenu Height="Auto">
+                                    <MenuItem Header="Upload new project">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Click" >
+                                                <i:InvokeCommandAction Command="{Binding ImportFileCommand}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <MenuItem.Icon>
+                                            <Image Source="/CandidatesBrowser3;component/Resources/clip.ico"></Image>
+                                        </MenuItem.Icon>
+
+                                    </MenuItem>
+                                </ContextMenu>
+                            </DataGrid.ContextMenu>
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction Command="{Binding SelectCandidateChangeCommand}"></i:InvokeCommandAction>

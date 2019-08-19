@@ -41,7 +41,7 @@ namespace CandidatesBrowser3.Model
 
         public ConfigCompanyProject(DataRow row)
         {
-            ProjectID = row.Field<int>("PROJECT_ID");
+            ProjectID = row.Field<int>("CONFIG_PROJECT_ID");
             CompanyID = row.Field<int>("COMPANY_ID");
             
         }

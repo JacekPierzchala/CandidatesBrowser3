@@ -72,6 +72,17 @@ namespace CandidatesBrowser3.Model
             }
         }
 
+        private string projectName;
+        public string ProjectName
+        {
+            get { return projectName; }
+            set { projectName = value; }
+        }
+
+        public string Position { get; set; }
+        public string Company { get; set; }
+        public int CompanyId { get; set; }
+        public string Area { get; set; }
         public ConfigProjectCandidate(DataRow row)
         {
             ConfigProjectID = row.Field<int>("CONFIG_PROJECT_ID");
@@ -79,7 +90,11 @@ namespace CandidatesBrowser3.Model
             ConfigProjectLibID = row.Field<int>("CONFIG_PROJECT_LIB_ID");
             ConfigGroupID = row.Field<int>("CONFIG_GROUP_ID");
             ConfigCandidateID = row.Field<int>("CANDIDATES_ID");
-            
+            ProjectName = row.Field<string>("PROJECT_NAME");
+            Position= row.Field<string>("POSITION");
+            Company= row.Field<string>("COMPANY_NAME");
+            CompanyId = row.Field<int>("COMPANY_ID");
+            Area = row.Field<string>("AREA_NAME");
         }
 
         public ConfigProjectCandidate()

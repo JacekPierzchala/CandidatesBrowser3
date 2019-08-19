@@ -9,7 +9,7 @@ namespace CandidatesBrowser3.Model
 {
     public enum ActionType
     {
-        Save,Delete
+        Save,Delete,Import
     }
     public class Document: INotifyPropertyChanged
     {

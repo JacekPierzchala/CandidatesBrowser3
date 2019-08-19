@@ -10,7 +10,7 @@ namespace CandidatesBrowser3.Model
 {
     public class CandidateCompany : ConfigCompany, INotifyPropertyChanged, ICloneable
     {
-        
+        public int CandidateCompanyId { get; set; }
         private int candidateID;
         public int CandidateID
         {
@@ -39,6 +39,8 @@ namespace CandidatesBrowser3.Model
             ProjectID= row.Field<int>("PROJECT_ID");
             Position= row.Field<string>("POSITION");
             base.Company = row.Field<string>("NAME");
+            CandidateCompanyId = row.Field<int>("ID");
+
         }
 
         public CandidateCompany()

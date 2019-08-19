@@ -54,12 +54,18 @@ namespace CandidatesBrowser3.ViewModel
             {
                 openFileDialog.InitialDirectory =  DocumentToAction.FolderPath;
             }
-            else
+            else 
             {
                 openFileDialog.InitialDirectory =Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             }
-                  
-            openFileDialog.Multiselect = true;
+
+            
+            if (DocumentToAction.Action != ActionType.Import)
+            {
+                openFileDialog.Multiselect = true;
+            }
+            else { openFileDialog.Multiselect = false; }
+
             openFileDialog.ShowDialog();
 
             DocumentToAction.DocumentNames = openFileDialog.FileNames;

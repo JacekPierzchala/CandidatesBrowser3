@@ -18,7 +18,9 @@ namespace CandidatesBrowser3.ViewModel
         
 
         private Candidate newCandidate;
+        private ICandidateCompanyRepository candidateCompanyRepository;
         private ICandidateRepository candidateRepository;
+        
 
         public Candidate NewCandidate
         {
@@ -47,10 +49,10 @@ namespace CandidatesBrowser3.ViewModel
                 }
              }
 
-            //int newID = 0;
             try
             {
                 NewCandidate.ID = candidateRepository.AddCandidtate(NewCandidate);
+                
                 CandidatesCollection.Add(NewCandidate);
                 MessengerCandidateCollection.Default.Send<ObservableCollection<Candidate>>(CandidatesCollection);
             }
@@ -60,9 +62,6 @@ namespace CandidatesBrowser3.ViewModel
 
             }
 
-
-
-
         }
         private bool CanSave(object obj)
         {
@@ -71,19 +70,30 @@ namespace CandidatesBrowser3.ViewModel
 
         #endregion
 
-        public AddNewCandidateViewModel(ICandidateRepository candidateRepository)
+        public AddNewCandidateViewModel(ICandidateRepository candidateRepository, ICandidateCompanyRepository candidateCompanyRepository)
         {
+            this.candidateCompanyRepository = candidateCompanyRepository;
             this.candidateRepository = candidateRepository;
-            CandidatesCollection= candidateRepository.GetCandidates();
+            CandidatesCollection = new ObservableCollection<Candidate>();
             SaveCommand = new CustomCommand(Save, CanSave);
-            NewCandidate = new Candidate();
 
+            MessengerCandidateCollection.Default.Register<ObservableCollection<Candidate>>(this, OnCandidateCollectionReceived);
             MessengerCandidateCollection.Default.Register<UpdateListMessageCandidateCollection>(this, OnUpdateListMessageReceived);
+        }
+
+        private void OnCandidateCollectionReceived(ObservableCollection<Candidate> candidatesCollection)
+        {
+           if (candidatesCollection.Where(e=>e.IsNew).Count()==0)
+            {
+                CandidatesCollection = candidatesCollection;
+                NewCandidate = new Candidate();
+                NewCandidate.IsNew = true;
+            }
         }
 
         private void OnUpdateListMessageReceived(UpdateListMessageCandidateCollection obj)
         {
-            
+            NewCandidate = new Candidate();
         }
 
         public void RaisePropertyChange(string propertyName)

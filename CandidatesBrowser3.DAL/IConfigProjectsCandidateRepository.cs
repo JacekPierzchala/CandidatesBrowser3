@@ -12,9 +12,9 @@ namespace CandidatesBrowser3.DAL
     {
         void DeleteConfigProjectCandidate(ConfigProjectCandidate configProject);
         ConfigProjectCandidate GetConfigProjectCandidate();
-        ConfigProjectCandidate ConfigProjectCandidateByID(int id);
+        ConfigProjectCandidate ConfigProjectCandidateByID(int projectId, int candidateId);
         ObservableCollection<ConfigProjectCandidate> GetConfigProjects();
         void UpdateConfigProjectCandidate(ConfigProjectCandidate configProject);
-        int AddConfigProjectCandidate(int candidateId, ConfigProject configProject);
+        int AddConfigProjectCandidate(int candidateId, ConfigProject configProject, string position, int companyId);
     }
 }

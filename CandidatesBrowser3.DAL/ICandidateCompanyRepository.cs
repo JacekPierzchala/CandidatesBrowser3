@@ -12,9 +12,10 @@ namespace CandidatesBrowser3.DAL
     {
         void DeleteCandidateCompany(CandidateCompany CandidateCompany);
         CandidateCompany GetCandidateCompany();
-        CandidateCompany CandidateCompanyByID(int id);
+        CandidateCompany CandidateCompanyByID(int CandidateID, int companyId);
         ObservableCollection<CandidateCompany> GetCandidateCompanys();
         int AddCandidateCompany(int candidateID, ConfigCompany configCompany, string position, ConfigProject configProject);
         void UpdateCandidateCompany(CandidateCompany CandidateCompany);
+        CandidateCompany AddAndCreateCandidateCompany(int candidateID, string position);
     }
 }

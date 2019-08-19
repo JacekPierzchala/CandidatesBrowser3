@@ -118,7 +118,7 @@ namespace CandidatesBrowser3.DAL
       
         }
 
-        public static void ExecProcedureWithArgs(string procedureName, Dictionary<dynamic, dynamic> Args)
+        public static void ExecSqlProcedure(string procedureName, Dictionary<dynamic, dynamic> Args)
         {
             try
             {
@@ -147,7 +147,69 @@ namespace CandidatesBrowser3.DAL
            
 
         }
+        public static void ExecSqlProcedure(string procedureName)
+        {
+            try
+            {
+                SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+                SqlCommand cmd = new SqlCommand();
 
+                cmd.CommandText = procedureName;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 1000;
+                cmd.Connection = sqlConnection;
+                sqlConnection.Open();
+
+                
+
+                cmd.ExecuteNonQuery();
+
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+
+
+        }
+
+        public static void UploadFileIntoDB(DataTable dt, string tableName, string sqlToCreate)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand(sqlToCreate, connection);
+                command.ExecuteNonQuery();
+                 SqlBulkCopy bulkCopy = new SqlBulkCopy(
+                    connection,
+                    SqlBulkCopyOptions.TableLock |
+                    SqlBulkCopyOptions.FireTriggers |
+                    SqlBulkCopyOptions.UseInternalTransaction,
+                    null
+                    );
+                try
+                {
+                    bulkCopy.DestinationTableName = "##importTable";
+
+                    bulkCopy.WriteToServer(dt);
+
+                    ExecSqlProcedure("UPDATE_INFO_FROM_FILE");
+                    
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+                // set the destination table name
+               
+            }
+        }
         public static object GetExecProcedureWithArgsResult(string procedureName, Dictionary<dynamic, dynamic> Args)
         {
             object result=null;

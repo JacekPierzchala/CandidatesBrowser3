@@ -9,6 +9,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Runtime.InteropServices;
 
 namespace CandidatesBrowser3.Utilities
 {
@@ -144,17 +146,19 @@ namespace CandidatesBrowser3.Utilities
 
         public static void ExportToExcel(DataTable DT,string projectName)
         {
-            Microsoft.Office.Interop.Excel.Application xlexcel;
-            Microsoft.Office.Interop.Excel.Workbook xlWorkBook;
-            Microsoft.Office.Interop.Excel.Worksheet xlWorkSheet;
+            Excel.Application xlexcel;
+            Excel.Workbook xlWorkBook;
+            Excel.Worksheet xlWorkSheet;
             object misValue = System.Reflection.Missing.Value;
-            xlexcel = new Microsoft.Office.Interop.Excel.Application();
-            xlexcel.Visible = false;
+            xlexcel = new Excel.Application
+            {
+                Visible = false,
 
-            xlexcel.DisplayAlerts = false;
+                DisplayAlerts = false
+            };
             xlWorkBook = xlexcel.Workbooks.Add(misValue);
 
-            xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+            xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 
 
             for (int i = 0; i < DT.Columns.Count; i++)
@@ -171,7 +175,7 @@ namespace CandidatesBrowser3.Utilities
                 }
             }
 
-            Microsoft.Office.Interop.Excel.Range XlRange;
+            Excel.Range XlRange;
             XlRange = xlWorkSheet.UsedRange;
             int lastcol = XlRange.Columns.Count + 1;
                 
@@ -180,16 +184,14 @@ namespace CandidatesBrowser3.Utilities
             XlRange.Cells.Font.Size = 10;
 
             for (int i = 1; i <= lastcol; i++)
-            {
-                
+            {                
                 {
-                    Microsoft.Office.Interop.Excel.Range allColumns = (Microsoft.Office.Interop.Excel.Range)xlWorkSheet.Columns[i];
+                    Excel.Range allColumns = (Excel.Range)xlWorkSheet.Columns[i];
                     allColumns.AutoFit();
                 }
-
             }
 
-            Microsoft.Office.Interop.Excel.Range HeaderRow = (Microsoft.Office.Interop.Excel.Range)xlWorkSheet.Range[xlWorkSheet.Cells[1, 1], xlWorkSheet.Cells[1, lastcol]];
+            Excel.Range HeaderRow = (Excel.Range)xlWorkSheet.Range[xlWorkSheet.Cells[1, 1], xlWorkSheet.Cells[1, lastcol]];
             HeaderRow.Cells.Interior.Color = Microsoft.Office.Interop.Excel.XlRgbColor.rgbLightGray;
             HeaderRow.Cells.Font.FontStyle = "Arial";
             HeaderRow.Font.Name = "Arial";
@@ -203,5 +205,55 @@ namespace CandidatesBrowser3.Utilities
 
         }
 
+        public static DataTable ImportDataToDataTable(string path)
+        {
+            Excel.Application xlexcel=null;
+            Excel.Workbook xlWorkBook=null;
+            Excel.Worksheet xlWorkSheet=null;
+            
+            object misValue = System.Reflection.Missing.Value;
+            xlexcel = new Excel.Application
+            {
+                Visible = false,
+
+                DisplayAlerts = false
+            };
+            xlWorkBook=xlexcel.Workbooks.Open(path);
+            xlWorkSheet = xlWorkBook.Worksheets.get_Item(1);
+            int firstRownumber = xlWorkSheet.Range["B:B"].Find("no").Row;           
+            int lastRownumber = firstRownumber;
+            while ((xlWorkSheet.Cells[lastRownumber, 2] as Excel.Range).Value!=null)
+            {
+                lastRownumber++;
+            }
+
+            Excel.Range rangeToImport = xlWorkSheet.Range[xlWorkSheet.Cells[firstRownumber, 3], xlWorkSheet.Cells[lastRownumber, 10]].Cells;
+            object[,] array = (object[,])rangeToImport.Value;
+
+            DataTable dt = new DataTable();
+            for (int i = 1; i <= array.GetLength(1); i++)
+            {
+                dt.Columns.Add(array[1, i].ToString());
+            }
+
+            for (int j = 2; j < array.GetLength(0); j++)
+            {
+                // create a DataRow using .NewRow()
+                DataRow row = dt.NewRow();
+
+                // iterate over all columns to fill the row
+                for (int i = 1; i <= array.GetLength(1); i++)
+                {
+                    row[i-1] = array[j, i];
+                }
+
+                // add the current row to the DataTable
+                dt.Rows.Add(row);
+            }
+
+            xlWorkBook.Close();
+            xlexcel.Quit();
+            return dt;
+        }
     }
 }

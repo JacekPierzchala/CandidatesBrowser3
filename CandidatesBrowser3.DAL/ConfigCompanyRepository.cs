@@ -71,9 +71,13 @@ namespace CandidatesBrowser3.DAL
             ConfigCompanysToUpdate = ConfigCompany;
         }
 
-        public ObservableCollection<ConfigCompany> GetConfigCompanysForCandidate(CandidateCompany cc)
-        {
-            return ConfigCompanys.Where(e => e.ID.Equals(cc.ID)).ToList().ToObservableCollection();
+        public ObservableCollection<ConfigCompany> GetConfigCompanysForCandidate( ObservableCollection<ConfigProjectCandidate> configProjectCandidates)
+        { 
+
+        
+            return  ConfigCompanys.Join(configProjectCandidates, cc => cc.ID, cp => cp.CompanyId, (cc, cp) => cc).ToList().Distinct().ToObservableCollection();
+            
+            
         }
 
         public int AddConfigCompany(ConfigCompany ConfigCompany)

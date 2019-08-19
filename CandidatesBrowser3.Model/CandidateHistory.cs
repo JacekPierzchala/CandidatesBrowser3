@@ -121,13 +121,13 @@ namespace CandidatesBrowser3.Model
                 }
         }
 
-        private int candidatesCompanyId;
-        public int CandidatesCompanyId
+        private int companyId;
+        public int CompanyId
         {
-            get { return candidatesCompanyId; }
+            get { return companyId; }
             set {
-                candidatesCompanyId = value;
-                RaisePropertyChange("CandidatesCompanyId");
+                companyId = value;
+                RaisePropertyChange("CompanyId");
                 }
         }
 
@@ -194,12 +194,13 @@ namespace CandidatesBrowser3.Model
 
         public CandidateHistory(DataRow row)
         {
-            CandidateID = row.Field<int>("CANDIDATE_ID");      
+            CandidateID = row.Field<int>("CANDIDATES_ID");      
             FirstName = row.Field<string>("FIRST_NAME"); 
             LastName= row.Field<string>("LAST_NAME");
             CompanyID = row.Field<int>("COMPANY_ID");
             Position= row.Field<string>("POSITION");
-            ProjectID= row.Field<int>("PROJECT_ID");
+
+            ProjectID = row.Field<int>("CONFIG_PROJECT_ID");
             CandidatesProjectsID= row.Field<int>("CANDIDATES_PROJECTS_ID");
             Timestamp = row.Field<DateTime>("TIMESTAMP");
             Seq= row.Field<int>("SEQ");

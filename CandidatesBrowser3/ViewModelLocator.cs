@@ -80,7 +80,7 @@ namespace CandidatesBrowser3
             get { return projectsReportViewModel; }
         }
 
-        private static AddNewCandidateViewModel addNewCandidateViewModel = new AddNewCandidateViewModel(candidateRepository);
+        private static AddNewCandidateViewModel addNewCandidateViewModel = new AddNewCandidateViewModel(candidateRepository, candidateCompanyRepository);
         public static AddNewCandidateViewModel AddNewCandidateViewModel
         {
             get { return addNewCandidateViewModel; }

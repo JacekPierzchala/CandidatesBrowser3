@@ -76,7 +76,7 @@ namespace CandidatesBrowser3.DAL
             Args.Add("@ConfigProjectID", configProject.ID);
             Args.Add("@JDUploaded", configProject.JdUploaded);
 
-            DBObjects.ExecProcedureWithArgs("UPDATE_PROJECT_DOCUMENT_INFO", Args);
+            DBObjects.ExecSqlProcedure("UPDATE_PROJECT_DOCUMENT_INFO", Args);
         }
 
     }

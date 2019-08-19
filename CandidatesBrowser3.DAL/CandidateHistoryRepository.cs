@@ -92,7 +92,7 @@ namespace CandidatesBrowser3.DAL
             Args.Add("@CV_RECEIVED", false);
             Args.Add("@CANDIDATES_PROJECTS_ID", CandidateHistory.CandidatesProjectsID);
 
-            DBObjects.ExecProcedureWithArgs("ADD_CANDIDATE_HISTORY", Args);
+            DBObjects.ExecSqlProcedure("ADD_CANDIDATE_HISTORY", Args);
         }
 
         //private void LoadHistorysByProjectID(int id)
