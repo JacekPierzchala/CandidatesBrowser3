@@ -57,10 +57,9 @@ namespace CandidatesBrowser3.DAL
 
         public ObservableCollection<ConfigProject> GetConfigProjects()
         {
-            if (ConfigProjects == null)
-            {
+           
                 LoadConfigProjects();
-            }
+           
             return ConfigProjects;
         }
 
@@ -77,6 +76,15 @@ namespace CandidatesBrowser3.DAL
             Args.Add("@JDUploaded", configProject.JdUploaded);
 
             DBObjects.ExecSqlProcedure("UPDATE_PROJECT_DOCUMENT_INFO", Args);
+        }
+
+        public int AddNewConfigProjects(int ConfigProjectsLibId, int ConfigAreaId)
+        {
+            Args.Clear();
+            Args.Add("@ConfigProjectsLibId", ConfigProjectsLibId);
+            Args.Add("@ConfigAreaId", ConfigAreaId);
+
+            return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_PROJECT_ID", Args).ToString());
         }
 
     }

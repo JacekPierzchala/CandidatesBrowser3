@@ -30,7 +30,7 @@ namespace CandidatesBrowser3.ViewModel
         private ICandidateCompanyRepository candidateCompanyRepository;
         private IConfigCompanyProjectRepository configCompanyProjectRepository;
         private IDialogService dialogService;
-
+        private ConfigProjectMessenger configProjectMessenger;
         private bool combinedRefreshNeeded;
         public bool CombinedRefreshNeeded
         {
@@ -285,21 +285,25 @@ namespace CandidatesBrowser3.ViewModel
             DocumentToAction.Action = ActionType.Import;
             MessengerCandidate.Default.Send<Document>(DocumentToAction);
             dialogService.ShowDetailDialog();
-            DataTable dt= GlobalFunctions.ImportDataToDataTable(DocumentToAction.DocumentNames[0]);
-            if (dt.Select("Candidate is null or Status is null").Count() > 0)
-            {
-                MessageBox.Show("Import failed,. Please complete Candidate Name and Status details!");
-                return;
-            }
-            string fileName = Path.GetFileNameWithoutExtension(DocumentToAction.DocumentNames[0]);
-            dt.Columns.Add("fileName");
-           
-            foreach (DataRow row in dt.Rows)
-            {
-                row["fileName"] = fileName;
-            }
-            string TempTableName ="##importTable";
-            string SqlToCreateTable = @"
+
+            if (DocumentToAction.DocumentNames.Length == 0) { return; }
+
+            try {
+                DataTable dt = GlobalFunctions.ImportDataToDataTable(DocumentToAction.DocumentNames[0]);
+                if (dt.Select("Candidate is null or Status is null").Count() > 0)
+                {
+                    MessageBox.Show("Import failed,. Please complete Candidate Name and Status details!");
+                    return;
+                }
+                string fileName = Path.GetFileNameWithoutExtension(DocumentToAction.DocumentNames[0]);
+                dt.Columns.Add("fileName");
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    row["fileName"] = fileName;
+                }
+                string TempTableName = "##importTable";
+                string SqlToCreateTable = @"
             CREATE TABLE ##importTable
             (
                 Company NVARCHAR(MAX),	
@@ -314,7 +318,25 @@ namespace CandidatesBrowser3.ViewModel
             )
             ";
 
-            DBObjects.UploadFileIntoDB(dt,TempTableName,SqlToCreateTable);
+                DBObjects.UploadFileIntoDB(dt, TempTableName, SqlToCreateTable);
+                LoadData();
+                addConfigsToCandidates();
+                LoadViews();
+
+                //MessengerConfigProject.Default.Send<ConfigProject>(ConfigProjectCollection.FirstOrDefault());
+                string newProjectName = fileName.Substring(fileName.IndexOf("-") + 1, fileName.Length - (fileName.IndexOf("-") + 1)).Substring(0, fileName.Substring(fileName.IndexOf("-") + 1, fileName.Length - (fileName.IndexOf("-") + 1)).IndexOf('_', fileName.Substring(fileName.IndexOf("-") + 1, fileName.Length - (fileName.IndexOf("-") + 1)).IndexOf('_') + 1)).Trim();
+                configProjectMessenger.RaiseConfigProjectChanged(ConfigProjectCollection.Where(e => e.ProjectName == newProjectName).FirstOrDefault());
+                    
+                    
+                MessageBox.Show("import success");
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+           
+          
         }
         private bool CanImportFile(object obj)
         {
@@ -351,14 +373,12 @@ namespace CandidatesBrowser3.ViewModel
             }
             return false;
         }
-
         private void SelectCandidateChange(object o)
         {
             Candidate SelectedCandidateTemp = new Candidate();
             GlobalFunctions.CopyProperties(SelectedCandidate, SelectedCandidateTemp);
             MessengerCandidate.Default.Send<Candidate>(SelectedCandidate);
-        }
-       
+        }       
         #endregion
        
         #endregion
@@ -375,8 +395,18 @@ namespace CandidatesBrowser3.ViewModel
                 RaisePropertyChange("Candidates");
             }
         }
-        public CollectionView CandidatesView { get; set; }
 
+        private CollectionView candidatesView;
+        public CollectionView CandidatesView
+        {
+            get { return candidatesView; }
+            set {
+                candidatesView = value;
+                RaisePropertyChange("CandidatesView");
+                }
+        }
+
+       
         private ObservableCollection<ConfigArea> configAreaCollection;
         public ObservableCollection<ConfigArea> ConfigAreaCollection
         {
@@ -515,6 +545,8 @@ namespace CandidatesBrowser3.ViewModel
             this.candidateCompanyRepository = candidateCompanyRepository;
             this.configCompanyProjectRepository = configCompanyProjectRepository;
             this.dialogService = dialogService;
+            configProjectMessenger = ConfigProjectMessenger.Instance;
+            configProjectMessenger.ConfigProjectChanged += OnConfigProjectChanged;
             DocumentToAction = new Document();
             AllProjectsSelected = true;
             AllAreasSelected = true;
@@ -536,8 +568,7 @@ namespace CandidatesBrowser3.ViewModel
 
             }
             #endregion
-            App.splashScreen.AddMessage("Loading completed");
-            //App.splashScreen.UpdateProgress(50);
+           
 
             App.splashScreen.AddMessage("Loading views");
             #region loadView
@@ -550,7 +581,6 @@ namespace CandidatesBrowser3.ViewModel
 
             }
             #endregion
-            App.splashScreen.AddMessage("Loading views completed");
             //App.splashScreen.UpdateProgress(70);
             App.splashScreen.AddMessage("Matching data");
             addConfigsToCandidates();
@@ -565,13 +595,56 @@ namespace CandidatesBrowser3.ViewModel
 
             MessengerCandidate.Default.Register<UpdateListMessage>(this, OnUpdateListMessageReceived);           
             MessengerCompany.Default.Register<List<CandidateCompany>>(this, OnCompanyReceived);
+            //MessengerConfigProject.Default.Register<UpdateListMessageConfigProject>(this, OnConfigProjectReceived);
             MessengerCandidateCollection.Default.Register<ObservableCollection<Candidate>>(this, OnCandidateCollectionReceived);
             MessengerDocument.Default.Register<UpdateDocument>(this, OnUpdateDocumentMessageReceived);
+            //MessengerConfigProject.Default.Register<ConfigProject>(this, OnConfigProjectReceived);
 
             App.splashScreen.AddMessage("Done!");
             //App.splashScreen.UpdateProgress(100);
 
             App.splashScreen.LoadComplete();
+        }
+
+        private void OnConfigProjectChanged(object sender, ConfigProjectValueChangedEventArgs e)
+        {
+            var receivedConfigProject = e.ConfigProject;
+            if(!ConfigProjectsLibs.Any(cp=>cp.Id==receivedConfigProject.ConfigProjectLibID))
+            {
+                ConfigProjectsLibs.Add(new ConfigProjectsLib
+                                {   Id = receivedConfigProject.ConfigProjectLibID,
+                                ProjectName = receivedConfigProject.ProjectName,
+                                Selected = true }
+                                    );
+                ConfigProjectCollection.Add(receivedConfigProject);
+            }
+            else
+            {
+                ConfigProject configProject = ConfigProjectCollection.Where(pr => pr.ID == receivedConfigProject.ID).FirstOrDefault();
+                ConfigProjectCollection.Remove(configProject);
+                ConfigProjectCollection.Add(receivedConfigProject);
+                ConfigProjectCandidateCollection.Where(cc => cc.ConfigProjectID == receivedConfigProject.ID)
+                                                .ToList()
+                                                .ForEach(cc =>
+                                                {
+                                                    cc.Area = receivedConfigProject.AreaName;
+                                                    cc.ConfigAreaID = receivedConfigProject.ConfigAreaID;
+                                                });
+                addConfigsToCandidates();
+                //Candidates.ToList().ForEach(cc=>cc.CandidateProjects=)
+
+            }
+           
+        }
+
+        private void OnConfigProjectReceived(ConfigProject obj)
+        {
+            
+        }
+
+        private void OnConfigProjectReceived(UpdateListMessageConfigProject obj)
+        {
+           
         }
 
         private void OnUpdateDocumentMessageReceived(UpdateDocument obj)
@@ -697,14 +770,9 @@ namespace CandidatesBrowser3.ViewModel
 
         private void addConfigsToCandidates()
         {
-            Candidates.ToList().ForEach(e => e.CandidateProjects = ConfigProjectCandidateCollection.Where(cp => cp.ConfigCandidateID.Equals(e.ID)).ToList().ToObservableCollection());
-            //Candidates.ToList().ForEach(e => e.CandidateCompanies = CandidateCompanyCollection.Where(ccp => ccp.CandidateID.Equals(e.ID)).ToList().ToObservableCollection());
-            //Candidates.ToList().ForEach(e => e.CandidateCompanies
-            //                   .Join(ConfigCompanyCollection, c => c.ID, cc => cc.ID, (c, cc) =>
-            //                          {
-            //                              return c.Position=cc.po
-       
-            //                          }
+            Candidates.ToList()
+                      .ForEach(e => e.CandidateProjects = ConfigProjectCandidateCollection.Where(cp => cp.ConfigCandidateID.Equals(e.ID)).ToList().ToObservableCollection());
+            
         }
 
         #region Filters
@@ -802,7 +870,7 @@ namespace CandidatesBrowser3.ViewModel
             }
             else
             {
-                if ((string.IsNullOrEmpty(ProjectNameFilter) || ((ConfigProjectsLib)item).ProjectName.ToLower().StartsWith(ProjectNameFilter.ToLower()))
+                if ((string.IsNullOrEmpty(ProjectNameFilter) || ((ConfigProjectsLib)item).ProjectName.ToLower().Contains(ProjectNameFilter.ToLower()))
                   &&
                     (
                     ConfigAreaView.Cast<ConfigArea>().ToList().Where(e => e.Selected.Equals(true)).Count() == ConfigAreaView.SourceCollection.Cast<ConfigArea>().ToList().Count() ||

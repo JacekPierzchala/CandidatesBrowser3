@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="CandidatesBrowser3.View.ProjectSettingsUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CandidatesBrowser3.View"
+             mc:Ignorable="d"          
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"          
+             xmlns:pn="clr-namespace:CandidatesBrowser3.Utilities"       
+             xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="12"
+             TextBlock.FontSize="12"
+             TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             DataContext="{Binding Source={StaticResource viewModelLocator}, Path=ProjectSettingsViewModel}"
+        
+   
+        d:DesignHeight="600" d:DesignWidth="600"
+         >
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Label}" BasedOn="{StaticResource labeStyle}"/>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition ></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" >
+            <TextBox VerticalContentAlignment="Center" Width="200" Text="{Binding NewProjectName}"></TextBox>
+            <Button  >
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                        <TextBlock Margin="2,0" VerticalAlignment="Center">Add new project</TextBlock>
+                        <materialdesign:PackIcon VerticalAlignment="Center" Kind="Add"></materialdesign:PackIcon>
+                    </StackPanel>
+                </Button.Content>
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding AddProjectCommand}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+               
+            </Button>
+    
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1">
+            <Label Content="Project Name:"/>
+            <TextBox Margin="1" Text="{Binding ProjectName,UpdateSourceTrigger=PropertyChanged}" />
+            <ScrollViewer Height="500">
+                <DataGrid GridLinesVisibility="None" HeadersVisibility="None" AutoGenerateColumns="False"  SelectedItem="{Binding SelectedProject}" BorderBrush="Gray" BorderThickness="1" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ProjectsCollectionView}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction  Command="{Binding SelectProjectChangeCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn  IsReadOnly="True" Binding="{Binding ProjectName}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+           
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+            <Button >
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                        <TextBlock Margin="2,0" VerticalAlignment="Center">Save</TextBlock>
+                        <materialdesign:PackIcon VerticalAlignment="Center" Kind="Approve"></materialdesign:PackIcon>
+                    </StackPanel>
+                </Button.Content>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding SaveCommand}"></i:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Label Margin="1" Content="Area"/>
+            <ComboBox  HorizontalContentAlignment="Center" SelectedItem="{Binding SelectedArea}" ItemsSource="{Binding ConfigAreasCollection}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding AreaName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+    </Grid>
+</UserControl>

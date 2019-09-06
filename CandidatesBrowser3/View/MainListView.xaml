@@ -13,8 +13,6 @@
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="12"
-        TextBlock.FontSize="12"
-        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -46,6 +44,13 @@
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <i:InvokeCommandAction Command="{Binding AddNewCandidateCommand}"></i:InvokeCommandAction>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
+                            <Button Margin="4" Content="Upload new project">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <i:InvokeCommandAction Command="{Binding ImportFileCommand}"></i:InvokeCommandAction>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Button>
@@ -262,7 +267,7 @@
                         <DataGrid SelectionMode="Single" Grid.Row="0" x:Name="datagridMainview" ItemsSource="{Binding CandidatesView}" AutoGenerateColumns="False" IsReadOnly="True"
                                       SelectedItem="{Binding SelectedCandidate}"
                                       >
-                            <DataGrid.ContextMenu>
+                            <!--<DataGrid.ContextMenu>
                                 <ContextMenu Height="Auto">
                                     <MenuItem Header="Upload new project">
                                         <i:Interaction.Triggers>
@@ -276,7 +281,7 @@
 
                                     </MenuItem>
                                 </ContextMenu>
-                            </DataGrid.ContextMenu>
+                            </DataGrid.ContextMenu>-->
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction Command="{Binding SelectCandidateChangeCommand}"></i:InvokeCommandAction>
@@ -348,6 +353,21 @@
                     <local:ProjectsReportUserControl></local:ProjectsReportUserControl>
                 </Grid>
             </TabItem>
+            <TabItem Header="Project Settings">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding ElementName=MainViewHeader}"></TextBlock>
+                            <materialdesign:PackIcon Kind="Calendar"></materialdesign:PackIcon>
+                        </Grid>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+
+                <Grid>
+                    <local:ProjectSettingsUserControl></local:ProjectSettingsUserControl>
+                </Grid>
+            </TabItem>
+
         </TabControl>
              
             <!--</dragablz:TabablzControl>-->

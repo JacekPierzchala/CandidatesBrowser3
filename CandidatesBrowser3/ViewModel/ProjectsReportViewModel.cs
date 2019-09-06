@@ -36,7 +36,7 @@ namespace CandidatesBrowser3.ViewModel
         private IConfigProjectRepository configProjectRepository;
         private ICandidateHistoryRepository candidateHistoryRepository;
         private IDialogService dialogService;
-
+        private ConfigProjectMessenger configProjectMessenger;
         #endregion
 
         #region commands
@@ -306,11 +306,27 @@ namespace CandidatesBrowser3.ViewModel
             this.configProjectRepository = configProjectRepository;
             this.candidateHistoryRepository = candidateHistoryRepository;
             this.dialogService = dialogService;
+            //MessengerConfigProject.Default.Register<ConfigProject>(this, OnConfigProjectReceived);
+            configProjectMessenger = ConfigProjectMessenger.Instance;
+            configProjectMessenger.ConfigProjectChanged += OnConfigProjectChanged;
             DocumentToAction = new Document();
             loadData();
             commandsInitialize();
         }
 
+        private void OnConfigProjectChanged(object sender, ConfigProjectValueChangedEventArgs e)
+        {
+            var receivedConfigProject = e.ConfigProject;
+            if (!ConfigProjectCollection.Any(cp => cp.Id == receivedConfigProject.ConfigProjectLibID))
+            {
+                ConfigProjectCollection.Add(receivedConfigProject);
+            }
+        }
+
+        private void OnConfigProjectReceived(ConfigProject obj)
+        {
+            loadData();
+        }
 
         private void commandsInitialize()
         {

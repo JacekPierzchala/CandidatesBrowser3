@@ -20,19 +20,15 @@ namespace CandidatesBrowser3.DAL
 
         public ConfigProjectCandidate GetConfigProjectCandidate()
         {
-            if (ConfigProjectsCandidates == null)
-            {
+          
                 LoadConfigProjectsCandidate();
-            }
-
+          
             return ConfigProjectsCandidates.FirstOrDefault();
         }
         public ConfigProjectCandidate ConfigProjectCandidateByID(int projectId, int candidateId)
         {
-            if (ConfigProjectsCandidates == null)
-            {
-                LoadConfigProjectsCandidate();
-            }
+         
+                LoadConfigProjectsCandidate();         
             return ConfigProjectsCandidates.Where(e => e.ConfigProjectID.Equals(projectId) && e.ConfigCandidateID.Equals(candidateId)).FirstOrDefault();
         }
         private void LoadConfigProjectsCandidate()
@@ -56,10 +52,7 @@ namespace CandidatesBrowser3.DAL
 
         public ObservableCollection<ConfigProjectCandidate> GetConfigProjects()
         {
-            if (ConfigProjectsCandidates == null)
-            {
                 LoadConfigProjectsCandidate();
-            }
             return ConfigProjectsCandidates;
         }
 

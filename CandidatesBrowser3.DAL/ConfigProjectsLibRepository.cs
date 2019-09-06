@@ -11,6 +11,7 @@ namespace CandidatesBrowser3.DAL
 {
    public class ConfigProjectsLibRepository:IConfigProjectsLibRepository
     {
+        private static Dictionary<dynamic, dynamic> Args = new Dictionary<dynamic, dynamic>();
         private static ObservableCollection<ConfigProjectsLib> ConfigProjectsLibs;
         public void DeleteConfigProjectsLib(ConfigProjectsLib configProjectsLib)
         {
@@ -19,11 +20,9 @@ namespace CandidatesBrowser3.DAL
 
         public ConfigProjectsLib GetConfigProjectsLib()
         {
-            if (ConfigProjectsLibs==null)
-            {
+            
                 LoadConfigProjectsLibs();
-            }
-
+           
             return ConfigProjectsLibs.FirstOrDefault();
         }
         public ConfigProjectsLib ConfigProjectsLibByID(int id)
@@ -54,11 +53,8 @@ namespace CandidatesBrowser3.DAL
         }
 
         public ObservableCollection<ConfigProjectsLib> GetConfigProjectsLibs()
-        {
-            if (ConfigProjectsLibs==null)
-            {
-                LoadConfigProjectsLibs();
-            }
+        {         
+                LoadConfigProjectsLibs();         
             return ConfigProjectsLibs;
         }
 
@@ -66,6 +62,14 @@ namespace CandidatesBrowser3.DAL
         {
             ConfigProjectsLib configProjectsLibToUpdate = ConfigProjectsLibs.Where(e => e.Id.Equals(configProjectsLib.Id)).FirstOrDefault();
             configProjectsLibToUpdate = configProjectsLib;
+        }
+
+        public int AddNewConfigProjectsLib(string ProjectName)
+        {
+            Args.Clear();
+            Args.Add("@ProjectName", ProjectName);
+
+            return int.Parse(DBObjects.GetExecProcedureWithArgsResult("ADD_NEW_PROJECT_LIB_ID", Args).ToString());
         }
     }
 }

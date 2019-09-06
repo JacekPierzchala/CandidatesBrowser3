@@ -147,18 +147,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Utilities\ConfigProjectMessenger.cs" />
     <Compile Include="Utilities\DialogService.cs" />
     <Compile Include="Utilities\IDialogService.cs" />
     <Compile Include="Utilities\Messenger.cs" />
     <Compile Include="Utilities\MessengerCandidateCollection.cs" />
     <Compile Include="Utilities\MessengerCandidateHistory.cs" />
     <Compile Include="Utilities\MessengerCompany.cs" />
+    <Compile Include="Utilities\MessengerConfigProject.cs" />
     <Compile Include="Utilities\MessengerDocument.cs" />
     <Compile Include="Utilities\MessengerCandidateProject.cs" />
     <Compile Include="Utilities\MultiConverter.cs" />
     <Compile Include="ViewModel\AddNewCandidateViewModel.cs" />
     <Compile Include="ViewModel\AssignNewProjectViewModel.cs" />
     <Compile Include="ViewModel\FileDialogsViewModel.cs" />
+    <Compile Include="ViewModel\ProjectSettingsViewModel.cs" />
     <Compile Include="ViewModel\ProjectsReportViewModel.cs" />
     <Compile Include="View\AddNewCandidateView.xaml.cs">
       <DependentUpon>AddNewCandidateView.xaml</DependentUpon>
@@ -168,6 +171,9 @@
     </Compile>
     <Compile Include="View\FileDialogsView.xaml.cs">
       <DependentUpon>FileDialogsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProjectSettingsUserControl.xaml.cs">
+      <DependentUpon>ProjectSettingsUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ProjectsReportUserControl.xaml.cs">
       <DependentUpon>ProjectsReportUserControl.xaml</DependentUpon>
@@ -214,6 +220,10 @@
     <Compile Include="View\MainListView.xaml.cs">
       <DependentUpon>MainListView.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\ProjectSettingsUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ProjectsReportUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

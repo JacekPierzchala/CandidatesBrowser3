@@ -62,10 +62,9 @@ namespace CandidatesBrowser3.DAL
 
         public ObservableCollection<CandidateCompany> GetCandidateCompanys()
         {
-            if (CandidateCompanys == null)
-            {
+            
                 LoadCandidateCompanys();
-            }
+            
             return CandidateCompanys;
         }
 

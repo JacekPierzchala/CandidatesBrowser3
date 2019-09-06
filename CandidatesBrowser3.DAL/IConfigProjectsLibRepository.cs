@@ -15,5 +15,7 @@ namespace CandidatesBrowser3.DAL
         ConfigProjectsLib ConfigProjectsLibByID(int id);
         ObservableCollection<ConfigProjectsLib> GetConfigProjectsLibs();
         void UpdateConfigProjectsLib(ConfigProjectsLib configProjectsLib);
+
+        int AddNewConfigProjectsLib(string ProjectName);
     }
 }

@@ -58,10 +58,8 @@ namespace CandidatesBrowser3.DAL
 
         public ObservableCollection<ConfigCompany> GetConfigCompanys()
         {
-            if (ConfigCompanys == null)
-            {
                 LoadConfigCompanys();
-            }
+          
             return ConfigCompanys;
         }
 

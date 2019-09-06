@@ -55,6 +55,15 @@ namespace CandidatesBrowser3
             
         }
 
+        private static ProjectSettingsViewModel projectSettingsViewModel = new ProjectSettingsViewModel
+            (configProjectsLibRepository: configProjectsLibRepository, configProjectRepository: configProjectRepository,
+            configAreaRepository: configAreaRepository);
+        public static ProjectSettingsViewModel ProjectSettingsViewModel
+        {
+            get { return projectSettingsViewModel; }
+
+        }
+
         private static FileDialogsViewModel fileDialogsViewModel = new FileDialogsViewModel(dialogService);
         public static FileDialogsViewModel FileDialogsViewModel
         {
